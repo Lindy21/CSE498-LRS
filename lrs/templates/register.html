@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Register{% endblock title %}
+{% block heading %}Learning Activity Capture{% endblock heading %}
+{% block content %}
+{% if error_message %}
+<p class="error">
+    <strong>{{ error_message }}</strong>
+</p>
+{% endif %}
+<h3>Register</h3>
+<form action="{% url lrs.views.register %}" method="post">
+    <table>
+        {% include 'table_form.html' %}
+    </table>
+    <input type="submit" value="Register" />
+</form>
+{% endblock content %}

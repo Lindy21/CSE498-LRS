@@ -1,0 +1,35 @@
+                                List of relations
+ Schema |                       Name                       | Type  |    Owner    
+--------+--------------------------------------------------+-------+-------------
+ public | auth_group                                       | table | lrs_control
+ public | auth_group_permissions                           | table | lrs_control
+ public | auth_permission                                  | table | lrs_control
+ public | auth_user                                        | table | lrs_control
+ public | auth_user_groups                                 | table | lrs_control
+ public | auth_user_user_permissions                       | table | lrs_control
+ public | django_admin_log                                 | table | lrs_control
+ public | django_content_type                              | table | lrs_control
+ public | django_session                                   | table | lrs_control
+ public | django_site                                      | table | lrs_control
+ public | lrs_activity                                     | table | lrs_control
+ public | lrs_activityprofile                              | table | lrs_control
+ public | lrs_activitystate                                | table | lrs_control
+ public | lrs_agent                                        | table | lrs_control
+ public | lrs_agent_member                                 | table | lrs_control
+ public | lrs_agentprofile                                 | table | lrs_control
+ public | lrs_consumer                                     | table | lrs_control
+ public | lrs_group                                        | table | lrs_control
+ public | lrs_nonce                                        | table | lrs_control
+ public | lrs_statement                                    | table | lrs_control
+ public | lrs_statement_attachments                        | table | lrs_control
+ public | lrs_statementattachment                          | table | lrs_control
+ public | lrs_statementcontextactivity                     | table | lrs_control
+ public | lrs_statementcontextactivity_context_activity    | table | lrs_control
+ public | lrs_statementref                                 | table | lrs_control
+ public | lrs_substatement                                 | table | lrs_control
+ public | lrs_substatementcontextactivity                  | table | lrs_control
+ public | lrs_substatementcontextactivity_context_activity | table | lrs_control
+ public | lrs_token                                        | table | lrs_control
+ public | lrs_verb                                         | table | lrs_control
+(30 rows)
+

@@ -1,0 +1,15 @@
+Django==1.4
+gunicorn==0.14.2
+pytz==2012c
+supervisor==3.0a12
+bencode==1.0
+oauth2==1.5.170
+psycopg2==2.5
+isodate==0.4.9
+python-dateutil==1.5
+unipath==1.0
+pycrypto==2.5
+lxml==2.3.4
+django-extensions==1.1.1
+South==0.8.1
+jsonfield==0.9.17

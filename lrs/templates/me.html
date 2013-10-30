@@ -1,0 +1,689 @@
+{% extends "base.html" %}
+{% block title %}{{user.username}} Home{% endblock title %}
+{% block heading %}{{user.username}} Home{% endblock heading %}
+{% block content %}
+</br>
+    
+<div id="tab-container" class="tab-container">
+  <ul class='etabs'>
+    <li class='tab default'><a href="#mystatements">Statements</a></li>
+    <li class='tab public'><a href="#publicstatements">Public Feed</a></li>
+    <li class='tab groups'><a href="#groupstatements">Groups</a></li>
+  </ul>
+    <div id="mystatements">
+        <span class="heading">Statements:</span><span class="small-link"><a id="delstmts" href="#mystatements">delete all statements</a></span>
+    </div>
+    <div id="publicstatements">
+        <span class="heading">Public Statements:</span>
+    </div>
+    <div id="groupstatements">
+        <div id="groupform">
+            <table>
+                <tr>
+                    <td>Group Name:</td>
+                    <td><input type="text" id="group_text"></td>
+                    <td><button type="button" onclick="create_group()">Create</button></td>
+                </tr>
+            </table>
+        </div>
+        <table>
+            <tr>
+                <td id="group_column">
+                    <span class="heading">Groups:</span><span class="small-link"></span>
+                </td>
+
+                <td id="statement_column">
+                    <span class="heading">Statements:</span><span class="small-link">Organize statements into groups by dragging and dropping</span>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+{% endblock content %}
+{% block extra_js %}
+<script src="{{ STATIC_URL }}scripts/jquery.easytabs.min.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}scripts/jquery.hashchange.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+var feedTimeout = null;
+var myFilters = {'user':null,'verb':null};
+var publicFilters = {'user':null,'verb':null};
+var lazyFix = false;
+
+$(document).ready(function() {
+    getStmts();
+    $(".stmt_link").click(stmtClick);
+    $('#tab-container').easytabs({
+        defaultTab: "li.default"
+    });
+    if ($('#mystatements').hasClass('active') && ! $('#mystatements ul').length){
+        getStmts();
+    }
+    if ($('#publicstatements').hasClass('active') && ! $('#publicstatements ul').length){
+        getPublicStmts();
+    }
+    if ($('#groupstatements').hasClass('active') && ! $('#groupstatements ul').length){
+        getGroups();
+        getStmts_Groups(null, $('#statement_column'));
+    }
+    $('#tab-container').bind('easytabs:after', function(event, $clicked, $targetPanel, settings){
+        if ($targetPanel.attr("id") == "mystatements"){
+            //clearFilters();
+            getStmts();
+        }
+         if ($targetPanel.attr("id") == "publicstatements"){
+            //clearFilters();
+            getPublicStmts();
+        }
+        if ($targetPanel.attr("id") == "groupstatements"){
+            //clearFilters();
+            getGroups();
+            getStmts_Groups(null, $('#statement_column'));
+        }       
+    });
+    $('#mystatements #delstmts').click(function(){ 
+        $.ajax({
+            url: "{% url lrs.views.my_statements %}",
+            type: "DELETE",
+            context: $(this),
+            success: function (data){
+                getStmts();
+            },
+            error: function(xhr, ajaxOptions, thrownError){
+                alert(thrownError);
+            },
+            timeout : 15000
+        });
+    });
+});
+
+//Function incase filtering is more complicated later. Called whenever tabs switched.
+function clearFilters(){
+    myFilters['user'] = null;
+    myFilters['verb'] = null;
+    publicFilters['user'] = null;
+    publicFilters['verb'] = null;
+}
+
+function getGroups(event){
+    if(feedTimeout) {
+        clearTimeout(feedTimeout);
+    }
+    var u = "{% url lrs.views.my_groups %}";
+    if (event && event.data.the_url){
+        u = event.data.the_url;
+    }
+    // Request for Groups
+    $.ajax({
+            url: u,
+            type: "GET",
+            context: $('#group_column'),
+            success: function (data){
+                if ($(this).children('ul').length){
+                    $(this).children('ul').replaceWith(groupUIData(data));
+                }
+                else {
+                    $(this).append(groupUIData(data));
+                }
+                $(this).children('ul').find('.group-link').click(groupClick);
+                //$(this).children('ul').find('.delstmt_link').click(delStmtClick);
+                $(this).children('ul').find('li.prev-next a.previous').click(
+                        {the_url: $(this).children('ul').find('li.prev-next a.previous').attr("data-target")}, getGroups);
+                $(this).children('ul').find('li.prev-next a.next').click(
+                        {the_url: $(this).children('ul').find('li.prev-next a.next').attr("data-target")}, getGroups);
+            },
+            error: function(xhr, ajaxOptions, thrownError){
+                alert(thrownError);
+            },
+            timeout : 15000
+        });
+}
+
+function getGroupStatements(event, groupid, ele){
+    var u = "{% url lrs.views.my_groups %}";
+
+    if (event){
+        if(event.data.the_url) {
+           u = event.data.the_url;
+           ele = $(event.target).parent().parent().parent().parent();
+           groupid = ele.attr('id');
+        }
+    }
+
+    $.ajax({
+            url: u,
+            type: "GET",
+            data: { 'group_id': groupid},
+            success: function (data){
+                if(!$(ele).children('div#stmts').length){
+                    $(ele).find('a.group-link').after('<div id="stmts" style="display:none;"></div>');
+                }
+                ele = $(ele).find('div#stmts');
+
+                if ($(ele).children('ul').length){
+                    $(ele).children('ul').replaceWith(groupStmtUIData(data, groupid));
+                }
+                else {
+                    $(ele).append(groupStmtUIData(data, groupid));
+                }
+                $(ele).children('ul').find('li.prev-next a.previous').click(
+                        {
+                            the_url: $(ele).children('ul').find('li.prev-next a.previous').attr("data-target")
+                        }, getGroupStatements);
+                $(ele).children('ul').find('li.prev-next a.next').click(
+                        {
+                            the_url: $(ele).children('ul').find('li.prev-next a.next').attr("data-target")
+                        }, getGroupStatements);
+
+                $(ele).slideDown(500);
+            },
+            error: function(xhr, ajaxOptions, thrownError){
+                alert(thrownError);
+            },
+            timeout : 15000
+        });
+}
+
+function groupClick(event){
+    if (event && event.currentTarget){
+        ele = event.target;
+    }
+    findDiv = $(ele).siblings('div#stmts').length;
+    if(findDiv===0){
+        getGroupStatements(null, $(ele).parent().attr("id"), $(ele).parent());
+    }
+    else{
+        $(ele).next('div#stmts').slideToggle();
+    }
+    return false;
+}
+
+function getStmts_Groups(event, element){
+    if(feedTimeout) {
+        clearTimeout(feedTimeout);
+    }
+    var u = "{% url lrs.views.my_statements %}";
+    var ele = $('#mystatements');
+
+    if (event){
+        if(event.data.the_url) {
+           u = event.data.the_url;
+        }
+        if(event.data.context) {
+            ele = event.data.context;
+        }
+    }
+    if(element) {
+        ele = element;
+    }
+
+    var verbFilter;
+
+    if(!myFilters['verb']){
+        verbFilter = null;
+    }
+    else{
+        verbFilter = myFilters['verb'];
+    }
+    $.ajax({
+            url: u,
+            type: "GET",
+            data: {user_filter:"1", verb_filter:verbFilter},
+            context: ele,
+            success: function (data){
+                if ($(this).children('ul').length){
+                    $(this).children('ul').replaceWith(groupStmtUIData(data));
+                }
+                else {
+                    $(this).append(groupStmtUIData(data));
+                }
+                $(this).children('ul').find('.stmt_link').click(stmtClick);
+                $(this).children('ul').find('li.prev-next a.previous').click(
+                        {
+                            the_url: $(this).children('ul').find('li.prev-next a.previous').attr("data-target"),
+                            context: $(this)
+                        }, getStmts_Groups);
+                $(this).children('ul').find('li.prev-next a.next').click(
+                        {
+                            the_url: $(this).children('ul').find('li.prev-next a.next').attr("data-target"),
+                            context: $(this)
+                        }, getStmts_Groups);
+            },
+            error: function(xhr, ajaxOptions, thrownError){
+                alert(thrownError);
+            },
+            timeout : 15000
+        });
+}
+
+function startDrag(event){
+    // Add target to event data
+    event.dataTransfer.setData("Text", event.target.id);
+}
+
+function dropStmt(event){
+    event.preventDefault();
+    // First, retreive dropped item's id and group id
+    var stmt_id = event.dataTransfer.getData("Text");
+    var group_id = $(event.target).attr('id');
+    var sendData = { 'stmt_id': stmt_id, 'group_id': group_id };
+    console.log(event.target);
+
+    // Next, send post request to add stmt_id to group_id
+    $.ajax({
+            url: "{% url lrs.views.my_groups %}",
+            type: "POST",
+            data: sendData,
+            success: function (){
+                getGroupStatements(null, group_id, event.target);
+            },
+            error: function(xhr, ajaxOptions, thrownError){
+                alert(thrownError);
+            },
+            timeout : 15000
+        });
+}
+
+function allowDrop(event){
+    event.preventDefault();
+}
+
+function groupUIData(data){
+    if(data['groups'].length == 0) {
+        return "<ul><li>no groups</li></ul>";
+    }
+
+    var ret = "<ul>";
+    for (var i = 0; i < data['groups'].length; i++) {
+        var grp = data['groups'][i];
+        ret += "<li><div id='" + grp['id'] +"' class='statement field' style='width:450px;border:2px solid #505050;' ondrop='dropStmt(event)' ondragover='allowDrop(event)'>" + grp['name'] + "<a style='float:right;' class='group-link' href='#group_column'>Open</a></div></li>";
+    }
+
+    var prev = "<span class='previous'>previous</span>";
+    if (data['previous']) {
+        prev = "<a class='previous' href='#group_column' data-target='" + data['previous'] + "'>previous</a>";
+    }
+    var next = "<span class='next'>next</span>";
+    if (data['next']) {
+        next = "<a class='next' href='#group_column' data-target='" + data['next'] + "'>next</a>";
+    }
+    ret += "<li class='prev-next'>" + prev + next + "</li>";
+    ret += "</ul>";
+
+    return ret;
+}
+
+function groupStmtUIData(data, grpid){
+    var ref = 'statement_column';
+    if(grpid){
+        ref = grpid;
+    }
+
+    if (data['stmts'].length == 0){
+        return "<ul><li>no statements</li></ul>"
+    }
+
+    var ret = "<ul>";
+
+     for (var i = 0; i < data['stmts'].length; i++) {
+        var stmt = data['stmts'][i];
+        ret += "<li><div id='" + stmt['statement_id'] + "' class='statement field' style='width:350px;border:2px solid #505050;' draggable='true' ondragstart='startDrag(event)'><div class='stmt_link lpad' href='" + stmt['statement_id'] + "'>" + stmt['actor_name'] + " " + "<a class='verb_link' href='" + stmt['statement_id'] + "'>" + stmt['verb'] + "</a>" + " " + stmt['object'] + "</div>";
+        ret += "</div></li>";
+    }
+
+    var prev = "<span class='previous'>previous</span>";
+    if (data['previous']) {
+        prev = "<a class='previous' href='#" + ref + "' data-target='" + data['previous'] + "'>previous</a>";
+    }
+    var next = "<span class='next'>next</span>";
+    if (data['next']) {
+        next = "<a class='next' href='#" + ref + "' data-target='" + data['next'] + "'>next</a>";
+    }
+    ret += "<li class='prev-next'>" + prev + next + "</li>";
+
+    ret += "</ul>";
+
+    return ret;
+}
+
+function verbClick(event){
+    if(event && event.currentTarget){
+        ele = event.target;
+    }
+    var stmtid = $(ele).attr("href");
+
+    lazyFix = true;
+
+    $.ajax({
+        url: "{% url lrs.views.my_statements %}?stmt_id="+stmtid,
+        type: "GET",
+        success: function (data){
+            var verb = data['verb'];
+            //verbFilter = verb['id'];
+            myFilters['verb'] = verb['id'];
+            getStmts();
+            //getStmts(null, null, verb['id']);
+        },
+        error: function(xhr, ajaxOptions, thrownError){
+            alert(thrownError)
+        },
+        timeout : 15000
+    });    
+}
+
+function publicVerbClick(event){
+    if(event && event.currentTarget){
+        ele = event.target;
+    }
+    var stmtid = $(ele).attr("href");
+
+    lazyFix = true;
+
+    $.ajax({
+        url: "{% url lrs.views.my_statements %}?stmt_id="+stmtid,
+        type: "GET",
+        success: function (data){
+            var verb = data['verb'];
+            //verbFilter = verb['id'];
+            publicFilters['verb'] = verb['id'];
+            getPublicStmts();
+        },
+        error: function(xhr, ajaxOptions, thrownError){
+            alert(thrownError)
+        },
+        timeout : 15000
+    });
+}
+
+function stmtClick(event){
+
+    if(lazyFix){
+        lazyFix = false;
+        return false;
+    }
+    clearTimeout(feedTimeout);
+    if (event && event.currentTarget){
+        ele = event.target;
+    }
+    if(!$(ele).next('div#stmts').length){
+        getStmtContent($(ele).attr("href"), this);
+    }
+    else{
+        $(ele).next('div#stmts').slideToggle();
+    }
+    return false;
+}
+
+function delStmtClick(event){
+    if (event && event.currentTarget){
+        ele = event.target;
+    }
+    var id = $(ele).siblings("div.stmt_link").attr("href");
+    console.log("deleting: " + id);
+    $.ajax({
+        url: "{% url lrs.views.my_statements %}?stmt_id="+id,
+        type: "DELETE",
+        context: $(this),
+        success: function (data){
+            getStmts();
+        },
+        error: function(xhr, ajaxOptions, thrownError){
+            alert(thrownError);
+        },
+        timeout : 15000
+    });
+
+    return false;
+}
+
+
+function getPublicStmts(event){
+    var u = "{% url lrs.views.my_statements %}";
+    var inPage = false;
+    if (event && event.data.the_url){
+        inPage = true;
+        clearTimeout(feedTimeout);
+        u = event.data.the_url;
+    }
+
+    var userFilter;
+    var verbFilter;
+
+    if(!publicFilters['user']){
+        userFilter = "0";
+    }
+    else{
+        userFilter = publicFilters['user'];
+    }
+    if(!publicFilters['verb']){
+        verbFilter = null;
+    }
+    else{
+        verbFilter = publicFilters['verb'];
+    }
+    $.ajax({
+            url: u,
+            type: "GET",
+            data: {user_filter:userFilter, verb_filter:verbFilter},
+            context: $('#publicstatements'),
+            success: function (data){
+                if ($(this).children('ul').length){
+                    $(this).children('ul').replaceWith(uiData(data,$("#publicstatements"),false));
+                }
+                else {
+                    $(this).append(uiData(data,"publicstatements",false));
+                }
+                $(this).children('ul').find('.stmt_link').click(stmtClick);
+                $(this).children('ul').find('.verb_link').click(publicVerbClick);
+                $(this).children('ul').find('li.prev-next a.previous').click(
+                        {the_url: $(this).children('ul').find('li.prev-next a.previous').attr("data-target")}, getPublicStmts);
+                $(this).children('ul').find('li.prev-next a.next').click(
+                        {the_url: $(this).children('ul').find('li.prev-next a.next').attr("data-target")}, getPublicStmts);
+            },
+            error: function(xhr, ajaxOptions, thrownError){
+                alert(thrownError);
+            },
+            timeout : 15000
+        });
+    if(!inPage)
+        feedTimeout = setTimeout(getPublicStmts, 10000);
+}
+
+function getStmts(event, element){
+    if(feedTimeout) {
+        clearTimeout(feedTimeout);
+    }
+    var u = "{% url lrs.views.my_statements %}";
+    var ele = $('#mystatements');
+
+    if (event){
+        if(event.data.the_url) {
+           u = event.data.the_url;
+        }
+        if(event.data.context) {
+            ele = event.data.context;
+        }
+    }
+    if(element) {
+        ele = element;
+    }
+
+    var verbFilter;
+
+    if(!myFilters['verb']){
+        verbFilter = null;
+    }
+    else{
+        verbFilter = myFilters['verb'];
+    }
+    $.ajax({
+            url: u,
+            type: "GET",
+            data: {user_filter:"1", verb_filter:verbFilter},
+            context: ele,
+            success: function (data){
+                if ($(this).children('ul').length){
+                    $(this).children('ul').replaceWith(uiData(data, this, true));
+                }
+                else {
+                    $(this).append(uiData(data, this, true));
+                }
+                $(this).children('ul').find('.stmt_link').click(stmtClick);
+                $(this).children('ul').find('.delstmt_link').click(delStmtClick);
+                $(this).children('ul').find('.verb_link').click(verbClick);
+                $(this).children('ul').find('li.prev-next a.previous').click(
+                        {
+                            the_url: $(this).children('ul').find('li.prev-next a.previous').attr("data-target"),
+                            context: $(this)
+                        }, getStmts);
+                $(this).children('ul').find('li.prev-next a.next').click(
+                        {
+                            the_url: $(this).children('ul').find('li.prev-next a.next').attr("data-target"),
+                            context: $(this)
+                        }, getStmts);
+            },
+            error: function(xhr, ajaxOptions, thrownError){
+                alert(thrownError);
+            },
+            timeout : 15000
+        });
+}
+
+function uiData(data, context, deletable){
+    if (data['stmts'].length == 0){
+        return "<ul><li>no statements</li></ul>";
+    }
+    var ret = "<ul>";
+    for (var i = 0; i < data['stmts'].length; i++) {
+        var stmt = data['stmts'][i];
+        ret += "<li><div class='statement field' style='width:450px;border:2px solid #505050;'><div class='stmt_link lpad' href='" + stmt['statement_id'] + "'>" + stmt['actor_name'] + " " + "<a class='verb_link' href='" + stmt['statement_id'] + "'>" + stmt['verb'] + "</a>" + " " + stmt['object'] + "</div>";
+        
+        if(deletable){
+            ret += "<a class='delstmt_link' href=''>Delete</a>";
+        }
+        //ret += "<span class='timestamp'>" + stmt['timestamp'] + "</span>";
+        //ret += " <a href='#' class='stmt_link lpad'>" + stmt['statement_id'] + "</a> ";
+        ret += "</div></li>";
+    }
+    var prev = "<span class='previous'>previous</span>";
+    if (data['previous']) {
+        prev = "<a class='previous' href='#" + $(context).attr('id') + "' data-target='" + data['previous'] + "'>previous</a>";
+    }
+    var next = "<span class='next'>next</span>";
+    if (data['next']) {
+        next = "<a class='next' href='#" + $(context).attr('id') + "' data-target='" + data['next'] + "'>next</a>";
+    }
+    ret += "<li class='prev-next'>" + prev + next + "</li>";
+    ret += "</ul>";
+    return ret;
+}
+
+function getStmtContent(stmtid, ele){
+    $.ajax({
+        url: "{% url lrs.views.my_statements %}?stmt_id="+stmtid,
+        type: "GET",
+        success: function (data){
+            $(ele).after('<div id="stmts" style="display:none;"></div>');
+            $(ele).siblings('div#stmts').append(buildContent(data));
+            $(ele).siblings('div#stmts').slideDown(500);
+        },
+        error: function(xhr, ajaxOptions, thrownError){
+            alert(thrownError)
+        },
+        timeout : 15000
+    });
+}
+
+function buildContent(data) {
+    var ret = "";
+    console.log("buildContent: " + JSON.stringify(data, null, 4));
+
+    var prefix = "http://verbs/";
+    if (data.verb.id.search(prefix) != -1) {
+        var type = data.verb.id.substring(prefix.length, data.verb.id.length - 1);
+        console.log(type);
+        switch (type) {
+            case "viewed":  // Image,
+                var objectLink = data.object.id.substring(0, data.object.id.lastIndexOf('/') + 1);
+                ret += "<img src='" + data.object.definition.description['en-US'] + "' alt='' width='375'>";
+            break;
+
+            case "watched": // Youtube video
+                var videoId = data.object.definition.description['en-US'];
+                ret += "<iframe width='420' height='315' src='//www.youtube.com/embed/" + videoId + "?rel=0' frameborder='0' allowfullscreen></iframe>";
+            break;
+
+            case "completed": // Quiz
+                ret += "Score: " + data.result.score.scaled * 100 + "%<br>";
+
+                var tmpString = "";
+                tmpString = data.object.id;
+                tmpString = tmpString.slice(tmpString.indexOf("|")+1);
+
+                while(tmpString.length > 0)
+                {
+                    ret += "<br>&nbsp&nbsp&nbsp&nbsp" + tmpString.substr(0,tmpString.indexOf(":")) + " Score : " + 
+                            parseInt(tmpString.substr(tmpString.indexOf(":")+1,tmpString.indexOf("/"))) * 100 + "%";
+                    tmpString = tmpString.slice(tmpString.indexOf("/")+1);
+                }
+            break;
+
+            case "read":    // Text
+                 var objectLink = data.object.id.substring(0, data.object.id.lastIndexOf('/') + 1);
+                ret += "Link: <a href='" + objectLink + "'>" + objectLink + "</a><br>";
+                ret += "<br>Text: <br>" + data.object.definition.description['en-US'].replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;') + "<br>";
+            break;
+            case "interaction":    //Desktop App
+            break;
+            case "started":
+            break;
+            default:        // Undefined
+                ret += "Link: <a href='" + data.object.id + "'>" + data.object.id + "</a><br>";
+            break;
+        }
+    } else {
+        // Invalid type
+        ret += "Invalid type. Please use http://verbs/..."
+    }
+
+    return ret;
+}
+
+function syntaxHighlight(json) {
+    if (typeof json != 'string') {
+         json = JSON.stringify(json, undefined, 4);
+    }
+    json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    json = json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+        var cls = 'number';
+        if (/^"/.test(match)) {
+            if (/:$/.test(match)) {
+                cls = 'key';
+            } else {
+                cls = 'string';
+            }
+        } else if (/true|false/.test(match)) {
+            cls = 'boolean';
+        } else if (/null/.test(match)) {
+            cls = 'null';
+        }
+        return '<span class="' + cls + '">' + match + '</span>';
+    });
+    json = json.replace(/(\{|\[)/g, function(match){return '<span class="expandable"><a href="#">' + match +'</a><span class="obj">';});
+    return json.replace(/(\}|\])/g, function(match){return '</span>' + match + '</span>'});
+}
+
+function create_group (){
+    var groupname = $("#group_text").val();
+    $.ajax({
+            url: "{% url lrs.views.my_groups %}",
+            type: "POST",
+            data: { name : groupname },
+            success: getGroups,
+            error: function(xhr, ajaxOptions, thrownError){
+                alert(thrownError);
+            },
+            timeout : 15000
+        });
+}
+</script>
+{% endblock extra_js %}
