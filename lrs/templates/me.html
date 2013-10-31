@@ -397,8 +397,10 @@ function verbClick(event){
             switch(myFilters['verb'])
             {
                 case("http://verbs/completed/"):
-                    alert("here");
-                    $("#my_verb_filter").selectedIndex = 1;
+                    alert(document.getElementById("my_verb_filter").selectedIndex.value);
+                    document.getElementById("my_verb_filter").selectedIndex = 1;
+                    alert(document.getElementById("my_verb_filter").selectedIndex.value);
+                    //$("#my_verb_filter").selectedIndex = 1;
                     break;
                 case("http://verbs/experienced/"):
                     $("#my_verb_filter").selectedIndex = 2;
