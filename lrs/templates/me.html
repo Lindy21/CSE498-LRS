@@ -14,7 +14,7 @@
         <span class="heading">Statements:</span>
         <td>Verb Filter:</td>
         <select id="my_verb_filter">
-            <option value="">-</option>
+            <option value=""></option>
             <option value="http://verbs/completed/">Completed</option>
             <option value="http://verbs/experienced/">Experienced</option>
             <option value="http://verbs/interacted/">Interacted</option>
@@ -393,6 +393,17 @@ function verbClick(event){
             var verb = data['verb'];
             //verbFilter = verb['id'];
             myFilters['verb'] = verb['id'];
+
+            switch(myFilters['verb'])
+            {
+                case("http://verbs/completed/"):
+                    $("#my_verb_filter").selectedIndex = 1;
+                    break;
+                case("http://verbs/experienced/"):
+                    $("#my_verb_filter").selectedIndex = 2;
+                    break;
+            }
+
             getStmts();
             //getStmts(null, null, verb['id']);
         },
