@@ -125,7 +125,7 @@ function getGroups(event){
                     $(this).append(groupUIData(data));
                 }
                 $(this).children('ul').find('.group-link').click(groupClick);
-                //$(this).children('ul').find('.delstmt_link').click(delStmtClick);
+                $(this).children('ul').find('.delete-group-link').click(deleteGroup);
                 $(this).children('ul').find('li.prev-next a.previous').click(
                         {the_url: $(this).children('ul').find('li.prev-next a.previous').attr("data-target")}, getGroups);
                 $(this).children('ul').find('li.prev-next a.next').click(
@@ -136,6 +136,22 @@ function getGroups(event){
             },
             timeout : 15000
         });
+}
+
+function deleteGroup(event){
+    var groupid = $(event.target).parents(".group").attr('id');
+    .ajax({
+        url: "{% url lrs.views.my_groups %}",
+        type: "DELETE",
+        data: { 'group_id', groupid },
+        success: function(){
+            //Reload groups
+            getGroups();
+        },
+        error: function(xhr, ajaxOptions, thrownError){
+            alert(thrownError);
+        }
+    });
 }
 
 function getGroupStatements(event, groupid, ele){
@@ -262,11 +278,16 @@ function startDrag(event){
 
 function dropStmt(event){
     event.preventDefault();
+    var ele = event.target;
+    if(!$(ele).hasClass('group')){
+        ele = $(ele).parents(".group");
+    }
+
     // First, retreive dropped item's id and group id
     var stmt_id = event.dataTransfer.getData("Text");
     var group_id = $(event.target).attr('id');
     var sendData = { 'stmt_id': stmt_id, 'group_id': group_id };
-    console.log(event.target);
+    
 
     // Next, send post request to add stmt_id to group_id
     $.ajax({
@@ -295,7 +316,7 @@ function groupUIData(data){
     var ret = "<ul>";
     for (var i = 0; i < data['groups'].length; i++) {
         var grp = data['groups'][i];
-        ret += "<li><div id='" + grp['id'] +"' class='statement field' style='width:450px;border:2px solid #505050;' ondrop='dropStmt(event)' ondragover='allowDrop(event)'>" + grp['name'] + "<a style='float:right;' class='group-link' href='#group_column'>Open</a></div></li>";
+        ret += "<li><div id='" + grp['id'] +"' class='statement field group' style='width:450px;border:2px solid #505050;' ondrop='dropStmt(event)' ondragover='allowDrop(event)'>" + grp['name'] + "<a style='float:right;' class='delete-group-link' href='#group_column'>Delete</a><a style='float:right;' class='group-link' href='#" + grp[id] + "'>Open</a></div></li>";
     }
 
     var prev = "<span class='previous'>previous</span>";
