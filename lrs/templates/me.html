@@ -14,7 +14,13 @@
         <span class="heading">Statements:</span>
         <td>Verb Filter:</td>
         <select id="my_verb_filter">
-            <option value="-">-</option>
+            <option value="">-</option>
+            <option value="http://verbs/completed/">Completed</option>
+            <option value="http://verbs/experienced/">Experienced</option>
+            <option value="http://verbs/interacted/">Interacted</option>
+            <option value="http://verbs/read/">Read</option>
+            <option value="http://verbs/started/">Started</option>
+            <option value="http://verbs/watched/">Watched</option>
         </select>
         <span class="small-link"><a id="delstmts" href="#mystatements">delete all statements</a></span>
     </div>
@@ -55,6 +61,7 @@ var publicFilters = {'user':null,'verb':null};
 var lazyFix = false;
 
 $(document).ready(function() {
+    clearFilters();
     getStmts();
     $(".stmt_link").click(stmtClick);
     $('#tab-container').easytabs({
@@ -103,10 +110,10 @@ $(document).ready(function() {
 
 //Function incase filtering is more complicated later. Called whenever tabs switched.
 function clearFilters(){
-    myFilters['user'] = null;
-    myFilters['verb'] = null;
-    publicFilters['user'] = null;
-    publicFilters['verb'] = null;
+    myFilters['user'] = "";
+    myFilters['verb'] = "";
+    publicFilters['user'] = "";
+    publicFilters['verb'] = "";
 }
 
 function getGroups(event){
@@ -474,18 +481,17 @@ function getPublicStmts(event){
     var userFilter;
     var verbFilter;
 
-    if(!publicFilters['user']){
+    if(publicFilters['user'] == ""){
         userFilter = "0";
     }
     else{
         userFilter = publicFilters['user'];
     }
-    if(!publicFilters['verb']){
+    if(publicFilters['verb'] == ""){
         verbFilter = null;
     }
     else{
         verbFilter = publicFilters['verb'];
-        alert(verbFilter);
     }
     $.ajax({
             url: u,
@@ -536,7 +542,7 @@ function getStmts(event, element){
 
     var verbFilter;
 
-    if(!myFilters['verb']){
+    if(myFilters['verb'] == ""){
         verbFilter = null;
     }
     else{
