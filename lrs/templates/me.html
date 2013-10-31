@@ -149,7 +149,7 @@ function deleteGroup(event){
     $.ajax({
         url: "{% url lrs.views.my_groups %}",
         type: "DELETE",
-        data: { 'group_id', groupid },
+        data: { 'group_id': groupid },
         success: function(){
             //Reload groups
             getGroups();
