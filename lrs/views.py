@@ -315,6 +315,16 @@ def my_statements(request):
 @login_required(login_url="/XAPI/accounts/login")
 def my_groups(request):
     try:
+        if request.method == "DELETE":
+            group_id = request.GET.get("group_id", None)
+            if group_id:
+                models.Group.objects.get(user=request.user, id=group_id).delete()
+                g = models.Group.objects.get(user=request.user, id=group_id)
+                if not g:
+                    return HttpResponse(status=204)
+                else:
+                    raise Exception("Failed To Delete Group: " + group_id)
+
         if request.method == "POST":
             name = request.POST.get('name', None)
             if name:
