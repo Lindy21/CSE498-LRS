@@ -17,7 +17,7 @@
             <option value=""></option>
             <option value="http://verbs/completed/">Completed</option>
             <option value="http://verbs/experienced/">Experienced</option>
-            <option value="http://verbs/interacted/">Interacted</option>
+            <option value="http://verbs/interaction/">Interacted</option>
             <option value="http://verbs/read/">Read</option>
             <option value="http://verbs/started/">Started</option>
             <option value="http://verbs/watched/">Watched</option>
@@ -110,6 +110,8 @@ $(document).ready(function() {
 
 //Function incase filtering is more complicated later. Called whenever tabs switched.
 function clearFilters(){
+    var e = document.getElementById("my_verb_filter");
+    e.selectedIndex = 0;
     myFilters['user'] = "";
     myFilters['verb'] = "";
     publicFilters['user'] = "";
@@ -394,16 +396,26 @@ function verbClick(event){
             //verbFilter = verb['id'];
             myFilters['verb'] = verb['id'];
 
+            var e = document.getElementById("my_verb_filter");
             switch(myFilters['verb'])
             {
                 case("http://verbs/completed/"):
-                    alert(document.getElementById("my_verb_filter").selectedIndex.value);
-                    document.getElementById("my_verb_filter").selectedIndex = 1;
-                    alert(document.getElementById("my_verb_filter").selectedIndex.value);
-                    //$("#my_verb_filter").selectedIndex = 1;
+                    e.selectedIndex = 1;
                     break;
                 case("http://verbs/experienced/"):
-                    $("#my_verb_filter").selectedIndex = 2;
+                    e.selectedIndex = 2;
+                    break;
+                case("http://verbs/interaction/"):
+                    e.selectedIndex = 3;
+                    break;
+                case("http://verbs/read/"):
+                    e.selectedIndex = 4;
+                    break;
+                case("http://verbs/started/"):
+                    e.selectedIndex = 5;
+                    break;
+                case("http://verbs/watched/"):
+                    e.selectedIndex = 6;
                     break;
             }
 
@@ -555,12 +567,13 @@ function getStmts(event, element){
     }
 
     var verbFilter;
+    var e = document.getElementById("my_verb_filter");
 
-    if(myFilters['verb'] == ""){
+    if(e.selectedIndex == 0){
         verbFilter = null;
     }
     else{
-        verbFilter = myFilters['verb'];
+        verbFilter = e.options[e.selectedIndex].value;//myFilters['verb'];
     }
     $.ajax({
             url: u,
