@@ -16,7 +16,6 @@
         <select id="my_verb_filter">
             <option value="-">-</option>
         </select>
-
         <span class="small-link"><a id="delstmts" href="#mystatements">delete all statements</a></span>
     </div>
     <div id="publicstatements">
@@ -486,6 +485,7 @@ function getPublicStmts(event){
     }
     else{
         verbFilter = publicFilters['verb'];
+        alert(verbFilter);
     }
     $.ajax({
             url: u,
