@@ -146,7 +146,7 @@ function getGroups(event){
 
 function deleteGroup(event){
     var groupid = $(event.target).parents(".group").attr('id');
-    .ajax({
+    $.ajax({
         url: "{% url lrs.views.my_groups %}",
         type: "DELETE",
         data: { 'group_id', groupid },
