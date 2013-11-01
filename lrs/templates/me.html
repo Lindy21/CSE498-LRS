@@ -308,7 +308,7 @@ function dropStmt(event){
 
     // First, retreive dropped item's id and group id
     var stmt_id = event.dataTransfer.getData("Text");
-    var group_id = $(event.target).attr('id');
+    var group_id = $(ele).attr('id');
     var sendData = { 'stmt_id': stmt_id, 'group_id': group_id };
     
 
@@ -318,7 +318,7 @@ function dropStmt(event){
             type: "POST",
             data: sendData,
             success: function (){
-                getGroupStatements(null, group_id, event.target);
+                getGroupStatements(null, group_id, ele);
             },
             error: function(xhr, ajaxOptions, thrownError){
                 alert(thrownError);
