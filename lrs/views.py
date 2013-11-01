@@ -263,21 +263,27 @@ def my_statements(request):
 
             if userFilter == "0":
                 statements = models.Statement.objects.order_by('-timestamp')
-            elif userFilter == "1":
-                statements = models.Statement.objects.filter(user=request.user).order_by('-timestamp')
-            else:
-                try:
-                    uFilter = User.objects.get(username=userFilter)
-                    statements = models.Statement.objects.filter(user=uFilter).order_by('-timestamp')
-                except User.DoesNotExist:
-                    statements = {}
-
-            if verbFilter:
+                if verbFilter:
                 try:
                     vFilter = models.Verb.objects.get(verb_id=verbFilter)
                     statements = statements.filter(verb=vFilter)
                 except: 
                     return HttpResponse(status=204)
+            elif userFilter == "1":
+                statements = models.Statement.objects.filter(user=request.user).order_by('-timestamp')
+                if verbFilter:
+                try:
+                    vFilter = models.Verb.objects.get(verb_id=verbFilter)
+                    statements = statements.filter(verb=vFilter)
+                except: 
+                    return HttpResponse(status=204)
+            else:
+                try:
+                    uFilter = User.objects.get(username=userFilter)
+                    statements = models.Statement.objects.filter(user=uFilter).order_by('-timestamp')
+                except:
+                    statements = {}
+
 
             for stmt in statements:
                 d = {}
