@@ -21,11 +21,21 @@
             <option value="http://verbs/read/">Read</option>
             <option value="http://verbs/started/">Started</option>
             <option value="http://verbs/watched/">Watched</option>
-        </select>
+        </select></br>
         <span class="small-link"><a id="delstmts" href="#mystatements">delete all statements</a></span>
     </div>
     <div id="publicstatements">
         <span class="heading">Public Statements:</span>
+        <td>Verb Filter:</td>
+        <select id="public_verb_filter" onchange="getPublicStmts()">
+            <option value=""></option>
+            <option value="http://verbs/completed/">Completed</option>
+            <option value="http://verbs/experienced/">Experienced</option>
+            <option value="http://verbs/interaction/">Interacted</option>
+            <option value="http://verbs/read/">Read</option>
+            <option value="http://verbs/started/">Started</option>
+            <option value="http://verbs/watched/">Watched</option>
+        </select></br>
     </div>
     <div id="groupstatements">
         <div id="groupform">
@@ -56,9 +66,7 @@
 <script src="{{ STATIC_URL }}scripts/jquery.hashchange.min.js" type="text/javascript"></script>
 <script type="text/javascript">
 var feedTimeout = null;
-var myFilters = {'user':null,'verb':null};
-var publicFilters = {'user':null,'verb':null};
-var lazyFix = false;
+var initStmtOff = false;
 
 $(document).ready(function() {
     clearFilters();
@@ -112,10 +120,8 @@ $(document).ready(function() {
 function clearFilters(){
     var e = document.getElementById("my_verb_filter");
     e.selectedIndex = 0;
-    myFilters['user'] = "";
-    myFilters['verb'] = "";
-    publicFilters['user'] = "";
-    publicFilters['verb'] = "";
+    e = document.getElementById("public_verb_filter");
+    e.selectedIndex = 0;
 }
 
 function getGroups(event){
@@ -386,7 +392,7 @@ function verbClick(event){
     }
     var stmtid = $(ele).attr("href");
 
-    lazyFix = true;
+    initStmtOff = true;
 
     $.ajax({
         url: "{% url lrs.views.my_statements %}?stmt_id="+stmtid,
@@ -394,10 +400,10 @@ function verbClick(event){
         success: function (data){
             var verb = data['verb'];
             //verbFilter = verb['id'];
-            myFilters['verb'] = verb['id'];
+            //myFilters['verb'] = verb['id'];
 
             var e = document.getElementById("my_verb_filter");
-            switch(myFilters['verb'])
+            switch(verb['id'])
             {
                 case("http://verbs/completed/"):
                     e.selectedIndex = 1;
@@ -435,7 +441,7 @@ function publicVerbClick(event){
     }
     var stmtid = $(ele).attr("href");
 
-    lazyFix = true;
+    initStmtOff = true;
 
     $.ajax({
         url: "{% url lrs.views.my_statements %}?stmt_id="+stmtid,
@@ -443,7 +449,31 @@ function publicVerbClick(event){
         success: function (data){
             var verb = data['verb'];
             //verbFilter = verb['id'];
-            publicFilters['verb'] = verb['id'];
+            //publicFilters['verb'] = verb['id'];
+
+            var e = document.getElementById("public_verb_filter");
+            switch(verb['id'])
+            {
+                case("http://verbs/completed/"):
+                    e.selectedIndex = 1;
+                    break;
+                case("http://verbs/experienced/"):
+                    e.selectedIndex = 2;
+                    break;
+                case("http://verbs/interaction/"):
+                    e.selectedIndex = 3;
+                    break;
+                case("http://verbs/read/"):
+                    e.selectedIndex = 4;
+                    break;
+                case("http://verbs/started/"):
+                    e.selectedIndex = 5;
+                    break;
+                case("http://verbs/watched/"):
+                    e.selectedIndex = 6;
+                    break;
+            }
+
             getPublicStmts();
         },
         error: function(xhr, ajaxOptions, thrownError){
@@ -455,8 +485,8 @@ function publicVerbClick(event){
 
 function stmtClick(event){
 
-    if(lazyFix){
-        lazyFix = false;
+    if(initStmtOff){
+        initStmtOff = false;
         return false;
     }
     clearTimeout(feedTimeout);
@@ -494,7 +524,6 @@ function delStmtClick(event){
     return false;
 }
 
-
 function getPublicStmts(event){
     var u = "{% url lrs.views.my_statements %}";
     var inPage = false;
@@ -507,7 +536,7 @@ function getPublicStmts(event){
     var userFilter;
     var verbFilter;
 
-    if(publicFilters['user'] == ""){
+    /*if(publicFilters['user'] == ""){
         userFilter = "0";
     }
     else{
@@ -518,6 +547,15 @@ function getPublicStmts(event){
     }
     else{
         verbFilter = publicFilters['verb'];
+    }*/
+    var verbFilter;
+    var e = document.getElementById("public_verb_filter");
+
+    if(e.selectedIndex == 0){
+        verbFilter = null;
+    }
+    else{
+        verbFilter = e.options[e.selectedIndex].value;//myFilters['verb'];
     }
     $.ajax({
             url: u,
