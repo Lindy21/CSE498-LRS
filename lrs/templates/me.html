@@ -13,7 +13,7 @@
     <div id="mystatements">
         <span class="heading">Statements:</span>
         <form><input id="my_verb_filter_checkbox" type="checkbox">Verb Filter
-        <select id="my_verb_filter" onchange="getStmts()">
+        <select id="my_verb_filter" onchange="initVerbFilter()">
             <option value=""></option>
             <option value="http://verbs/completed/">Completed</option>
             <option value="http://verbs/experienced/">Experienced</option>
@@ -21,14 +21,13 @@
             <option value="http://verbs/read/">Read</option>
             <option value="http://verbs/started/">Started</option>
             <option value="http://verbs/watched/">Watched</option>
-        </form>
-        </select></br>
+        </select></form></br>
         <span class="small-link"><a id="delstmts" href="#mystatements">delete all statements</a></span>
     </div>
     <div id="publicstatements">
         <span class="heading">Public Statements:</span>
-        <td>Verb Filter (Sort By):</td>
-        <select id="public_verb_filter" onchange="getPublicStmts()">
+        <form><input id="public_verb_filter_checkbox" type="checkbox">Verb Filter
+        <select id="public_verb_filter" onchange="initPublicVerbFilter()">
             <option value=""></option>
             <option value="http://verbs/completed/">Completed</option>
             <option value="http://verbs/experienced/">Experienced</option>
@@ -36,7 +35,7 @@
             <option value="http://verbs/read/">Read</option>
             <option value="http://verbs/started/">Started</option>
             <option value="http://verbs/watched/">Watched</option>
-        </select></br>
+        </select></form></br>
     </div>
     <div id="groupstatements">
         <div id="groupform">
@@ -116,6 +115,18 @@ $(document).ready(function() {
         });
     });
 });
+
+function initVerbFilter(){
+    var check = document.getElementById("my_verb_filter_checkbox");
+    check.checked = true;
+    getStmts();
+}
+
+function initPublicVerbFilter(){
+    var check = document.getElementById("public_verb_filter_checkbox");
+    check.checked = true;
+    getPublicStmts();
+}
 
 //Function incase filtering is more complicated later. Called whenever tabs switched.
 function clearFilters(){
@@ -442,6 +453,7 @@ function verbClick(event){
             //myFilters['verb'] = verb['id'];
 
             var e = document.getElementById("my_verb_filter");
+            var check = document.getElementById("my_verb_filter_checkbox");
             switch(verb['id'])
             {
                 case("http://verbs/completed/"):
@@ -463,6 +475,7 @@ function verbClick(event){
                     e.selectedIndex = 6;
                     break;
             }
+            check.checked = true;
 
             getStmts();
             //getStmts(null, null, verb['id']);
@@ -575,22 +588,10 @@ function getPublicStmts(event){
     var userFilter = "0";
     var verbFilter;
 
-    /*if(publicFilters['user'] == ""){
-        userFilter = "0";
-    }
-    else{
-        userFilter = publicFilters['user'];
-    }
-    if(publicFilters['verb'] == ""){
-        verbFilter = null;
-    }
-    else{
-        verbFilter = publicFilters['verb'];
-    }*/
-    var verbFilter;
     var e = document.getElementById("public_verb_filter");
+    var check = document.getElementById("public_verb_filter_checkbox");
 
-    if(e.selectedIndex == 0){
+    if(e.selectedIndex == 0 || !check.checked){
         verbFilter = null;
     }
     else{
@@ -645,8 +646,9 @@ function getStmts(event, element){
 
     var verbFilter;
     var e = document.getElementById("my_verb_filter");
+    var check = document.getElementById("my_verb_filter_checkbox");
 
-    if(e.selectedIndex == 0){
+    if(e.selectedIndex == 0 || !check.checked){
         verbFilter = null;
     }
     else{
