@@ -41,13 +41,15 @@
     </div>
     <div id="groupstatements">
         <div id="groupform">
+            <form name="groupForm" action="javascript:createGroup">
             <table>
                 <tr>
                     <td>Group Name:</td>
                     <td><input type="text" id="group_text"></td>
-                    <td><button type="button" onclick="create_group()">Create</button></td>
+                    <td><input name="Create" type="submit"></td>
                 </tr>
             </table>
+        </form>
         </div>
         <table>
             <tr>
@@ -836,7 +838,10 @@ function create_group (){
             url: "{% url lrs.views.my_groups %}",
             type: "POST",
             data: { name : groupname },
-            success: getGroups,
+            success: function(){
+                $("#group_text").val("");
+                getGroups();
+            },
             error: function(xhr, ajaxOptions, thrownError){
                 alert(thrownError);
             },
