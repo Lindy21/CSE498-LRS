@@ -328,7 +328,7 @@ def my_groups(request):
                     raise Exception("Failed to remove stmt: " + stmt_id + ", from group: " + group_id)
             if group_id:
                 models.Group.objects.get(user=request.user, id=group_id).delete()
-                g = models.Group.objects.get(user=request.user, id=group_id)
+                g = models.Group.objects.filter(user=request.user, id=group_id)
                 if not g:
                     return HttpResponse(status=204)
                 else:
