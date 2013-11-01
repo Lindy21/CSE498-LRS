@@ -222,6 +222,7 @@ function getGroupStatements(event, groupid, ele){
                 }
 
                 $(ele).children('ul').find('a.remove-link').click(removeStatement);
+                $(ele).children('ul').find('.stmt_link').click(stmtClick);
                 $(ele).children('ul').find('li.prev-next a.previous').click(
                         {
                             the_url: $(ele).children('ul').find('li.prev-next a.previous').attr("data-target")
@@ -360,7 +361,7 @@ function groupUIData(data){
     for (var i = 0; i < data['groups'].length; i++) {
         var grp = data['groups'][i];
         // Group title
-        ret += "<li><div id='" + grp['id'] +"' class='statement field group-field' style='width:450px;border:2px solid #505050;' ondrop='dropStmt(event)' ondragover='allowDrop(event)'>" + grp['name'];
+        ret += "<li><div id='" + grp['id'] +"' class='statement field group-field' style='width:500px;border:2px solid #505050;' ondrop='dropStmt(event)' ondragover='allowDrop(event)'>" + grp['name'];
         // Open Group link
         ret += "<a style='float:right; padding-left:1em;' class='group-link' href='#" + grp['id'] + "'>Open</a>";
         // Delete Group link
@@ -409,7 +410,7 @@ function groupStmtUIData(data, grpid){
     }
 
     if (data['stmts'].length == 0){
-        return "<ul><li>no statements</li></ul>"
+        return "<ul><li>no statements</li></ul>";
     }
 
     var ret = "<ul>";
@@ -417,9 +418,9 @@ function groupStmtUIData(data, grpid){
      for (var i = 0; i < data['stmts'].length; i++) {
         var stmt = data['stmts'][i];
         // Statement Container
-        ret += "<li><div id='" + stmt['statement_id'] + "' class='statement field' style='width:350px;border:2px solid #505050;' draggable='true' ondragstart='startDrag(event)'>";
+        ret += "<li><div id='" + stmt['statement_id'] + "' class='statement field' style='width:450px;border:2px solid #505050;' draggable='true' ondragstart='startDrag(event)'>";
         // Statement itself
-        ret += "<div class='stmt_link lpad' href='" + stmt['statement_id'] + "'>" + stmt['actor_name'] + " " + "<a class='verb_link' href='" + stmt['statement_id'] + "'>" + stmt['verb'] + "</a>" + " " + stmt['object'];
+        ret += "<div class='stmt_link lpad' href='" + stmt['statement_id'] + "'>" + stmt['actor_name'] + " " + stmt['verb'] + " " + stmt['object'];
 
         // In group, add a remove link
         if(grpid){
