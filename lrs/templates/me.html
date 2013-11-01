@@ -12,7 +12,7 @@
   </ul>
     <div id="mystatements">
         <span class="heading">Statements:</span>
-        <form><input id="my_verb_filter_checkbox" type="checkbox">Verb Filter
+        <form><input id="my_verb_filter_checkbox" type="checkbox" onclick="getStmts()">Verb Filter
         <select id="my_verb_filter" onchange="initVerbFilter()">
             <option value=""></option>
             <option value="http://verbs/completed/">Completed</option>
@@ -26,7 +26,7 @@
     </div>
     <div id="publicstatements">
         <span class="heading">Public Statements:</span>
-        <form><input id="public_verb_filter_checkbox" type="checkbox">Verb Filter
+        <form><input id="public_verb_filter_checkbox" type="checkbox" onclick="getPublicStmts()">Verb Filter
         <select id="public_verb_filter" onchange="initPublicVerbFilter()">
             <option value=""></option>
             <option value="http://verbs/completed/">Completed</option>
