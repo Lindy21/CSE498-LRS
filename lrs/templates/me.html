@@ -593,7 +593,7 @@ function getPublicStmts(event){
         u = event.data.the_url;
     }
 
-    var userFilter = "0";
+    var userFilter;
     var verbFilter;
 
     var e = document.getElementById("public_verb_filter");
@@ -604,6 +604,16 @@ function getPublicStmts(event){
     }
     else{
         verbFilter = e.options[e.selectedIndex].value;//myFilters['verb'];
+    }
+
+    e = document.getElementById("public_user_filter");
+    check = document.getElementById("public_user_filter_checkbox");
+
+    if(!e.value || !check.checked){
+        userFilter = "0";
+    }
+    else{
+        userFilter = e.value;
     }
     $.ajax({
             url: u,
