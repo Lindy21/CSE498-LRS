@@ -266,11 +266,11 @@ def my_statements(request):
             elif userFilter == "1":
                 statements = models.Statement.objects.filter(user=request.user).order_by('-timestamp')
             else:
-                try:
+                #try:
                     uFilter = User.objects.get(username=userFilter)
                     statements = models.Statement.objects.filter(user=uFilter).order_by('-timestamp')
-                except User.DoesNotExist:
-                    return HttpResponse(status=204)
+                #except User.DoesNotExist:
+                    #return HttpResponse(status=204)
 
             if verbFilter:
                 try:
