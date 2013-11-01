@@ -226,7 +226,7 @@ function groupClick(event){
     }
     findDiv = $(ele).siblings('div#stmts').length;
     if(findDiv===0){
-        getGroupStatements(null, $(ele).attr("href"), $(ele).parent());
+        getGroupStatements(null, $(ele).parent().attr("id"), $(ele).parent());
     }
     else{
         $(ele).siblings('div#stmts').slideToggle();
