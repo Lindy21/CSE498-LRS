@@ -363,7 +363,7 @@ function groupUIData(data){
     for (var i = 0; i < data['groups'].length; i++) {
         var grp = data['groups'][i];
         // Group title
-        ret += "<li><div id='" + grp['id'] +"' class='statement field group-field' style='width:550px;border:2px solid #505050;' ondrop='dropStmt(event)' ondragover='allowDrop(event)'>" + grp['name'];
+        ret += "<li><div id='" + grp['id'] +"' class='group-field' ondrop='dropStmt(event)' ondragover='allowDrop(event)'>" + grp['name'];
         // Open Group link
         ret += "<a style='float:right; padding-left:1em;' class='group-link' href='#" + grp['id'] + "'>Open</a>";
         // Delete Group link
@@ -420,7 +420,7 @@ function groupStmtUIData(data, grpid){
      for (var i = 0; i < data['stmts'].length; i++) {
         var stmt = data['stmts'][i];
         // Statement Container
-        ret += "<li><div id='" + stmt['statement_id'] + "' class='statement field' style='width:450px;border:2px solid #505050;' draggable='true' ondragstart='startDrag(event)'>";
+        ret += "<li><div id='" + stmt['statement_id'] + "' class='statement field' draggable='true' ondragstart='startDrag(event)'>";
         // Statement itself
         ret += "<div class='stmt_link lpad' href='" + stmt['statement_id'] + "'>" + stmt['actor_name'] + " " + stmt['verb'] + " " + stmt['object'];
 
