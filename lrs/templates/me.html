@@ -254,13 +254,15 @@ function getStmts_Groups(event, element){
     }
 
     var verbFilter;
+    var e = document.getElementById("my_verb_filter");
 
-    if(!myFilters['verb']){
+    if(e.selectedIndex == 0){
         verbFilter = null;
     }
     else{
-        verbFilter = myFilters['verb'];
+        verbFilter = e.options[e.selectedIndex].value;
     }
+
     $.ajax({
             url: u,
             type: "GET",
@@ -340,7 +342,7 @@ function groupUIData(data){
         // Group title
         ret += "<li><div id='" + grp['id'] +"' class='statement field group-field' style='width:450px;border:2px solid #505050;' ondrop='dropStmt(event)' ondragover='allowDrop(event)'>" + grp['name'];
         // Open Group link
-        ret += "<a style='float:right; padding-left:5em;' class='group-link' href='#" + grp['id'] + "'>Open</a>";
+        ret += "<a style='float:right; padding-left:1em;' class='group-link' href='#" + grp['id'] + "'>Open</a>";
         // Delete Group link
         ret += "<a style='float:right;' class='delete-group-link' href='#group_column'>Delete</a>";
 
@@ -397,14 +399,14 @@ function groupStmtUIData(data, grpid){
         // Statement Container
         ret += "<li><div id='" + stmt['statement_id'] + "' class='statement field' style='width:350px;border:2px solid #505050;' draggable='true' ondragstart='startDrag(event)'>";
         // Statement itself
-        ret += "<div class='stmt_link lpad' href='" + stmt['statement_id'] + "'>" + stmt['actor_name'] + " " + "<a class='verb_link' href='" + stmt['statement_id'] + "'>" + stmt['verb'] + "</a>" + " " + stmt['object'] + "</div>";
+        ret += "<div class='stmt_link lpad' href='" + stmt['statement_id'] + "'>" + stmt['actor_name'] + " " + "<a class='verb_link' href='" + stmt['statement_id'] + "'>" + stmt['verb'] + "</a>" + " " + stmt['object'];
 
         // In group, add a remove link
         if(grpid){
-            ret += "<a style='float:right;' class='remove-link'>Remove</a>";
+            ret += "<a style='float:right;' class='remove-link' href='#"+grp['id']+"'>Remove</a>";
         }
 
-        ret += "</div></li>";
+        ret += "</div></div></li>";
     }
 
     var prev = "<span class='previous'>previous</span>";
