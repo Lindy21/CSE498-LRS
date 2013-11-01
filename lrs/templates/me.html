@@ -302,8 +302,8 @@ function startDrag(event){
 function dropStmt(event){
     event.preventDefault();
     var ele = event.target;
-    if(!$(ele).hasClass('group')){
-        ele = $(ele).parents(".group");
+    if(!$(ele).hasClass('group-field')){
+        ele = $(ele).closest("div.group-field");
     }
 
     // First, retreive dropped item's id and group id
