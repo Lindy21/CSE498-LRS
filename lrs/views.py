@@ -317,6 +317,15 @@ def my_groups(request):
     try:
         if request.method == "DELETE":
             group_id = request.GET.get("group_id", None)
+            stmt_id = request.GET.get("stmt_id", None)
+            if stmt_id and group_id:
+                s = models.Statement.objects.filter(user=request.user, statement_id=stmt_id)
+                models.Group.objects.get(user=request.user, id=group_id).statements.remove(s)
+                stmt = models.Group.objects.get(user=request.user, id=group_id).statments.filter(user=request.user, statement_id=stmt_id)
+                if not stmt:
+                    return HttpResponse(status=204)
+                else:
+                    raise Exception("Failed to remove stmt: " + stmt_id + ", from group: " + group_id)
             if group_id:
                 models.Group.objects.get(user=request.user, id=group_id).delete()
                 g = models.Group.objects.get(user=request.user, id=group_id)
@@ -324,6 +333,8 @@ def my_groups(request):
                     return HttpResponse(status=204)
                 else:
                     raise Exception("Failed To Delete Group: " + group_id)
+            else:
+                raise Exception("Invalid Parameters")
 
         if request.method == "POST":
             name = request.POST.get('name', None)
@@ -344,6 +355,8 @@ def my_groups(request):
                     group.statements.add(stmt)
                     return HttpResponse(status=204)
                 return HttpResponse(json.dumps({"error_message":"invalid group and/or statement"}), status=400)
+            else:
+                raise Exception("Invalid POST method")
 
         group_id = request.GET.get("group_id", None)
         if group_id:

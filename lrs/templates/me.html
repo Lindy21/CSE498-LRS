@@ -161,9 +161,8 @@ function getGroups(event){
 function deleteGroup(event){
     var groupid = $(event.target).parents(".group").attr('id');
     $.ajax({
-        url: "{% url lrs.views.my_groups %}",
+        url: "{% url lrs.views.my_groups %}?group_id="+groupid,
         type: "DELETE",
-        data: { 'group_id': groupid },
         success: function(){
             //Reload groups
             getGroups();
@@ -191,7 +190,7 @@ function getGroupStatements(event, groupid, ele){
             data: { 'group_id': groupid},
             success: function (data){
                 if(!$(ele).children('div#stmts').length){
-                    $(ele).find('a.group-link').after('<div id="stmts" style="display:none;"></div>');
+                    $(ele).find('span.group-content').after('<div id="stmts" style="display:none;"></div>');
                 }
                 ele = $(ele).find('div#stmts');
 
@@ -201,6 +200,8 @@ function getGroupStatements(event, groupid, ele){
                 else {
                     $(ele).append(groupStmtUIData(data, groupid));
                 }
+
+                $(ele).children('ul').find('a.remove-link').click(removeStatement);
                 $(ele).children('ul').find('li.prev-next a.previous').click(
                         {
                             the_url: $(ele).children('ul').find('li.prev-next a.previous').attr("data-target")
@@ -336,7 +337,15 @@ function groupUIData(data){
     var ret = "<ul>";
     for (var i = 0; i < data['groups'].length; i++) {
         var grp = data['groups'][i];
-        ret += "<li><div id='" + grp['id'] +"' class='statement field group' style='width:450px;border:2px solid #505050;' ondrop='dropStmt(event)' ondragover='allowDrop(event)'>" + grp['name'] + "<a style='float:right;' class='delete-group-link' href='#group_column'>Delete</a><a style='float:right;' class='group-link' href='#" + grp['id'] + "'>Open</a></div></li>";
+        // Group title
+        ret += "<li><div id='" + grp['id'] +"' class='statement field group-field' style='width:450px;border:2px solid #505050;' ondrop='dropStmt(event)' ondragover='allowDrop(event)'>" + grp['name'];
+        // Open Group link
+        ret += "<a style='float:right; padding-left:5em;' class='group-link' href='#" + grp['id'] + "'>Open</a>";
+        // Delete Group link
+        ret += "<a style='float:right;' class='delete-group-link' href='#group_column'>Delete</a>";
+
+        ret += "<span class='group-content'></span>";
+        ret += "</div></li>";
     }
 
     var prev = "<span class='previous'>previous</span>";
@@ -353,6 +362,24 @@ function groupUIData(data){
     return ret;
 }
 
+function removeStatement(event){
+
+    var stmtid = $(event.target).parents("div.statement").attr('id');
+    var groupid = $(event.target).parents("div.group-field").attr('id');
+
+    $.ajax({
+        url: "{% url lrs.views.my_groups %}?group_id="+groupid+"&stmt_id="+stmtid,
+        type: "DELETE",
+        success: function(){
+            //Reload group statements
+            getGroupStatements(null, groupid, $(event.target).parents("div.group-field"));
+        },
+        error: function(xhr, ajaxOptions, thrownError){
+            alert(thrownError);
+        }
+    });
+}
+
 function groupStmtUIData(data, grpid){
     var ref = 'statement_column';
     if(grpid){
@@ -367,7 +394,16 @@ function groupStmtUIData(data, grpid){
 
      for (var i = 0; i < data['stmts'].length; i++) {
         var stmt = data['stmts'][i];
-        ret += "<li><div id='" + stmt['statement_id'] + "' class='statement field' style='width:350px;border:2px solid #505050;' draggable='true' ondragstart='startDrag(event)'><div class='stmt_link lpad' href='" + stmt['statement_id'] + "'>" + stmt['actor_name'] + " " + "<a class='verb_link' href='" + stmt['statement_id'] + "'>" + stmt['verb'] + "</a>" + " " + stmt['object'] + "</div>";
+        // Statement Container
+        ret += "<li><div id='" + stmt['statement_id'] + "' class='statement field' style='width:350px;border:2px solid #505050;' draggable='true' ondragstart='startDrag(event)'>";
+        // Statement itself
+        ret += "<div class='stmt_link lpad' href='" + stmt['statement_id'] + "'>" + stmt['actor_name'] + " " + "<a class='verb_link' href='" + stmt['statement_id'] + "'>" + stmt['verb'] + "</a>" + " " + stmt['object'] + "</div>";
+
+        // In group, add a remove link
+        if(grpid){
+            ret += "<a style='float:right;' class='remove-link'>Remove</a>";
+        }
+
         ret += "</div></li>";
     }
 
