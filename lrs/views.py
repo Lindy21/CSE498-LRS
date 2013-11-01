@@ -267,7 +267,7 @@ def my_statements(request):
                 statements = models.Statement.objects.filter(user=request.user).order_by('-timestamp')
             else:
                 try:
-                    uFilter = User.objects.get(username__exact=userFilter)
+                    uFilter = User.objects.get(username=userFilter)
                     statements = models.Statement.objects.filter(user=uFilter).order_by('-timestamp')
                 except User.DoesNotExist:
                     return HttpResponse(status=204)
