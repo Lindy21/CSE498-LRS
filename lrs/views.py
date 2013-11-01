@@ -321,7 +321,7 @@ def my_groups(request):
             if stmt_id and group_id:
                 s = models.Statement.objects.filter(user=request.user, statement_id=stmt_id)
                 models.Group.objects.filter(user=request.user, id=group_id).statements.remove(s)
-                stmt = models.Group.objects.filter(user=request.user, id=group_id).statments.filter(user=request.user, statement_id=stmt_id)
+                stmt = models.Group.objects.filter(user=request.user, id=group_id).statements.filter(user=request.user, statement_id=stmt_id)
                 if not stmt:
                     return HttpResponse(status=204)
                 else:
