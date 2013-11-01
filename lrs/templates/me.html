@@ -159,7 +159,7 @@ function getGroups(event){
 }
 
 function deleteGroup(event){
-    var groupid = $(event.target).parents(".group").attr('id');
+    var groupid = $(event.target).parents(".group-field").attr('id');
     $.ajax({
         url: "{% url lrs.views.my_groups %}?group_id="+groupid,
         type: "DELETE",
@@ -179,7 +179,7 @@ function getGroupStatements(event, groupid, ele){
     if (event){
         if(event.data.the_url) {
            u = event.data.the_url;
-           ele = $(event.target).parent().parent().parent().parent();
+           ele = $(event.target).parents("div.group-field");
            groupid = ele.attr('id');
         }
     }
@@ -226,10 +226,10 @@ function groupClick(event){
     }
     findDiv = $(ele).siblings('div#stmts').length;
     if(findDiv===0){
-        getGroupStatements(null, $(ele).parent().attr("id"), $(ele).parent());
+        getGroupStatements(null, $(ele).attr("href"), $(ele).parent());
     }
     else{
-        $(ele).next('div#stmts').slideToggle();
+        $(ele).siblings('div#stmts').slideToggle();
     }
     return false;
 }
