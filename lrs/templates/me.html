@@ -684,13 +684,14 @@ function getStmts(event, element){
     e = document.getElementById("my_search");
     check = document.getElementById("my_search_checkbox");
 
-    if(check.checked! || e.value == "") {
+    alert(e.value);
+    /*if(check.checked! || e.value == "") {
         objectFilter = null;
     }
     else {
         alert(e.value);
         objectFilter = e.value;
-    }
+    }*/
 
     $.ajax({
             url: u,
