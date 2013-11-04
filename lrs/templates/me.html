@@ -21,7 +21,7 @@
             <option value="http://verbs/completed/">Quiz Results</option>
             <option value="http://verbs/watched/">Videos</option>
             <option value="http://verbs/experienced/">Webpages</option>
-        </select></form></br>
+        </select></form>
         <form><input id="my_search_checkbox" type="checkbox" onclick="getStmts()">Search:
         <input id="my_search" type="text"></br>        
         <span class="small-link"><a id="delstmts" href="#mystatements">delete all statements</a></span>
@@ -39,7 +39,9 @@
             <option value="http://verbs/completed/">Quiz Results</option>
             <option value="http://verbs/watched/">Videos</option>
             <option value="http://verbs/experienced/">Webpages</option>
-        </select></form></br>
+        </select></form>
+        <form><input id="public_search_checkbox" type="checkbox" onclick="getStmts()">Search:
+        <input id="public_search" type="text"></br>
     </div>
     <div id="groupstatements">
         <div id="groupform">
@@ -679,10 +681,10 @@ function getStmts(event, element){
         verbFilter = e.options[e.selectedIndex].value;//myFilters['verb'];
     }
 
-    /*e = document.getElementById("my_search");
+    e = document.getElementById("my_search");
     check = document.getElementById("my_search_checkbox");
 
-    if(check.checked! || e.value == null) {
+    /*if(check.checked! || e.value == null) {
         objectFilter = null;
     }
     else {
