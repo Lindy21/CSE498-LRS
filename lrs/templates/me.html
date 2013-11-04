@@ -679,7 +679,7 @@ function getStmts(event, element){
         verbFilter = e.options[e.selectedIndex].value;//myFilters['verb'];
     }
 
-    e = document.getElementById("my_search");
+    /*e = document.getElementById("my_search");
     check = document.getElementById("my_search_checkbox");
 
     if(check.checked! || e.value == null) {
@@ -687,12 +687,12 @@ function getStmts(event, element){
     }
     else {
         objectFilter = e.value;
-    }
+    }*/
 
     $.ajax({
             url: u,
             type: "GET",
-            data: {user_filter:"1", verb_filter:verbFilter, object_filter:objectFilter},
+            data: {user_filter:"1", verb_filter:verbFilter},//, object_filter:objectFilter},
             context: ele,
             success: function (data){
                 if ($(this).children('ul').length){
