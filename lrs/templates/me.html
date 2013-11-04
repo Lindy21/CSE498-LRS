@@ -131,6 +131,9 @@ $(document).ready(function() {
             getStmts_Groups(null, $('#statement_column'));
         }       
     });
+    $("#publicstatements").on('show', function(event){
+        getPublicStmts();
+    });
     $('#mystatements #delstmts').click(function(){ 
         $.ajax({
             url: "{% url lrs.views.my_statements %}",
