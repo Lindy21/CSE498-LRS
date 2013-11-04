@@ -12,17 +12,17 @@
   </ul>
     <div id="mystatements">
         <span class="heading">Statements:</span>
-        <form><input id="my_verb_filter_checkbox" type="checkbox" onclick="getStmts()">Verb Filter:
+        <form><input id="my_verb_filter_checkbox" type="checkbox" onclick="getStmts()">Show:
         <select id="my_verb_filter" onchange="initVerbFilter()">
-            <option value=""></option>
-            <option value="http://verbs/completed/">Completed</option>
-            <option value="http://verbs/experienced/">Experienced</option>
-            <option value="http://verbs/interaction/">Interacted</option>
-            <option value="http://verbs/read/">Read</option>
-            <option value="http://verbs/started/">Started</option>
-            <option value="http://verbs/watched/">Watched</option>
-        </select></form></br>
-        <form><input id="my_search_checkbox" type="checkbox" onclick="getStmts()">User Filter:
+            <option value="">All</option>
+            <option value="http://verbs/completed/">Quiz Results</option>
+            <option value="http://verbs/experienced/">Webpages</option>
+            <option value="http://verbs/interaction/">Desktop Apps</option>
+            <option value="http://verbs/read/">Selected Texts</option>
+            <option value="http://verbs/started/">Quizzes</option>
+            <option value="http://verbs/watched/">Videos</option>
+        </select></form>
+        <form><input id="my_search_checkbox" type="checkbox" onclick="getStmts()">Search For:
         <input id="my_search" type="text"></br>        
         <span class="small-link"><a id="delstmts" href="#mystatements">delete all statements</a></span>
     </div>
@@ -623,7 +623,7 @@ function getPublicStmts(event){
     $.ajax({
             url: u,
             type: "GET",
-            data: {user_filter:userFilter, verb_filter:verbFilter},
+            data: {user_filter:userFilter, verb_filter:verbFilter, object_filter:null},
             context: $('#publicstatements'),
             success: function (data){
                 if ($(this).children('ul').length){
@@ -668,6 +668,7 @@ function getStmts(event, element){
     }
 
     var verbFilter;
+    var objectFilter;
     var e = document.getElementById("my_verb_filter");
     var check = document.getElementById("my_verb_filter_checkbox");
 
@@ -677,10 +678,21 @@ function getStmts(event, element){
     else{
         verbFilter = e.options[e.selectedIndex].value;//myFilters['verb'];
     }
+
+    e = document.getElementById("my_search");
+    check = document.getElementById("my_search_checkbox");
+
+    if(check.checked! || e.value == null) {
+        objectFilter = null;
+    }
+    else {
+        objectFilter = e.value;
+    }
+
     $.ajax({
             url: u,
             type: "GET",
-            data: {user_filter:"1", verb_filter:verbFilter},
+            data: {user_filter:"1", verb_filter:verbFilter, object_filter:objectFilter},
             context: ele,
             success: function (data){
                 if ($(this).children('ul').length){

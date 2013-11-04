@@ -260,6 +260,7 @@ def my_statements(request):
 
             userFilter = request.GET.get("user_filter", None)
             verbFilter = request.GET.get("verb_filter", None)
+            objectFilter = request.GET.get("object_filter", None)
 
             if userFilter == "0":
                 statements = models.Statement.objects.order_by('-timestamp')
