@@ -687,24 +687,17 @@ function getStmts(event, element){
     alert(check.checked);
     alert(e.value);
 
-    if(!check.checked) {
+    if(!check.checked || e.value == "") {
         objectFilter = null;
     }
     else {
         objectFilter = e.value;
     }
-    /*if(check.checked! || e.value == "") {
-        objectFilter = null;
-    }
-    else {
-        alert(e.value);
-        objectFilter = e.value;
-    }*/
 
     $.ajax({
             url: u,
             type: "GET",
-            data: {user_filter:"1", verb_filter:verbFilter},//, object_filter:objectFilter},
+            data: {user_filter:"1", verb_filter:verbFilter, object_filter:objectFilter},
             context: ele,
             success: function (data){
                 if ($(this).children('ul').length){
