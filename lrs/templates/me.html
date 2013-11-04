@@ -585,7 +585,7 @@ function stmtClick(event){
     }
     element = $(ele).parents('.statement').find('div#stmts');
     if(!$(element).length){
-        getStmtContent($(element).parent().attr("href"), this);
+        getStmtContent($(ele).parent().attr("href"), this);
     }
     else{
         $(element).collapse('toggle');
