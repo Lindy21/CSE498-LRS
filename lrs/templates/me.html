@@ -131,6 +131,22 @@ $(document).ready(function() {
             getStmts_Groups(null, $('#statement_column'));
         }       
     });
+    $('a[data-toggle="tab"]').on('show', function (e) {
+        if ($(event.target).attr("href") == "#mystatements"){
+            //clearFilters();
+            getStmts();
+        }
+         if ($(event.target).attr("href") == "#publicstatements"){
+            //clearFilters();
+            getPublicStmts();
+        }
+        if ($(event.target).attr("href") == "#groupstatements"){
+            //clearFilters();
+            getGroups();
+            getStmts_Groups(null, $('#statement_column'));
+        }
+    })
+
     $("#publicstatements").on('show', function(event){
         getPublicStmts();
     });
