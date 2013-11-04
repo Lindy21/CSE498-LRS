@@ -622,10 +622,21 @@ function getPublicStmts(event){
     else{
         userFilter = e.value;
     }
+
+    e = document.getElementById("public_search");
+    check = document.getElementById("public_search_checkbox");
+
+    if(!check.checked || e.value == "") {
+        objectFilter = null;
+    }
+    else {
+        objectFilter = e.value;
+    }
+
     $.ajax({
             url: u,
             type: "GET",
-            data: {user_filter:userFilter, verb_filter:verbFilter, object_filter:null},
+            data: {user_filter:userFilter, verb_filter:verbFilter, object_filter:objectFilter},
             context: $('#publicstatements'),
             success: function (data){
                 if ($(this).children('ul').length){
@@ -683,9 +694,6 @@ function getStmts(event, element){
 
     e = document.getElementById("my_search");
     check = document.getElementById("my_search_checkbox");
-
-    alert(check.checked);
-    alert(e.value);
 
     if(!check.checked || e.value == "") {
         objectFilter = null;
