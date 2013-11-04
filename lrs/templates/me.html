@@ -772,10 +772,9 @@ function uiData(data, context, deletable){
         ret += stmt['object'];
 
         ret += "<a class='stmt_link btn btn-primary pull-right' href='#'>Open</a>";
-        ret += "<a class='delstmt_link btn btn-danger' pull-right href='#'>Delete</a>";
         
         if(deletable){
-            ret += "<a class='delstmt_link btn btn-danger' pull-right href='#'>Delete</a>";
+            ret += "<a class='delstmt_link btn btn-danger pull-right' href='#'>Delete</a>";
         }
         ret += "</div></li>";
     }
