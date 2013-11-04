@@ -78,7 +78,7 @@ var initStmtOff = false;
 
 $(document).ready(function() {
     clearFilters();
-    getStmts();
+    //getStmts();
     $(".stmt_link").click(stmtClick);
     $('#tab-container').easytabs({
         defaultTab: "li.default"
@@ -684,7 +684,10 @@ function getStmts(event, element){
     e = document.getElementById("my_search");
     check = document.getElementById("my_search_checkbox");
 
+    alert(check.checked);
     alert(e.value);
+
+
     /*if(check.checked! || e.value == "") {
         objectFilter = null;
     }
