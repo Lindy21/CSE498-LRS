@@ -687,7 +687,12 @@ function getStmts(event, element){
     alert(check.checked);
     alert(e.value);
 
-
+    if(check.checked!) {
+        objectFilter = null;
+    }
+    else {
+        objectFilter = e.value;
+    }
     /*if(check.checked! || e.value == "") {
         objectFilter = null;
     }
