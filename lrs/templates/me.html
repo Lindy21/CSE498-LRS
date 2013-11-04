@@ -15,30 +15,30 @@
         <form><input id="my_verb_filter_checkbox" type="checkbox" onclick="getStmts()">Show:
         <select id="my_verb_filter" onchange="initVerbFilter()">
             <option value="">All</option>
-            <option value="http://verbs/completed/">Quiz Results</option>
-            <option value="http://verbs/experienced/">Webpages</option>
             <option value="http://verbs/interaction/">Desktop Apps</option>
-            <option value="http://verbs/read/">Selected Texts</option>
+            <option value="http://verbs/read/">Selected Texts</option> 
             <option value="http://verbs/started/">Quizzes</option>
+            <option value="http://verbs/completed/">Quiz Results</option>
             <option value="http://verbs/watched/">Videos</option>
-        </select></form>
-        <form><input id="my_search_checkbox" type="checkbox" onclick="getStmts()">Search For:
+            <option value="http://verbs/experienced/">Webpages</option>
+        </select></form></br>
+        <form><input id="my_search_checkbox" type="checkbox" onclick="getStmts()">Search:
         <input id="my_search" type="text"></br>        
         <span class="small-link"><a id="delstmts" href="#mystatements">delete all statements</a></span>
     </div>
     <div id="publicstatements">
         <span class="heading">Public Statements:</span>
-        <form><input id="public_user_filter_checkbox" type="checkbox" onclick="getPublicStmts()">User Filter:
+        <form><input id="public_user_filter_checkbox" type="checkbox" onclick="getPublicStmts()">User:
         <input id="public_user_filter" type="text"></br>
-        <form><input id="public_verb_filter_checkbox" type="checkbox" onclick="getPublicStmts()">Verb Filter:
+        <form><input id="public_verb_filter_checkbox" type="checkbox" onclick="getPublicStmts()">Show:
         <select id="public_verb_filter" onchange="initPublicVerbFilter()">
-            <option value=""></option>
-            <option value="http://verbs/completed/">Completed</option>
-            <option value="http://verbs/experienced/">Experienced</option>
-            <option value="http://verbs/interaction/">Interacted</option>
-            <option value="http://verbs/read/">Read</option>
-            <option value="http://verbs/started/">Started</option>
-            <option value="http://verbs/watched/">Watched</option>
+            <option value="">All</option>
+            <option value="http://verbs/interaction/">Desktop Apps</option>
+            <option value="http://verbs/read/">Selected Texts</option> 
+            <option value="http://verbs/started/">Quizzes</option>
+            <option value="http://verbs/completed/">Quiz Results</option>
+            <option value="http://verbs/watched/">Videos</option>
+            <option value="http://verbs/experienced/">Webpages</option>
         </select></form></br>
     </div>
     <div id="groupstatements">
@@ -470,22 +470,22 @@ function verbClick(event){
             switch(verb['id'])
             {
                 case("http://verbs/completed/"):
-                    e.selectedIndex = 1;
-                    break;
-                case("http://verbs/experienced/"):
-                    e.selectedIndex = 2;
-                    break;
-                case("http://verbs/interaction/"):
-                    e.selectedIndex = 3;
-                    break;
-                case("http://verbs/read/"):
                     e.selectedIndex = 4;
                     break;
+                case("http://verbs/experienced/"):
+                    e.selectedIndex = 6;
+                    break;
+                case("http://verbs/interaction/"):
+                    e.selectedIndex = 1;
+                    break;
+                case("http://verbs/read/"):
+                    e.selectedIndex = 2;
+                    break;
                 case("http://verbs/started/"):
-                    e.selectedIndex = 5;
+                    e.selectedIndex = 3;
                     break;
                 case("http://verbs/watched/"):
-                    e.selectedIndex = 6;
+                    e.selectedIndex = 5;
                     break;
             }
             check.checked = true;
@@ -520,22 +520,22 @@ function publicVerbClick(event){
             switch(verb['id'])
             {
                 case("http://verbs/completed/"):
-                    e.selectedIndex = 1;
-                    break;
-                case("http://verbs/experienced/"):
-                    e.selectedIndex = 2;
-                    break;
-                case("http://verbs/interaction/"):
-                    e.selectedIndex = 3;
-                    break;
-                case("http://verbs/read/"):
                     e.selectedIndex = 4;
                     break;
+                case("http://verbs/experienced/"):
+                    e.selectedIndex = 6;
+                    break;
+                case("http://verbs/interaction/"):
+                    e.selectedIndex = 1;
+                    break;
+                case("http://verbs/read/"):
+                    e.selectedIndex = 2;
+                    break;
                 case("http://verbs/started/"):
-                    e.selectedIndex = 5;
+                    e.selectedIndex = 3;
                     break;
                 case("http://verbs/watched/"):
-                    e.selectedIndex = 6;
+                    e.selectedIndex = 5;
                     break;
             }
 
