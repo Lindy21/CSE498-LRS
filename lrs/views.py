@@ -268,6 +268,7 @@ def my_statements(request):
                     try:
                         vFilter = models.Verb.objects.get(verb_id=verbFilter)
                         statements = statements.filter(verb=vFilter)
+                        
                     except: 
                         return HttpResponse(status=204)
             elif userFilter == "1":
