@@ -76,7 +76,7 @@
         <form class="form-inline" name="groupForm" action="javascript:create_group()">
                 Group Name:
                 <input type="text" id="group_text"/>
-                <input name="Submit" type="submit" value="Create"/>
+                <input name="Submit" type="submit" value="Create" class="btn"/>
         </form>
         <div class="container">
             <div class="row">
@@ -403,15 +403,15 @@ function groupUIData(data){
         return "<ul class='unstyled'><li>no groups</li></ul>";
     }
 
-    var ret = "<ul class='unstyled span6 offset1'>";
+    var ret = "<ul class='unstyled'>";
     for (var i = 0; i < data['groups'].length; i++) {
         var grp = data['groups'][i];
         // Group title
-        ret += "<li><div id='" + grp['id'] +"' class='group-field span6' ondrop='dropStmt(event)' ondragover='allowDrop(event)'>" + grp['name'];
+        ret += "<li><div id='" + grp['id'] +"' class='group-field' ondrop='dropStmt(event)' ondragover='allowDrop(event)'>" + grp['name'];
         // Open Group link
-        ret += "<a class='group-link btn btn-primary' href='#" + grp['id'] + "'>Open</a>";
+        ret += "<a class='group-link btn btn-primary pull-right' href='#" + grp['id'] + "'>Open</a>";
         // Delete Group link
-        ret += "<a class='delete-group-link btn btn-danger' href='#'>Delete</a>";
+        ret += "<a class='delete-group-link btn btn-danger pull-right' href='#'>Delete</a>";
 
         ret += "<span class='group-content'></span>";
         ret += "</div></li>";
@@ -464,7 +464,7 @@ function groupStmtUIData(data, grpid){
      for (var i = 0; i < data['stmts'].length; i++) {
         var stmt = data['stmts'][i];
         // Statement Container
-        ret += "<li><div id='" + stmt['statement_id'] + "' class='statement span4 offset5' draggable='true' ondragstart='startDrag(event)'>";
+        ret += "<li><div id='" + stmt['statement_id'] + "' class='statement' draggable='true' ondragstart='startDrag(event)'>";
         // Statement itself
         ret += "<div class='stmt_link lpad' href='" + stmt['statement_id'] + "'>" + stmt['actor_name'] + " " + stmt['verb'] + " " + stmt['object'];
 
