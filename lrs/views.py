@@ -293,8 +293,8 @@ def my_statements(request):
                             vFilter = models.Verb.objects.get(verb_id=verbFilter)
                             statements = statements.filter(verb=vFilter)
 
-                        if objectFilter:
-                            statements = statements.filter(object__icontains=objectFilter)
+                            if objectFilter:
+                                statements = statements.filter(object__icontains=objectFilter)
                         except: 
                             vFilter = null;
                 except:
