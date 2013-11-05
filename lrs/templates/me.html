@@ -69,6 +69,7 @@
             Search:
             <input id="public_search" type="text"></br>
         </form>
+        <h2>Public Feed:</h2>
     </div>
 
     <div id="groupstatements" class="tab-pane">
@@ -686,7 +687,7 @@ function getPublicStmts(event){
                     $(this).children('ul').replaceWith(uiData(data,$("#publicstatements"),false));
                 }
                 else {
-                    $(this).append(uiData(data,"publicstatements",false));
+                    $(this).append(uiData(data,$("#publicstatements"),false));
                 }
                 $(this).children('ul').find('.stmt_link').click(stmtClick);
                 $(this).children('ul').find('.verb_link').click(publicVerbClick);
@@ -700,8 +701,8 @@ function getPublicStmts(event){
             },
             timeout : 15000
         });
-    if(!inPage)
-        feedTimeout = setTimeout(getPublicStmts, 10000);
+    //if(!inPage)
+    //    feedTimeout = setTimeout(getPublicStmts, 10000);
 }
 
 function getStmts(event, element){
@@ -801,11 +802,11 @@ function uiData(data, context, deletable){
 
     var prev = "<li class='disabled'><a href='#'>&laquo;</a></li>";
     if (data['previous']) {
-        prev = "<li><a href='#" + $(context).attr('id') + "' data-target='" + data['previous'] + "'>&laquo;</a></li>";
+        prev = "<li class='prev-next'><a class='previous' href='#" + $(context).attr('id') + "' data-target='" + data['previous'] + "'>&laquo;</a></li>";
     }
     var next = "<li class='disabled'>&raquo;</li>";
     if (data['next']) {
-        next = "<li><a href='#" + $(context).attr('id') + "' data-target='" + data['next'] + "'>&raquo;</a></li>";
+        next = "<li class='prev-next'><a class='next' href='#" + $(context).attr('id') + "' data-target='" + data['next'] + "'>&raquo;</a></li>";
     }
     ret += "<li class='pagination offset1'><ul>" + prev + next + "</ul></li>";
     ret += "</ul>";
