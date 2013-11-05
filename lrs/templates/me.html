@@ -46,7 +46,7 @@
             </label>
             User:
             <input id="public_user_filter" type="text">
-        </form></br>
+        </form>
         <form class="form-inline">
             <label class="checkbox">
                 <input id="public_verb_filter_checkbox" type="checkbox" onclick="getPublicStmts()">
@@ -676,6 +676,7 @@ function getPublicStmts(event){
     }
     else {
         objectFilter = e.value;
+        alert(objectFilter);
     }
 
     $.ajax({
