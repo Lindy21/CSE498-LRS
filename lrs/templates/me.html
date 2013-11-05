@@ -399,32 +399,32 @@ function allowDrop(event){
 
 function groupUIData(data){
     if(data['groups'].length == 0) {
-        return "<ul><li>no groups</li></ul>";
+        return "<ul class='unstyled'><li>no groups</li></ul>";
     }
 
-    var ret = "<ul>";
+    var ret = "<ul class='unstyled'>";
     for (var i = 0; i < data['groups'].length; i++) {
         var grp = data['groups'][i];
         // Group title
-        ret += "<li><div id='" + grp['id'] +"' class='group-field' ondrop='dropStmt(event)' ondragover='allowDrop(event)'>" + grp['name'];
+        ret += "<li><div id='" + grp['id'] +"' class='group-field well' ondrop='dropStmt(event)' ondragover='allowDrop(event)'>" + grp['name'];
         // Open Group link
-        ret += "<a style='float:right; padding-left:1em;' class='group-link' href='#" + grp['id'] + "'>Open</a>";
+        ret += "<a class='group-link btn btn-primary' href='#" + grp['id'] + "'>Open</a>";
         // Delete Group link
-        ret += "<a style='float:right;' class='delete-group-link' href='#group_column'>Delete</a>";
+        ret += "<a class='delete-group-link btn btn-danger' href='#'>Delete</a>";
 
         ret += "<span class='group-content'></span>";
         ret += "</div></li>";
     }
 
-    var prev = "<span class='previous'>previous</span>";
+    var prev = "<li class='disabled'><a href='#'>&laquo;</a></li>";
     if (data['previous']) {
-        prev = "<a class='previous' href='#group_column' data-target='" + data['previous'] + "'>previous</a>";
+        prev = "<li class='prev-next'><a class='previous' href='#group_column' data-target='" + data['previous'] + "'>&laquo;</a></li>";
     }
-    var next = "<span class='next'>next</span>";
+    var next = "<li class='disabled'><a href='#'>&raquo;</a></li>";
     if (data['next']) {
-        next = "<a class='next' href='#group_column' data-target='" + data['next'] + "'>next</a>";
+        next = "<li class='prev-next'><a class='next' href='#group_column' data-target='" + data['next'] + "'>&raquo;</a></li>";
     }
-    ret += "<li class='prev-next'>" + prev + next + "</li>";
+    ret += "<li class='pagination offset1'><ul>" + prev + next + "</ul></li>";
     ret += "</ul>";
 
     return ret;
@@ -455,35 +455,35 @@ function groupStmtUIData(data, grpid){
     }
 
     if (data['stmts'].length == 0){
-        return "<ul><li>no statements</li></ul>";
+        return "<ul class='unstyled'><li>no statements</li></ul>";
     }
 
-    var ret = "<ul>";
+    var ret = "<ul class='unstyled'>";
 
      for (var i = 0; i < data['stmts'].length; i++) {
         var stmt = data['stmts'][i];
         // Statement Container
-        ret += "<li><div id='" + stmt['statement_id'] + "' class='statement field' draggable='true' ondragstart='startDrag(event)'>";
+        ret += "<li><div id='" + stmt['statement_id'] + "' class='statement' draggable='true' ondragstart='startDrag(event)'>";
         // Statement itself
         ret += "<div class='stmt_link lpad' href='" + stmt['statement_id'] + "'>" + stmt['actor_name'] + " " + stmt['verb'] + " " + stmt['object'];
 
         // In group, add a remove link
         if(grpid){
-            ret += "<a style='float:right;' class='remove-link' href='#"+grpid+"'>Remove</a>";
+            ret += "<a class='remove-link btn pull-right' href='#"+grpid+"'>Remove</a>";
         }
 
         ret += "</div></div></li>";
     }
 
-    var prev = "<span class='previous'>previous</span>";
+    var prev = "<li class='disabled'><a href='#'>&laquo;</a></li>";
     if (data['previous']) {
-        prev = "<a class='previous' href='#" + ref + "' data-target='" + data['previous'] + "'>previous</a>";
+        prev = "<li class='prev-next'><a class='previous' href='#" + ref + "' data-target='" + data['previous'] + "'>&laquo;</a></li>";
     }
-    var next = "<span class='next'>next</span>";
+    var next = "<li class='disabled'><a href='#'>&raquo;</a></li>";
     if (data['next']) {
-        next = "<a class='next' href='#" + ref + "' data-target='" + data['next'] + "'>next</a>";
+        next = "<li class='prev-next'><a class='next' href='#" + ref + "' data-target='" + data['next'] + "'>&raquo;</a></li>";
     }
-    ret += "<li class='prev-next'>" + prev + next + "</li>";
+    ret += "<li class='pagination offset1'><ul>" + prev + next + "</ul></li>";
 
     ret += "</ul>";
 
@@ -777,7 +777,7 @@ function getStmts(event, element){
 
 function uiData(data, context, deletable){
     if (data['stmts'].length == 0){
-        return "<ul><li>no statements</li></ul>";
+        return "<ul class='unstyled'><li>no statements</li></ul>";
     }
     var ret = "<ul class='unstyled pull-left'>";
     for (var i = 0; i < data['stmts'].length; i++) {
