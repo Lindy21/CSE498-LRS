@@ -843,7 +843,7 @@ function buildContent(data) {
                 while(tmpString.length > 0)
                 {
                     ret += "<br>&nbsp&nbsp&nbsp&nbsp" + tmpString.substr(0,tmpString.indexOf(":")) + " Score : " + 
-                            parseInt(tmpString.substr(tmpString.indexOf(":")+1,tmpString.indexOf("/"))) * 100 + "%";
+                            parseFloat(tmpString.substr(tmpString.indexOf(":")+1,tmpString.indexOf("/"))) * 100 + "%";
                     tmpString = tmpString.slice(tmpString.indexOf("/")+1);
                 }
             break;
