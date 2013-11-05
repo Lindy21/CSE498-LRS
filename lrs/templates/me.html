@@ -588,7 +588,7 @@ function stmtClick(event){
     }
     element = $(ele).parents('.statement').find('div#stmts');
     if(!$(element).length){
-        getStmtContent($(ele).parent().attr("href"), this);
+        getStmtContent($(ele).parents('.statement').attr("href"), this);
     }
     else{
         $(element).collapse('toggle');
@@ -771,8 +771,8 @@ function uiData(data, context, deletable){
     for (var i = 0; i < data['stmts'].length; i++) {
         var stmt = data['stmts'][i];
         ret += "<li><div class='row'><div class='statement span7 offset1' href='" + stmt['statement_id'] + "'>";
-        ret += stmt['actor_name'] + " ";
 		ret += "<div class='span5'>";
+		ret += stmt['actor_name'] + " ";
         ret += "<a class='verb_link' href='" + stmt['statement_id'] + "'>" + stmt['verb'] + "</a>" + " ";
         ret += stmt['object'];
 		ret += "</div>";
