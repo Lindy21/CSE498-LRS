@@ -80,7 +80,7 @@
         </form>
         <div class="container">
             <div class="row">
-                <div id="group_column" class="span5">
+                <div id="group_column" class="span5 offset1">
                     <h3>Groups:</h3>
                 </div>
 
@@ -255,7 +255,7 @@ function getGroupStatements(event, groupid, ele){
             data: { 'group_id': groupid},
             success: function (data){
                 if(!$(ele).children('div#stmts').length){
-                    $(ele).find('span.group-content').after('<div id="stmts" style="display:none;"></div>');
+                    $(ele).find('span.group-content').after('<div id="stmts" class="row"></div>');
                 }
                 ele = $(ele).find('div#stmts');
 
@@ -425,7 +425,7 @@ function groupUIData(data){
     if (data['next']) {
         next = "<li class='prev-next'><a class='next' href='#group_column' data-target='" + data['next'] + "'>&raquo;</a></li>";
     }
-    ret += "<li class='pagination offset1'><ul>" + prev + next + "</ul></li>";
+    ret += "<li class='pagination'><ul>" + prev + next + "</ul></li>";
     ret += "</ul>";
 
     return ret;
@@ -464,7 +464,7 @@ function groupStmtUIData(data, grpid){
      for (var i = 0; i < data['stmts'].length; i++) {
         var stmt = data['stmts'][i];
         // Statement Container
-        ret += "<li><div id='" + stmt['statement_id'] + "' class='statement' draggable='true' ondragstart='startDrag(event)'>";
+        ret += "<li><div id='" + stmt['statement_id'] + "' class='statement span4' draggable='true' ondragstart='startDrag(event)'>";
         // Statement itself
         ret += "<div class='stmt_link lpad' href='" + stmt['statement_id'] + "'>" + stmt['actor_name'] + " " + stmt['verb'] + " " + stmt['object'];
 
@@ -484,7 +484,7 @@ function groupStmtUIData(data, grpid){
     if (data['next']) {
         next = "<li class='prev-next'><a class='next' href='#" + ref + "' data-target='" + data['next'] + "'>&raquo;</a></li>";
     }
-    ret += "<li class='pagination offset1'><ul>" + prev + next + "</ul></li>";
+    ret += "<li class='pagination'><ul>" + prev + next + "</ul></li>";
 
     ret += "</ul>";
 
