@@ -270,7 +270,7 @@ def my_statements(request):
                         statements = statements.filter(verb=vFilter)
 
                         if objectFilter:
-                            statements = statements.filter(object__icontains=objectFilter)
+                            statements = statements.filter(activity_definition_name__icontains=objectFilter)
                     except: 
                         return HttpResponse(status=204)
             elif userFilter == "1":
@@ -281,7 +281,7 @@ def my_statements(request):
                         statements = statements.filter(verb=vFilter)
 
                         if objectFilter:
-                            statements = statements.filter(object__icontains=objectFilter)
+                            statements = statements.filter(activity_definition_name__icontains=objectFilter)
                     except: 
                         return HttpResponse(status=204)
             else:
@@ -294,7 +294,7 @@ def my_statements(request):
                             statements = statements.filter(verb=vFilter)
 
                             if objectFilter:
-                                statements = statements.filter(object__icontains=objectFilter)
+                                statements = statements.filter(activity_definition_name__icontains=objectFilter)
                         except: 
                             vFilter = null;
                 except:
