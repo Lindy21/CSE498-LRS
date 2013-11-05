@@ -78,17 +78,17 @@
                 <input type="text" id="group_text"/>
                 <input name="Submit" type="submit" value="Create"/>
         </form>
-        <table>
-            <tr>
-                <td id="group_column">
-                    <span class="heading">Groups:</span><span class="small-link"></span>
-                </td>
+        <div class="container">
+            <div class="row">
+                <div id="group_column" class="span5">
+                    <h3>Groups:</h3>
+                </div>
 
-                <td id="statement_column">
-                    <span class="heading">Statements:</span><span class="small-link">Organize statements into groups by dragging and dropping</span>
-                </td>
-            </tr>
-        </table>
+                <div id="statement_column" class="span5">
+                    <h3>Statements:</h3><span class="small-link">Organize statements into groups by dragging and dropping</span>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock content %}
@@ -398,15 +398,16 @@ function allowDrop(event){
 }
 
 function groupUIData(data){
+
     if(data['groups'].length == 0) {
         return "<ul class='unstyled'><li>no groups</li></ul>";
     }
 
-    var ret = "<ul class='unstyled'>";
+    var ret = "<ul class='unstyled span6 offset1'>";
     for (var i = 0; i < data['groups'].length; i++) {
         var grp = data['groups'][i];
         // Group title
-        ret += "<li><div id='" + grp['id'] +"' class='group-field well' ondrop='dropStmt(event)' ondragover='allowDrop(event)'>" + grp['name'];
+        ret += "<li><div id='" + grp['id'] +"' class='group-field span6' ondrop='dropStmt(event)' ondragover='allowDrop(event)'>" + grp['name'];
         // Open Group link
         ret += "<a class='group-link btn btn-primary' href='#" + grp['id'] + "'>Open</a>";
         // Delete Group link
@@ -463,13 +464,13 @@ function groupStmtUIData(data, grpid){
      for (var i = 0; i < data['stmts'].length; i++) {
         var stmt = data['stmts'][i];
         // Statement Container
-        ret += "<li><div id='" + stmt['statement_id'] + "' class='statement' draggable='true' ondragstart='startDrag(event)'>";
+        ret += "<li><div id='" + stmt['statement_id'] + "' class='statement span4 offset5' draggable='true' ondragstart='startDrag(event)'>";
         // Statement itself
         ret += "<div class='stmt_link lpad' href='" + stmt['statement_id'] + "'>" + stmt['actor_name'] + " " + stmt['verb'] + " " + stmt['object'];
 
         // In group, add a remove link
         if(grpid){
-            ret += "<a class='remove-link btn pull-right' href='#"+grpid+"'>Remove</a>";
+            ret += "<a class='remove-link btn btn-danger pull-right' href='#"+grpid+"'>Remove</a>";
         }
 
         ret += "</div></div></li>";
@@ -782,7 +783,7 @@ function uiData(data, context, deletable){
     var ret = "<ul class='unstyled pull-left'>";
     for (var i = 0; i < data['stmts'].length; i++) {
         var stmt = data['stmts'][i];
-        ret += "<li><div class='statement span5 offset1' href='" + stmt['statement_id'] + "'>";
+        ret += "<li><div class='statement span5 offset3' href='" + stmt['statement_id'] + "'>";
         ret += stmt['actor_name'] + " ";
         ret += "<a class='verb_link' href='" + stmt['statement_id'] + "'>" + stmt['verb'] + "</a>" + " ";
         ret += stmt['object'];
