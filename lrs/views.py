@@ -307,11 +307,11 @@ def my_statements(request):
                 d['verb'] = stmt.verb.get_display()
                 d['verb_id'] = stmt.verb.get_id()
                 stmtobj = stmt.get_object()
-                stmtname = stmtobj.get_a_name()
-                d['object'] = stmtname
+                d['object'] = stmtobj.get_a_name()
 
+                searchstring = stmtobj.get_search_index()
                 if objectFilter:
-                    if objectFilter in stmtname:
+                    if objectFilter in searchstring:
                         slist.append(d)
                 else:
                     slist.append(d)
