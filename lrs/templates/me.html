@@ -770,18 +770,25 @@ function uiData(data, context, deletable){
     var ret = "<ul class='unstyled pull-left'>";
     for (var i = 0; i < data['stmts'].length; i++) {
         var stmt = data['stmts'][i];
-        ret += "<li><div class='statement span5 offset3' href='" + stmt['statement_id'] + "'>";
+        ret += "<li><div class='row'><div class='statement span7 offset1' href='" + stmt['statement_id'] + "'>";
         ret += stmt['actor_name'] + " ";
+		ret += "<div class='span5'>";
         ret += "<a class='verb_link' href='" + stmt['statement_id'] + "'>" + stmt['verb'] + "</a>" + " ";
         ret += stmt['object'];
-
+		ret += "</div>";
+		
+		ret += "<div class='row'>
+		ret += "<div class='span2'>
         ret += "<a class='stmt_link btn btn-primary pull-right' href='#'>Open</a>";
         
         if(deletable){
             ret += "<a class='delstmt_link btn btn-danger pull-right' href='#'>Delete</a>";
         }
+		ret += "</div>";
+		ret += "</div>";
+		
         ret += "<span class='stmt-field'></span>"
-        ret += "</div></li>";
+        ret += "</div></div></li>";
     }
 
     var prev = "<li class='disabled'><a href='#'>&laquo;</a></li>";
