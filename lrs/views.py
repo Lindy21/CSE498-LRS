@@ -310,11 +310,12 @@ def my_statements(request):
                 stmtname = stmtobj.get_a_name()
                 d['object'] = stmtname
 
-                #if objectFilter:
+                if objectFilter:
+                    slist.append(d)
                     #if objectFilter in stmtname:
                         #slist.append(d)
-                #else:
-                slist.append(d)
+                else:
+                    slist.append(d)
             
             paginator = Paginator(slist, settings.STMTS_PER_PAGE)
 
