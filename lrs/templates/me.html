@@ -146,10 +146,6 @@ $(document).ready(function() {
             getGroups();
             getStmts_Groups(null, $('#statement_column'));
         }
-    })
-
-    $("#publicstatements").on('show', function(event){
-        getPublicStmts();
     });
     $('#mystatements #delstmts').click(function(){ 
         $.ajax({
@@ -701,8 +697,8 @@ function getPublicStmts(event){
             },
             timeout : 15000
         });
-    //if(!inPage)
-    //    feedTimeout = setTimeout(getPublicStmts, 10000);
+    if(!inPage)
+        feedTimeout = setTimeout(getPublicStmts, 10000);
 }
 
 function getStmts(event, element){
@@ -804,7 +800,7 @@ function uiData(data, context, deletable){
     if (data['previous']) {
         prev = "<li class='prev-next'><a class='previous' href='#" + $(context).attr('id') + "' data-target='" + data['previous'] + "'>&laquo;</a></li>";
     }
-    var next = "<li class='disabled'>&raquo;</li>";
+    var next = "<li class='disabled'><a href='#'>&raquo;</a></li>";
     if (data['next']) {
         next = "<li class='prev-next'><a class='next' href='#" + $(context).attr('id') + "' data-target='" + data['next'] + "'>&raquo;</a></li>";
     }
