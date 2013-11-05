@@ -268,6 +268,9 @@ def my_statements(request):
                     try:
                         vFilter = models.Verb.objects.get(verb_id=verbFilter)
                         statements = statements.filter(verb=vFilter)
+
+                        if objectFilter:
+                            statements = statements.filter(object__icontains=objectFilter)
                     except: 
                         return HttpResponse(status=204)
             elif userFilter == "1":
@@ -276,6 +279,9 @@ def my_statements(request):
                     try:
                         vFilter = models.Verb.objects.get(verb_id=verbFilter)
                         statements = statements.filter(verb=vFilter)
+
+                        if objectFilter:
+                            statements = statements.filter(object__icontains=objectFilter)
                     except: 
                         return HttpResponse(status=204)
             else:
@@ -286,6 +292,9 @@ def my_statements(request):
                         try:
                             vFilter = models.Verb.objects.get(verb_id=verbFilter)
                             statements = statements.filter(verb=vFilter)
+
+                        if objectFilter:
+                            statements = statements.filter(object__icontains=objectFilter)
                         except: 
                             vFilter = null;
                 except:
