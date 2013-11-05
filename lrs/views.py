@@ -270,7 +270,8 @@ def my_statements(request):
                         statements = statements.filter(verb=vFilter)
 
                         if objectFilter:
-                            statements = statements.filter(activity_definition_name__icontains=objectFilter)
+                            oFilter = models.Activity.objects.get(activity_definition_name__icontains=objectFilter)
+                            statements = statements.filter(object_activity=oFilter)
                     except: 
                         return HttpResponse(status=204)
             elif userFilter == "1":
