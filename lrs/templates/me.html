@@ -770,7 +770,9 @@ function uiData(data, context, deletable){
     var ret = "<ul class='unstyled pull-left'>";
     for (var i = 0; i < data['stmts'].length; i++) {
         var stmt = data['stmts'][i];
-        ret += "<li><div class='row'><div class='statement span7 offset1' href='" + stmt['statement_id'] + "'>";
+        ret += "<li><div class='row'><div class='statement ";
+
+		ret += " offset1' href='" + stmt['statement_id'] + "'>";
 		ret += "<div class='row'>";
 		ret += "<div class='span5'>";
 		ret += stmt['actor_name'] + " ";
@@ -780,7 +782,16 @@ function uiData(data, context, deletable){
 		
 		ret += "<div class='span2'>";
         
-		ret += "<a class='stmt_link btn btn-primary pull-left' style='margin-right: 1em' href='#'>Open</a>";
+		ret += "<a class='stmt_link btn btn-primary";
+		if(deletable)
+		{
+			ret += "pull-left'";
+		}
+		else
+		{
+			ret += "pull-right'";
+		}
+		ret += "style='margin-right: 1em' href='#'>Open</a>";
 		
         if(deletable){
             ret += "<a class='delstmt_link btn btn-danger pull-right' href='#'>Delete</a>";
