@@ -266,6 +266,8 @@ function getGroupStatements(event, groupid, ele){
                     $(ele).append(groupStmtUIData(data, groupid));
                 }
 
+
+                $(ele).children('ul').find('div.statement').addClass('span4');
                 $(ele).children('ul').find('a.remove-link').click(removeStatement);
                 $(ele).children('ul').find('.stmt_link').click(stmtClick);
                 $(ele).children('ul').find('li.prev-next a.previous').click(
