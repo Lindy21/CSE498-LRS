@@ -771,6 +771,7 @@ function uiData(data, context, deletable){
     for (var i = 0; i < data['stmts'].length; i++) {
         var stmt = data['stmts'][i];
         ret += "<li><div class='row'><div class='statement span7 offset1' href='" + stmt['statement_id'] + "'>";
+		ret += "<div class='row'>";
 		ret += "<div class='span5'>";
 		ret += stmt['actor_name'] + " ";
         ret += "<a class='verb_link' href='" + stmt['statement_id'] + "'>" + stmt['verb'] + "</a>" + " ";
@@ -786,7 +787,7 @@ function uiData(data, context, deletable){
         }
 		
 		ret += "</div>";
-		
+		ret += "</div>";
 		ret += "<div class='row'>";
         ret += "<span class='stmt-field'></span>";
         ret += "</div>";
@@ -808,7 +809,7 @@ function uiData(data, context, deletable){
 
 function getStmtContent(stmtid, ele){
     
-	ele = $(ele).parent().siblings(".stmt-field");
+	ele = $(ele).parents('.statement').find(".stmt-field");
     $.ajax({
         url: "{% url lrs.views.my_statements %}?stmt_id="+stmtid,
         type: "GET",
