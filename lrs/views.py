@@ -306,10 +306,11 @@ def my_statements(request):
                 d['verb'] = stmt.verb.get_display()
                 d['verb_id'] = stmt.verb.get_id()
                 stmtobj = stmt.get_object()
-                d['object'] = stmtobj.get_a_name()
+                stmtname = stmtobj.get_a_name()
+                d['object'] = stmtname
 
                 if objectFilter:
-                    if objectFilter in stmtobj.activity_definition_name:
+                    if objectFilter in stmtname:
                         slist.append(d)
                 else:
                     slist.append(d)
