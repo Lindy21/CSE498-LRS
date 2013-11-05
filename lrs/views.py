@@ -271,7 +271,7 @@ def my_statements(request):
 
                         if objectFilter:
                             #oFilter = models.Activity.objects.get(activity_definition_name__icontains=objectFilter)
-                            statements = statements.filter(object_activity__activity_definition_name__icontains=objectFilter)
+                            statements = statements.filter(object_activity.activity_definition_name__icontains=objectFilter)
                     except: 
                         return HttpResponse(status=204)
             elif userFilter == "1":
@@ -282,7 +282,7 @@ def my_statements(request):
                         statements = statements.filter(verb=vFilter)
 
                         if objectFilter:
-                            statements = statements.filter(object_activity__activity_definition_name__icontains=objectFilter)
+                            statements = statements.filter(object_activity.activity_definition_name__icontains=objectFilter)
                     except: 
                         return HttpResponse(status=204)
             else:
@@ -295,7 +295,7 @@ def my_statements(request):
                             statements = statements.filter(verb=vFilter)
 
                             if objectFilter:
-                                statements = statements.filter(object_activity__activity_definition_name__icontains=objectFilter)
+                                statements = statements.filter(object_activity.activity_definition_name__icontains=objectFilter)
                         except: 
                             vFilter = null;
                 except:
