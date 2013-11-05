@@ -255,7 +255,7 @@ function getGroupStatements(event, groupid, ele){
             data: { 'group_id': groupid},
             success: function (data){
                 if(!$(ele).children('div#stmts').length){
-                    $(ele).find('span.group-content').after('<div id="stmts" class="row"></div>');
+                    $(ele).find('span.group-content').after('<div id="stmts" class="row" style="margin-top:2em;"></div>');
                 }
                 ele = $(ele).find('div#stmts');
 
@@ -488,7 +488,7 @@ function groupStmtUIData(data, grpid){
     if (data['next']) {
         next = "<li class='prev-next'><a class='next' href='#" + ref + "' data-target='" + data['next'] + "'>&raquo;</a></li>";
     }
-    ret += "<li class='pagination'><ul>" + prev + next + "</ul></li>";
+    ret += "<li class='pagination span4'><ul>" + prev + next + "</ul></li>";
 
     ret += "</ul>";
 
