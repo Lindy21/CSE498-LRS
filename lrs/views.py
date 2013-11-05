@@ -260,24 +260,44 @@ def my_statements(request):
 
             userFilter = request.GET.get("user_filter", None)
             verbFilter = request.GET.get("verb_filter", None)
+            objectFilter = request.GET.get("object_filter", None)
 
             if userFilter == "0":
                 statements = models.Statement.objects.order_by('-timestamp')
+                if verbFilter:
+                    try:
+                        vFilter = models.Verb.objects.get(verb_id=verbFilter)
+                        statements = statements.filter(verb=vFilter)
+
+                    except: 
+                        return HttpResponse(status=204)
             elif userFilter == "1":
                 statements = models.Statement.objects.filter(user=request.user).order_by('-timestamp')
+                if verbFilter:
+                    try:
+                        vFilter = models.Verb.objects.get(verb_id=verbFilter)
+                        statements = statements.filter(verb=vFilter)
+
+                        #if objectFilter:
+                            #statements = statements.filter(object_activity.activity_definition_name__icontains=objectFilter)
+                    except: 
+                        return HttpResponse(status=204)
             else:
                 try:
-                    uFilter = User.objects.get(username__exact=userFilter)
+                    uFilter = User.objects.get(username=userFilter)
                     statements = models.Statement.objects.filter(user=uFilter).order_by('-timestamp')
-                except User.DoesNotExist:
-                    return HttpResponse(status=204)
+                    if verbFilter:
+                        try:
+                            vFilter = models.Verb.objects.get(verb_id=verbFilter)
+                            statements = statements.filter(verb=vFilter)
 
-            if verbFilter:
-                try:
-                    vFilter = models.Verb.objects.get(verb_id=verbFilter)
-                    statements = statements.filter(verb=vFilter)
-                except: 
-                    return HttpResponse(status=204)
+                            #if objectFilter:
+                                #statements = statements.filter(object_activity.activity_definition_name__icontains=objectFilter)
+                        except: 
+                            vFilter = null;
+                except:
+                    statements = {}
+
 
             for stmt in statements:
                 d = {}
@@ -288,7 +308,13 @@ def my_statements(request):
                 d['verb_id'] = stmt.verb.get_id()
                 stmtobj = stmt.get_object()
                 d['object'] = stmtobj.get_a_name()
-                slist.append(d)
+
+                searchstring = stmtobj.get_search_index()
+                if objectFilter:
+                    if objectFilter in searchstring:
+                        slist.append(d)
+                else:
+                    slist.append(d)
             
             paginator = Paginator(slist, settings.STMTS_PER_PAGE)
 
@@ -317,13 +343,24 @@ def my_groups(request):
     try:
         if request.method == "DELETE":
             group_id = request.GET.get("group_id", None)
+            stmt_id = request.GET.get("stmt_id", None)
+            if stmt_id and group_id:
+                s = models.Statement.objects.get(user=request.user, statement_id=stmt_id)
+                models.Group.objects.get(user=request.user, id=group_id).statements.remove(s)
+                stmt = models.Group.objects.get(user=request.user, id=group_id).statements.filter(user=request.user, statement_id=stmt_id)
+                if not stmt:
+                    return HttpResponse(status=204)
+                else:
+                    raise Exception("Failed to remove stmt: " + stmt_id + ", from group: " + group_id)
             if group_id:
                 models.Group.objects.get(user=request.user, id=group_id).delete()
-                g = models.Group.objects.get(user=request.user, id=group_id)
+                g = models.Group.objects.filter(user=request.user, id=group_id)
                 if not g:
                     return HttpResponse(status=204)
                 else:
                     raise Exception("Failed To Delete Group: " + group_id)
+            else:
+                raise Exception("Invalid Parameters")
 
         if request.method == "POST":
             name = request.POST.get('name', None)
@@ -344,6 +381,8 @@ def my_groups(request):
                     group.statements.add(stmt)
                     return HttpResponse(status=204)
                 return HttpResponse(json.dumps({"error_message":"invalid group and/or statement"}), status=400)
+            else:
+                raise Exception("Invalid POST method")
 
         group_id = request.GET.get("group_id", None)
         if group_id:

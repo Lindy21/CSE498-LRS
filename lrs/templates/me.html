@@ -4,39 +4,91 @@
 {% block content %}
 </br>
     
-<div id="tab-container" class="tab-container">
-  <ul class='etabs'>
-    <li class='tab default'><a href="#mystatements">Statements</a></li>
-    <li class='tab public'><a href="#publicstatements">Public Feed</a></li>
-    <li class='tab groups'><a href="#groupstatements">Groups</a></li>
-  </ul>
-    <div id="mystatements">
-        <span class="heading">Statements:</span><span class="small-link"><a id="delstmts" href="#mystatements">delete all statements</a></span>
-    </div>
-    <div id="publicstatements">
-        <span class="heading">Public Statements:</span>
-    </div>
-    <div id="groupstatements">
-        <div id="groupform">
-            <table>
-                <tr>
-                    <td>Group Name:</td>
-                    <td><input type="text" id="group_text"></td>
-                    <td><button type="button" onclick="create_group()">Create</button></td>
-                </tr>
-            </table>
-        </div>
-        <table>
-            <tr>
-                <td id="group_column">
-                    <span class="heading">Groups:</span><span class="small-link"></span>
-                </td>
+<ul id="myTab" class="nav nav-tabs">
+  <li><a href="#mystatements" data-toggle="tab">Statements</a></li>
+  <li><a href="#publicstatements" data-toggle="tab">Public Feed</a></li>
+  <li><a href="#groupstatements" data-toggle="tab">Groups</a></li>
+</ul>
 
-                <td id="statement_column">
-                    <span class="heading">Statements:</span><span class="small-link">Organize statements into groups by dragging and dropping</span>
-                </td>
-            </tr>
-        </table>
+<div class="tab-content">
+    <div id="mystatements" class="tab-pane">
+        <form class="form-inline">
+            <label class="checkbox">
+                <input id="my_verb_filter_checkbox" type="checkbox" onclick="getStmts()">
+            </label>
+            Show:
+            <select id="my_verb_filter" onchange="initVerbFilter()">
+                <option value="">All</option>
+                <option value="http://verbs/interaction/">Desktop Apps</option>
+                <option value="http://verbs/read/">Selected Texts</option> 
+                <option value="http://verbs/started/">Quizzes</option>
+                <option value="http://verbs/completed/">Quiz Results</option>
+                <option value="http://verbs/watched/">Videos</option>
+                <option value="http://verbs/experienced/">Webpages</option>
+            </select>
+        </form>
+
+        <form class="form-inline">
+            <label class="checkbox">
+                <input id="my_search_checkbox" type="checkbox" onclick="getStmts()">
+            </label>
+            Search:
+            <input id="my_search" type="text">
+        </form></br>        
+        <span class="small-link"><a id="delstmts" href="#mystatements" class="btn btn-danger">delete all statements</a></span>
+        <h2>Statements:</h2>
+    </div>
+
+    <div id="publicstatements" class="tab-pane">
+        <form class="form-inline">
+            <label class="checkbox">
+                <input id="public_user_filter_checkbox" type="checkbox" onclick="getPublicStmts()">
+            </label>
+            User:
+            <input id="public_user_filter" type="text">
+        </form>
+        <form class="form-inline">
+            <label class="checkbox">
+                <input id="public_verb_filter_checkbox" type="checkbox" onclick="getPublicStmts()">
+            </label>
+            Show:
+            <select id="public_verb_filter" onchange="initPublicVerbFilter()">
+                <option value="">All</option>
+                <option value="http://verbs/interaction/">Desktop Apps</option>
+                <option value="http://verbs/read/">Selected Texts</option> 
+                <option value="http://verbs/started/">Quizzes</option>
+                <option value="http://verbs/completed/">Quiz Results</option>
+                <option value="http://verbs/watched/">Videos</option>
+                <option value="http://verbs/experienced/">Webpages</option>
+            </select>
+        </form>
+        <form class="form-inline">
+            <label class="checkbox">
+                <input id="public_search_checkbox" type="checkbox" onclick="getPublicStmts()">
+            </label>
+            Search:
+            <input id="public_search" type="text"></br>
+        </form>
+        <h2>Public Feed:</h2>
+    </div>
+
+    <div id="groupstatements" class="tab-pane">
+        <form class="form-inline" name="groupForm" action="javascript:create_group()">
+                Group Name:
+                <input type="text" id="group_text"/>
+                <input name="Submit" type="submit" value="Create" class="btn"/>
+        </form>
+        <div class="container">
+            <div class="row">
+                <div id="group_column" class="span5 offset1">
+                    <h3>Groups:</h3>
+                </div>
+
+                <div id="statement_column" class="span5">
+                    <h3>Statements:</h3><span class="small-link">Organize statements into groups by dragging and dropping</span>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock content %}
@@ -45,12 +97,12 @@
 <script src="{{ STATIC_URL }}scripts/jquery.hashchange.min.js" type="text/javascript"></script>
 <script type="text/javascript">
 var feedTimeout = null;
-var myFilters = {'user':null,'verb':null};
-var publicFilters = {'user':null,'verb':null};
-var lazyFix = false;
+var initStmtOff = false;
 
 $(document).ready(function() {
-    getStmts();
+    clearFilters();
+    //getStmts();
+    $('#myTab a:first').tab('show');
     $(".stmt_link").click(stmtClick);
     $('#tab-container').easytabs({
         defaultTab: "li.default"
@@ -80,6 +132,21 @@ $(document).ready(function() {
             getStmts_Groups(null, $('#statement_column'));
         }       
     });
+    $('a[data-toggle="tab"]').on('show', function (e) {
+        if ($(event.target).attr("href") == "#mystatements"){
+            //clearFilters();
+            getStmts();
+        }
+         if ($(event.target).attr("href") == "#publicstatements"){
+            //clearFilters();
+            getPublicStmts();
+        }
+        if ($(event.target).attr("href") == "#groupstatements"){
+            //clearFilters();
+            getGroups();
+            getStmts_Groups(null, $('#statement_column'));
+        }
+    });
     $('#mystatements #delstmts').click(function(){ 
         $.ajax({
             url: "{% url lrs.views.my_statements %}",
@@ -98,10 +165,10 @@ $(document).ready(function() {
 
 //Function incase filtering is more complicated later. Called whenever tabs switched.
 function clearFilters(){
-    myFilters['user'] = null;
-    myFilters['verb'] = null;
-    publicFilters['user'] = null;
-    publicFilters['verb'] = null;
+    var e = document.getElementById("my_verb_filter");
+    e.selectedIndex = 0;
+    e = document.getElementById("public_verb_filter");
+    e.selectedIndex = 0;
 }
 
 function getGroups(event){
@@ -139,11 +206,10 @@ function getGroups(event){
 }
 
 function deleteGroup(event){
-    var groupid = $(event.target).parents(".group").attr('id');
-    .ajax({
-        url: "{% url lrs.views.my_groups %}",
+    var groupid = $(event.target).parents(".group-field").attr('id');
+    $.ajax({
+        url: "{% url lrs.views.my_groups %}?group_id="+groupid,
         type: "DELETE",
-        data: { 'group_id', groupid },
         success: function(){
             //Reload groups
             getGroups();
@@ -160,7 +226,7 @@ function getGroupStatements(event, groupid, ele){
     if (event){
         if(event.data.the_url) {
            u = event.data.the_url;
-           ele = $(event.target).parent().parent().parent().parent();
+           ele = $(event.target).parents("div.group-field");
            groupid = ele.attr('id');
         }
     }
@@ -171,7 +237,7 @@ function getGroupStatements(event, groupid, ele){
             data: { 'group_id': groupid},
             success: function (data){
                 if(!$(ele).children('div#stmts').length){
-                    $(ele).find('a.group-link').after('<div id="stmts" style="display:none;"></div>');
+                    $(ele).find('span.group-content').after('<div id="stmts" class="row collapse" style="margin-top:2em;"></div>');
                 }
                 ele = $(ele).find('div#stmts');
 
@@ -181,6 +247,11 @@ function getGroupStatements(event, groupid, ele){
                 else {
                     $(ele).append(groupStmtUIData(data, groupid));
                 }
+
+
+                $(ele).children('ul').find('div.statement').addClass('span4');
+                $(ele).children('ul').find('a.remove-link').click(removeStatement);
+                $(ele).children('ul').find('.stmt_link').click(stmtClick);
                 $(ele).children('ul').find('li.prev-next a.previous').click(
                         {
                             the_url: $(ele).children('ul').find('li.prev-next a.previous').attr("data-target")
@@ -190,7 +261,7 @@ function getGroupStatements(event, groupid, ele){
                             the_url: $(ele).children('ul').find('li.prev-next a.next').attr("data-target")
                         }, getGroupStatements);
 
-                $(ele).slideDown(500);
+                $(ele).collapse('show');
             },
             error: function(xhr, ajaxOptions, thrownError){
                 alert(thrownError);
@@ -208,7 +279,7 @@ function groupClick(event){
         getGroupStatements(null, $(ele).parent().attr("id"), $(ele).parent());
     }
     else{
-        $(ele).next('div#stmts').slideToggle();
+        $(ele).siblings('div#stmts').collapse('toggle');
     }
     return false;
 }
@@ -233,13 +304,15 @@ function getStmts_Groups(event, element){
     }
 
     var verbFilter;
+    var e = document.getElementById("my_verb_filter");
 
-    if(!myFilters['verb']){
+    if(e.selectedIndex == 0){
         verbFilter = null;
     }
     else{
-        verbFilter = myFilters['verb'];
+        verbFilter = e.options[e.selectedIndex].value;
     }
+
     $.ajax({
             url: u,
             type: "GET",
@@ -279,13 +352,13 @@ function startDrag(event){
 function dropStmt(event){
     event.preventDefault();
     var ele = event.target;
-    if(!$(ele).hasClass('group')){
-        ele = $(ele).parents(".group");
+    if(!$(ele).hasClass('group-field')){
+        ele = $(ele).closest("div.group-field");
     }
 
     // First, retreive dropped item's id and group id
     var stmt_id = event.dataTransfer.getData("Text");
-    var group_id = $(event.target).attr('id');
+    var group_id = $(ele).attr('id');
     var sendData = { 'stmt_id': stmt_id, 'group_id': group_id };
     
 
@@ -295,7 +368,7 @@ function dropStmt(event){
             type: "POST",
             data: sendData,
             success: function (){
-                getGroupStatements(null, group_id, event.target);
+                getGroupStatements(null, group_id, ele);
             },
             error: function(xhr, ajaxOptions, thrownError){
                 alert(thrownError);
@@ -309,28 +382,55 @@ function allowDrop(event){
 }
 
 function groupUIData(data){
+
     if(data['groups'].length == 0) {
-        return "<ul><li>no groups</li></ul>";
+        return "<ul class='unstyled'><li>no groups</li></ul>";
     }
 
-    var ret = "<ul>";
+    var ret = "<ul class='unstyled'>";
     for (var i = 0; i < data['groups'].length; i++) {
         var grp = data['groups'][i];
-        ret += "<li><div id='" + grp['id'] +"' class='statement field group' style='width:450px;border:2px solid #505050;' ondrop='dropStmt(event)' ondragover='allowDrop(event)'>" + grp['name'] + "<a style='float:right;' class='delete-group-link' href='#group_column'>Delete</a><a style='float:right;' class='group-link' href='#" + grp[id] + "'>Open</a></div></li>";
+        // Group title
+        ret += "<li><div id='" + grp['id'] +"' class='group-field' ondrop='dropStmt(event)' ondragover='allowDrop(event)'>" + grp['name'];
+        // Open Group link
+        ret += "<a class='group-link btn btn-primary pull-right' href='#" + grp['id'] + "'>Open</a>";
+        // Delete Group link
+        ret += "<a class='delete-group-link btn btn-danger pull-right' href='#'>Delete</a>";
+
+        ret += "<span class='group-content'></span>";
+        ret += "</div></li>";
     }
 
-    var prev = "<span class='previous'>previous</span>";
+    var prev = "<li class='disabled'><a href='#'>&laquo;</a></li>";
     if (data['previous']) {
-        prev = "<a class='previous' href='#group_column' data-target='" + data['previous'] + "'>previous</a>";
+        prev = "<li class='prev-next'><a class='previous' href='#group_column' data-target='" + data['previous'] + "'>&laquo;</a></li>";
     }
-    var next = "<span class='next'>next</span>";
+    var next = "<li class='disabled'><a href='#'>&raquo;</a></li>";
     if (data['next']) {
-        next = "<a class='next' href='#group_column' data-target='" + data['next'] + "'>next</a>";
+        next = "<li class='prev-next'><a class='next' href='#group_column' data-target='" + data['next'] + "'>&raquo;</a></li>";
     }
-    ret += "<li class='prev-next'>" + prev + next + "</li>";
+    ret += "<li class='pagination'><ul>" + prev + next + "</ul></li>";
     ret += "</ul>";
 
     return ret;
+}
+
+function removeStatement(event){
+
+    var stmtid = $(event.target).parents("div.statement").attr('id');
+    var groupid = $(event.target).parents("div.group-field").attr('id');
+
+    $.ajax({
+        url: "{% url lrs.views.my_groups %}?group_id="+groupid+"&stmt_id="+stmtid,
+        type: "DELETE",
+        success: function(){
+            //Reload group statements
+            getGroupStatements(null, groupid, $(event.target).parents("div.group-field"));
+        },
+        error: function(xhr, ajaxOptions, thrownError){
+            alert(thrownError);
+        }
+    });
 }
 
 function groupStmtUIData(data, grpid){
@@ -340,26 +440,37 @@ function groupStmtUIData(data, grpid){
     }
 
     if (data['stmts'].length == 0){
-        return "<ul><li>no statements</li></ul>"
+        return "<ul class='unstyled'><li>no statements</li></ul>";
     }
 
-    var ret = "<ul>";
+    var ret = "<ul class='unstyled'>";
 
      for (var i = 0; i < data['stmts'].length; i++) {
         var stmt = data['stmts'][i];
-        ret += "<li><div id='" + stmt['statement_id'] + "' class='statement field' style='width:350px;border:2px solid #505050;' draggable='true' ondragstart='startDrag(event)'><div class='stmt_link lpad' href='" + stmt['statement_id'] + "'>" + stmt['actor_name'] + " " + "<a class='verb_link' href='" + stmt['statement_id'] + "'>" + stmt['verb'] + "</a>" + " " + stmt['object'] + "</div>";
-        ret += "</div></li>";
+        // Statement Container
+        ret += "<li><div id='" + stmt['statement_id'] + "' class='statement' draggable='true' ondragstart='startDrag(event)'>";
+        // Statement itself
+        ret += "<div class='lpad' href='" + stmt['statement_id'] + "'>" + stmt['actor_name'] + " " + stmt['verb'] + " " + stmt['object'];
+
+        ret += "<a class='stmt_link btn btn-primary pull-right' href='#'>Open</a>";
+
+        // In group, add a remove link
+        if(grpid){
+            ret += "<a class='remove-link btn btn-danger pull-right' href='#"+grpid+"'>Remove</a>";
+        }
+        ret += "<span class='stmt-field'></span>";
+        ret += "</div></div></li>";
     }
 
-    var prev = "<span class='previous'>previous</span>";
+    var prev = "<li class='disabled'><a href='#'>&laquo;</a></li>";
     if (data['previous']) {
-        prev = "<a class='previous' href='#" + ref + "' data-target='" + data['previous'] + "'>previous</a>";
+        prev = "<li class='prev-next'><a class='previous' href='#" + ref + "' data-target='" + data['previous'] + "'>&laquo;</a></li>";
     }
-    var next = "<span class='next'>next</span>";
+    var next = "<li class='disabled'><a href='#'>&raquo;</a></li>";
     if (data['next']) {
-        next = "<a class='next' href='#" + ref + "' data-target='" + data['next'] + "'>next</a>";
+        next = "<li class='prev-next'><a class='next' href='#" + ref + "' data-target='" + data['next'] + "'>&raquo;</a></li>";
     }
-    ret += "<li class='prev-next'>" + prev + next + "</li>";
+    ret += "<li class='pagination span4'><ul>" + prev + next + "</ul></li>";
 
     ret += "</ul>";
 
@@ -372,7 +483,7 @@ function verbClick(event){
     }
     var stmtid = $(ele).attr("href");
 
-    lazyFix = true;
+    initStmtOff = true;
 
     $.ajax({
         url: "{% url lrs.views.my_statements %}?stmt_id="+stmtid,
@@ -380,7 +491,33 @@ function verbClick(event){
         success: function (data){
             var verb = data['verb'];
             //verbFilter = verb['id'];
-            myFilters['verb'] = verb['id'];
+            //myFilters['verb'] = verb['id'];
+
+            var e = document.getElementById("my_verb_filter");
+            var check = document.getElementById("my_verb_filter_checkbox");
+            switch(verb['id'])
+            {
+                case("http://verbs/completed/"):
+                    e.selectedIndex = 4;
+                    break;
+                case("http://verbs/experienced/"):
+                    e.selectedIndex = 6;
+                    break;
+                case("http://verbs/interaction/"):
+                    e.selectedIndex = 1;
+                    break;
+                case("http://verbs/read/"):
+                    e.selectedIndex = 2;
+                    break;
+                case("http://verbs/started/"):
+                    e.selectedIndex = 3;
+                    break;
+                case("http://verbs/watched/"):
+                    e.selectedIndex = 5;
+                    break;
+            }
+            check.checked = true;
+
             getStmts();
             //getStmts(null, null, verb['id']);
         },
@@ -397,7 +534,7 @@ function publicVerbClick(event){
     }
     var stmtid = $(ele).attr("href");
 
-    lazyFix = true;
+    initStmtOff = true;
 
     $.ajax({
         url: "{% url lrs.views.my_statements %}?stmt_id="+stmtid,
@@ -405,7 +542,31 @@ function publicVerbClick(event){
         success: function (data){
             var verb = data['verb'];
             //verbFilter = verb['id'];
-            publicFilters['verb'] = verb['id'];
+            //publicFilters['verb'] = verb['id'];
+
+            var e = document.getElementById("public_verb_filter");
+            switch(verb['id'])
+            {
+                case("http://verbs/completed/"):
+                    e.selectedIndex = 4;
+                    break;
+                case("http://verbs/experienced/"):
+                    e.selectedIndex = 6;
+                    break;
+                case("http://verbs/interaction/"):
+                    e.selectedIndex = 1;
+                    break;
+                case("http://verbs/read/"):
+                    e.selectedIndex = 2;
+                    break;
+                case("http://verbs/started/"):
+                    e.selectedIndex = 3;
+                    break;
+                case("http://verbs/watched/"):
+                    e.selectedIndex = 5;
+                    break;
+            }
+
             getPublicStmts();
         },
         error: function(xhr, ajaxOptions, thrownError){
@@ -417,19 +578,20 @@ function publicVerbClick(event){
 
 function stmtClick(event){
 
-    if(lazyFix){
-        lazyFix = false;
+    if(initStmtOff){
+        initStmtOff = false;
         return false;
     }
     clearTimeout(feedTimeout);
     if (event && event.currentTarget){
         ele = event.target;
     }
-    if(!$(ele).next('div#stmts').length){
-        getStmtContent($(ele).attr("href"), this);
+    element = $(ele).parents('.statement').find('div#stmts');
+    if(!$(element).length){
+        getStmtContent($(ele).parent().attr("href"), this);
     }
     else{
-        $(ele).next('div#stmts').slideToggle();
+        $(element).collapse('toggle');
     }
     return false;
 }
@@ -438,7 +600,7 @@ function delStmtClick(event){
     if (event && event.currentTarget){
         ele = event.target;
     }
-    var id = $(ele).siblings("div.stmt_link").attr("href");
+    var id = $(ele).parents('.statement').attr("href");
     console.log("deleting: " + id);
     $.ajax({
         url: "{% url lrs.views.my_statements %}?stmt_id="+id,
@@ -456,7 +618,6 @@ function delStmtClick(event){
     return false;
 }
 
-
 function getPublicStmts(event){
     var u = "{% url lrs.views.my_statements %}";
     var inPage = false;
@@ -468,30 +629,49 @@ function getPublicStmts(event){
 
     var userFilter;
     var verbFilter;
+    var objectFilter;
 
-    if(!publicFilters['user']){
-        userFilter = "0";
-    }
-    else{
-        userFilter = publicFilters['user'];
-    }
-    if(!publicFilters['verb']){
+    var e = document.getElementById("public_verb_filter");
+    var check = document.getElementById("public_verb_filter_checkbox");
+
+    if(e.selectedIndex == 0 || !check.checked){
         verbFilter = null;
     }
     else{
-        verbFilter = publicFilters['verb'];
+        verbFilter = e.options[e.selectedIndex].value;//myFilters['verb'];
     }
+
+    e = document.getElementById("public_user_filter");
+    check = document.getElementById("public_user_filter_checkbox");
+
+    if(!e.value || !check.checked){
+        userFilter = "0";
+    }
+    else{
+        userFilter = e.value;
+    }
+
+    e = document.getElementById("public_search");
+    check = document.getElementById("public_search_checkbox");
+
+    if(!check.checked || e.value == "") {
+        objectFilter = null;
+    }
+    else {
+        objectFilter = e.value;
+    }
+
     $.ajax({
             url: u,
             type: "GET",
-            data: {user_filter:userFilter, verb_filter:verbFilter},
+            data: {user_filter:userFilter, verb_filter:verbFilter, object_filter:objectFilter},
             context: $('#publicstatements'),
             success: function (data){
                 if ($(this).children('ul').length){
                     $(this).children('ul').replaceWith(uiData(data,$("#publicstatements"),false));
                 }
                 else {
-                    $(this).append(uiData(data,"publicstatements",false));
+                    $(this).append(uiData(data,$("#publicstatements"),false));
                 }
                 $(this).children('ul').find('.stmt_link').click(stmtClick);
                 $(this).children('ul').find('.verb_link').click(publicVerbClick);
@@ -529,17 +709,31 @@ function getStmts(event, element){
     }
 
     var verbFilter;
+    var objectFilter;
+    var e = document.getElementById("my_verb_filter");
+    var check = document.getElementById("my_verb_filter_checkbox");
 
-    if(!myFilters['verb']){
+    if(e.selectedIndex == 0 || !check.checked){
         verbFilter = null;
     }
     else{
-        verbFilter = myFilters['verb'];
+        verbFilter = e.options[e.selectedIndex].value;//myFilters['verb'];
     }
+
+    e = document.getElementById("my_search");
+    check = document.getElementById("my_search_checkbox");
+
+    if(!check.checked || e.value == "") {
+        objectFilter = null;
+    }
+    else {
+        objectFilter = e.value;
+    }
+
     $.ajax({
             url: u,
             type: "GET",
-            data: {user_filter:"1", verb_filter:verbFilter},
+            data: {user_filter:"1", verb_filter:verbFilter, object_filter:objectFilter},
             context: ele,
             success: function (data){
                 if ($(this).children('ul').length){
@@ -571,41 +765,47 @@ function getStmts(event, element){
 
 function uiData(data, context, deletable){
     if (data['stmts'].length == 0){
-        return "<ul><li>no statements</li></ul>";
+        return "<ul class='unstyled'><li>no statements</li></ul>";
     }
-    var ret = "<ul>";
+    var ret = "<ul class='unstyled pull-left'>";
     for (var i = 0; i < data['stmts'].length; i++) {
         var stmt = data['stmts'][i];
-        ret += "<li><div class='statement field' style='width:450px;border:2px solid #505050;'><div class='stmt_link lpad' href='" + stmt['statement_id'] + "'>" + stmt['actor_name'] + " " + "<a class='verb_link' href='" + stmt['statement_id'] + "'>" + stmt['verb'] + "</a>" + " " + stmt['object'] + "</div>";
+        ret += "<li><div class='statement span5 offset3' href='" + stmt['statement_id'] + "'>";
+        ret += stmt['actor_name'] + " ";
+        ret += "<a class='verb_link' href='" + stmt['statement_id'] + "'>" + stmt['verb'] + "</a>" + " ";
+        ret += stmt['object'];
+
+        ret += "<a class='stmt_link btn btn-primary pull-right' href='#'>Open</a>";
         
         if(deletable){
-            ret += "<a class='delstmt_link' href=''>Delete</a>";
+            ret += "<a class='delstmt_link btn btn-danger pull-right' href='#'>Delete</a>";
         }
-        //ret += "<span class='timestamp'>" + stmt['timestamp'] + "</span>";
-        //ret += " <a href='#' class='stmt_link lpad'>" + stmt['statement_id'] + "</a> ";
+        ret += "<span class='stmt-field'></span>"
         ret += "</div></li>";
     }
-    var prev = "<span class='previous'>previous</span>";
+
+    var prev = "<li class='disabled'><a href='#'>&laquo;</a></li>";
     if (data['previous']) {
-        prev = "<a class='previous' href='#" + $(context).attr('id') + "' data-target='" + data['previous'] + "'>previous</a>";
+        prev = "<li class='prev-next'><a class='previous' href='#" + $(context).attr('id') + "' data-target='" + data['previous'] + "'>&laquo;</a></li>";
     }
-    var next = "<span class='next'>next</span>";
+    var next = "<li class='disabled'><a href='#'>&raquo;</a></li>";
     if (data['next']) {
-        next = "<a class='next' href='#" + $(context).attr('id') + "' data-target='" + data['next'] + "'>next</a>";
+        next = "<li class='prev-next'><a class='next' href='#" + $(context).attr('id') + "' data-target='" + data['next'] + "'>&raquo;</a></li>";
     }
-    ret += "<li class='prev-next'>" + prev + next + "</li>";
+    ret += "<li class='pagination offset1'><ul>" + prev + next + "</ul></li>";
     ret += "</ul>";
     return ret;
 }
 
 function getStmtContent(stmtid, ele){
+    ele = $(ele).siblings(".stmt-field");
     $.ajax({
         url: "{% url lrs.views.my_statements %}?stmt_id="+stmtid,
         type: "GET",
         success: function (data){
-            $(ele).after('<div id="stmts" style="display:none;"></div>');
+            $(ele).after('<div id="stmts" class="collapse"></div>');
             $(ele).siblings('div#stmts').append(buildContent(data));
-            $(ele).siblings('div#stmts').slideDown(500);
+            $(ele).siblings('div#stmts').collapse('show');
         },
         error: function(xhr, ajaxOptions, thrownError){
             alert(thrownError)
@@ -643,7 +843,7 @@ function buildContent(data) {
                 while(tmpString.length > 0)
                 {
                     ret += "<br>&nbsp&nbsp&nbsp&nbsp" + tmpString.substr(0,tmpString.indexOf(":")) + " Score : " + 
-                            parseInt(tmpString.substr(tmpString.indexOf(":")+1,tmpString.indexOf("/"))) * 100 + "%";
+                            parseFloat(tmpString.substr(tmpString.indexOf(":")+1,tmpString.indexOf("/"))) * 100 + "%";
                     tmpString = tmpString.slice(tmpString.indexOf("/")+1);
                 }
             break;
@@ -699,7 +899,10 @@ function create_group (){
             url: "{% url lrs.views.my_groups %}",
             type: "POST",
             data: { name : groupname },
-            success: getGroups,
+            success: function(){
+                $("#group_text").val("");
+                getGroups();
+            },
             error: function(xhr, ajaxOptions, thrownError){
                 alert(thrownError);
             },

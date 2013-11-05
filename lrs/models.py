@@ -538,6 +538,12 @@ class Activity(models.Model):
         except:
             return self.activity_id
 
+    def get_search_index(self):
+        try:
+            return self.activity_definition_name.get('en-US') + self.activity_definition_description.get('en-US')
+        except:
+            return self.activity_id
+
     def __unicode__(self):
         return json.dumps(self.object_return())
 

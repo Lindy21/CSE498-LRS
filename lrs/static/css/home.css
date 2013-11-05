@@ -368,6 +368,24 @@ div
 #groupstatements .statement
 {
   display: block;
+  width:450px;
+  border:2px solid #505050;
+}
+
+#groupstatements .group-field
+{
+  width:550px;
+  border:2px solid #505050;
+  background-color: #99CCFF;
+
+  -moz-border-radius-bottomright:15px;
+  border-bottom-right-radius:15px;
+  -moz-border-radius-bottomleft:15px;
+  border-bottom-left-radius:15px;
+  -moz-border-radius-topright:15px;
+  border-top-right-radius:15px;
+  -moz-border-radius-topleft:15px;
+  border-top-left-radius:15px;
 }
 
 #groupstatements .timestamp
