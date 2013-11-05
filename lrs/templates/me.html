@@ -779,16 +779,18 @@ function uiData(data, context, deletable){
 		
 		ret += "<div class='span2'>";
         
+		ret += "<a class='stmt_link btn btn-primary pull-left' style='margin-right: 1em' href='#'>Open</a>";
+		
         if(deletable){
             ret += "<a class='delstmt_link btn btn-danger pull-right' href='#'>Delete</a>";
         }
 		
-		ret += "<a class='stmt_link btn btn-primary pull-right' href='#'>Open</a>";
-
 		ret += "</div>";
 		
-        ret += "<span class='stmt-field'></span>"
-        ret += "</div></div></li>";
+		ret += "<div class='row'>";
+        ret += "<span class='stmt-field'></span>";
+        ret += "</div>";
+		ret += "</div></div></li>";
     }
 
     var prev = "<li class='disabled'><a href='#'>&laquo;</a></li>";
