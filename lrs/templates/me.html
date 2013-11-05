@@ -464,9 +464,11 @@ function groupStmtUIData(data, grpid){
      for (var i = 0; i < data['stmts'].length; i++) {
         var stmt = data['stmts'][i];
         // Statement Container
-        ret += "<li><div id='" + stmt['statement_id'] + "' class='statement span4' draggable='true' ondragstart='startDrag(event)'>";
+        ret += "<li><div id='" + stmt['statement_id'] + "' class='statement' draggable='true' ondragstart='startDrag(event)'>";
         // Statement itself
-        ret += "<div class='stmt_link lpad' href='" + stmt['statement_id'] + "'>" + stmt['actor_name'] + " " + stmt['verb'] + " " + stmt['object'];
+        ret += "<div class='lpad' href='" + stmt['statement_id'] + "'>" + stmt['actor_name'] + " " + stmt['verb'] + " " + stmt['object'];
+
+        ret += "<a class='stmt_link btn btn-primary pull-right' href='#'>Open</a>";
 
         // In group, add a remove link
         if(grpid){
