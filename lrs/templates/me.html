@@ -64,7 +64,7 @@
         </form>
         <form class="form-inline">
             <label class="checkbox">
-                <input id="public_search_checkbox" type="checkbox" onclick="getStmts()">
+                <input id="public_search_checkbox" type="checkbox" onclick="getPublicStmts()">
             </label>
             Search:
             <input id="public_search" type="text"></br>
@@ -162,24 +162,6 @@ $(document).ready(function() {
         });
     });
 });
-
-function initUserFilter(){
-    var check = document.getElementById("public_user_filter_checkbox");
-    check.checked = true;
-    getPublicStmts();
-}
-
-function initVerbFilter(){
-    var check = document.getElementById("my_verb_filter_checkbox");
-    check.checked = true;
-    getStmts();
-}
-
-function initPublicVerbFilter(){
-    var check = document.getElementById("public_verb_filter_checkbox");
-    check.checked = true;
-    getPublicStmts();
-}
 
 //Function incase filtering is more complicated later. Called whenever tabs switched.
 function clearFilters(){
@@ -647,6 +629,7 @@ function getPublicStmts(event){
 
     var userFilter;
     var verbFilter;
+    var objectFilter;
 
     var e = document.getElementById("public_verb_filter");
     var check = document.getElementById("public_verb_filter_checkbox");
@@ -745,7 +728,9 @@ function getStmts(event, element){
         objectFilter = null;
     }
     else {
+
         objectFilter = e.value;
+        alert(objectFilter);
     }
 
     $.ajax({
