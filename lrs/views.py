@@ -311,9 +311,8 @@ def my_statements(request):
                 d['object'] = stmtname
 
                 if objectFilter:
-                    slist.append(d)
-                    #if objectFilter in stmtname:
-                        #slist.append(d)
+                    if objectFilter in stmtname:
+                        slist.append(d)
                 else:
                     slist.append(d)
             
