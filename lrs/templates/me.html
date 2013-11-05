@@ -777,14 +777,14 @@ function uiData(data, context, deletable){
         ret += stmt['object'];
 		ret += "</div>";
 		
-		ret += "<div class='row'>";
 		ret += "<div class='span2'>";
-        ret += "<a class='stmt_link btn btn-primary pull-right' href='#'>Open</a>";
         
         if(deletable){
             ret += "<a class='delstmt_link btn btn-danger pull-right' href='#'>Delete</a>";
         }
-		ret += "</div>";
+		
+		ret += "<a class='stmt_link btn btn-primary pull-right' href='#'>Open</a>";
+
 		ret += "</div>";
 		
         ret += "<span class='stmt-field'></span>"
@@ -805,7 +805,8 @@ function uiData(data, context, deletable){
 }
 
 function getStmtContent(stmtid, ele){
-    ele = $(ele).siblings(".stmt-field");
+    
+	ele = $(ele).parent().siblings(".stmt-field");
     $.ajax({
         url: "{% url lrs.views.my_statements %}?stmt_id="+stmtid,
         type: "GET",
