@@ -883,18 +883,30 @@ function buildContent(data) {
             break;
 
             case "completed": // Quiz
-                ret += "Score: " + data.result.score.scaled * 100 + "%<br>";
+                //ret += "Score: " + data.result.score.scaled * 100 + "%<br>";
 
                 var tmpString = "";
                 tmpString = data.object.id;
                 tmpString = tmpString.slice(tmpString.indexOf("|")+1);
 
+                var tmpRet = "";
+
                 while(tmpString.length > 0)
                 {
-                    ret += "<br>&nbsp&nbsp&nbsp&nbsp" + tmpString.substr(0,tmpString.indexOf(":")) + " Score : " + 
-                            parseFloat(tmpString.substr(tmpString.indexOf(":")+1,tmpString.indexOf("/"))) * 100 + "%";
-                    tmpString = tmpString.slice(tmpString.indexOf("/")+1);
+                    if(tmpString.indexOf("TOTAL") < 2)
+                    {
+                        ret += "Total Score: " + data.result.score.scaled * 100 + "%<br>";
+                        tmpString = "";
+                    }
+                    else
+                    {
+                        tmpRet += "<br>&nbsp&nbsp&nbsp&nbsp" + tmpString.substr(0,tmpString.indexOf(":")) + " Score : " + 
+                                parseFloat(tmpString.substr(tmpString.indexOf(":")+1,tmpString.indexOf("/"))) * 100 + "%";
+                        tmpString = tmpString.slice(tmpString.indexOf("/")+1);
+                    }
                 }
+
+                ret += tmpRet;
             break;
 
             case "read":    // Text
