@@ -345,7 +345,7 @@ def my_groups(request):
             group_id = request.GET.get("group_id", None)
             stmt_id = request.GET.get("stmt_id", None)
             if stmt_id and group_id:
-                s = models.Statement.objects.get(user=request.user, statement_id=stmt_id)
+                s = models.Statement.objects.get(statement_id=stmt_id)
                 models.Group.objects.get(user=request.user, id=group_id).statements.remove(s)
                 stmt = models.Group.objects.get(user=request.user, id=group_id).statements.filter(user=request.user, statement_id=stmt_id)
                 if not stmt:
@@ -375,7 +375,7 @@ def my_groups(request):
             group_id = request.POST.get('group_id', None)
             stmt_id = request.POST.get('stmt_id', None)
             if group_id and stmt_id:
-                stmt = models.Statement.objects.get(user=request.user, statement_id=stmt_id)
+                stmt = models.Statement.objects.get(statement_id=stmt_id)
                 group = models.Group.objects.get(user=request.user, id=group_id)
                 if group and stmt:
                     group.statements.add(stmt)
