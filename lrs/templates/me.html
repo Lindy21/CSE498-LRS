@@ -73,11 +73,6 @@
     </div>
 
     <div id="groupstatements" class="tab-pane">
-        <form class="form-inline" name="groupForm" action="javascript:create_group()">
-                Group Name:
-                <input type="text" id="group_text"/>
-                <input name="Submit" type="submit" value="Create" class="btn"/>
-        </form>
         <form class="form-inline">
             <label class="checkbox">
                 <input id="group_user_filter_checkbox" type="checkbox" onclick="getStmts_Group()">
@@ -106,6 +101,11 @@
             </label>
             Search:
             <input id="group_search" type="text"></br>
+        </form>
+        <form class="form-inline" name="groupForm" action="javascript:create_group()">
+                Group Name:
+                <input type="text" id="group_text"/>
+                <input name="Submit" type="submit" value="Create" class="btn"/>
         </form>
         <div class="container">
             <div class="row">
