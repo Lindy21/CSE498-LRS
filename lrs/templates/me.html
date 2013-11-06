@@ -55,6 +55,7 @@
             <select id="public_verb_filter" onchange="initPublicVerbFilter()">
                 <option value="">All</option>
                 <option value="http://verbs/interaction/">Desktop Apps</option>
+                <option value="http://verbs/viewed/">Images</option>
                 <option value="http://verbs/read/">Selected Texts</option> 
                 <option value="http://verbs/started/">Quizzes</option>
                 <option value="http://verbs/completed/">Quiz Results</option>
@@ -88,6 +89,7 @@
             <select id="group_verb_filter" onchange="initGroupVerbFilter()">
                 <option value="">All</option>
                 <option value="http://verbs/interaction/">Desktop Apps</option>
+                <option value="http://verbs/viewed/">Images</option>
                 <option value="http://verbs/read/">Selected Texts</option> 
                 <option value="http://verbs/started/">Quizzes</option>
                 <option value="http://verbs/completed/">Quiz Results</option>
@@ -102,12 +104,12 @@
             Search:
             <input id="group_search" type="text"></br>
         </form>
-        <form class="form-inline" name="groupForm">
+        <form class="form-inline" name="groupForm" action="javascript:create_group()">
                 Group Name:
                 <input type="text" id="group_text"/>
-                <input onclick="create_group()" name="Submit" type="submit" value="Create" class="btn"/>
-                <input onclick="auto_create_group()" name="Auto-Submit" type="submit" value="Auto-Create" class="btn"/>
+                <input name="Submit" type="submit" value="Create" class="btn"/>
         </form>
+        
         <div class="container">
             <div class="row">
                 <div id="group_column" class="span5" style="margin-right:1em;">
@@ -577,22 +579,25 @@ function verbClick(event){
             switch(verb['id'])
             {
                 case("http://verbs/completed/"):
-                    e.selectedIndex = 4;
+                    e.selectedIndex = 5;
                     break;
                 case("http://verbs/experienced/"):
-                    e.selectedIndex = 6;
+                    e.selectedIndex = 7;
                     break;
                 case("http://verbs/interaction/"):
                     e.selectedIndex = 1;
                     break;
-                case("http://verbs/read/"):
+                case("http://verbs/viewed"):
                     e.selectedIndex = 2;
                     break;
-                case("http://verbs/started/"):
+                case("http://verbs/read/"):
                     e.selectedIndex = 3;
                     break;
+                case("http://verbs/started/"):
+                    e.selectedIndex = 4;
+                    break;
                 case("http://verbs/watched/"):
-                    e.selectedIndex = 5;
+                    e.selectedIndex = 6;
                     break;
             }
             check.checked = true;
@@ -630,22 +635,25 @@ function publicVerbClick(event){
             switch(verb['id'])
             {
                 case("http://verbs/completed/"):
-                    e.selectedIndex = 4;
+                    e.selectedIndex = 5;
                     break;
                 case("http://verbs/experienced/"):
-                    e.selectedIndex = 6;
+                    e.selectedIndex = 7;
                     break;
                 case("http://verbs/interaction/"):
                     e.selectedIndex = 1;
                     break;
-                case("http://verbs/read/"):
+                case("http://verbs/viewed"):
                     e.selectedIndex = 2;
                     break;
-                case("http://verbs/started/"):
+                case("http://verbs/read/"):
                     e.selectedIndex = 3;
                     break;
+                case("http://verbs/started/"):
+                    e.selectedIndex = 4;
+                    break;
                 case("http://verbs/watched/"):
-                    e.selectedIndex = 5;
+                    e.selectedIndex = 6;
                     break;
             }
 
