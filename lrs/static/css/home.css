@@ -21,6 +21,10 @@ code
   background-color:#4B4B57;
   color:#D1D1E0;
 }
+a
+{
+  cursor:pointer;
+}
 h1
 {
   /*position: absolute;*/
