@@ -311,6 +311,11 @@ div
   margin-right: 3em;
 }
 
+#mystatements .verb_link
+{
+  cursor:pointer;
+}
+
 #publicstatements
 {
   font-size: .75em;
@@ -349,6 +354,10 @@ div
   margin-right: 3em;
 }
 
+#publicstatements .verb_link
+{
+  cursor:pointer;
+}
 
 #groupstatements
 {
