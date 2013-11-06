@@ -450,7 +450,7 @@ function groupStmtUIData(data, grpid){
         /////////////////////////
         ret += "<li><div class='row'><div class='statement ";
 
-        ret += " offset1' href='" + stmt['statement_id'] + "' draggable='true' ondragstart='startDrag(event)'>";
+        ret += "' href='" + stmt['statement_id'] + "' draggable='true' ondragstart='startDrag(event)'>";
         ret += "<div class='row'>";
         ret += "<div class='span5'>";
         ret += stmt['actor_name'] + " ";
@@ -480,7 +480,7 @@ function groupStmtUIData(data, grpid){
         
         ret += "</div>";
         ret += "</div>";
-        ret += "<div class='row'><div class";
+        ret += "<div class='row span5'>";
         ret += "<div class='stmt-field'></div>";
         // Statement content inserted here.
         ret += "</div>";
@@ -826,7 +826,7 @@ function uiData(data, context, deletable){
 		
 		ret += "</div>";
 		ret += "</div>";
-		ret += "<div class='row'><div class";
+		ret += "<div class='row span5'>";
         ret += "<div class='stmt-field'></div>";
         ret += "</div>";
 		ret += "</div></div></li>";
@@ -852,7 +852,7 @@ function getStmtContent(stmtid, ele){
         url: "{% url lrs.views.my_statements %}?stmt_id="+stmtid,
         type: "GET",
         success: function (data){
-            $(ele).after('<div id="stmts" class="span5 collapse"></div>');
+            $(ele).after('<div id="stmts" class="collapse"></div>');
             $(ele).siblings('div#stmts').append(buildContent(data));
             $(ele).siblings('div#stmts').collapse('show');
         },
