@@ -75,14 +75,14 @@
     <div id="groupstatements" class="tab-pane">
         <form class="form-inline">
             <label class="checkbox">
-                <input id="group_user_filter_checkbox" type="checkbox" onclick="getStmts_Group()">
+                <input id="group_user_filter_checkbox" type="checkbox" onclick="getStmts_Groups()">
             </label>
             User:
             <input id="public_user_filter" type="text">
         </form>
         <form class="form-inline">
             <label class="checkbox">
-                <input id="group_verb_filter_checkbox" type="checkbox" onclick="getStmts_Group()">
+                <input id="group_verb_filter_checkbox" type="checkbox" onclick="getStmts_Groups()">
             </label>
             Show:
             <select id="group_verb_filter" onchange="initGroupVerbFilter()">
@@ -97,7 +97,7 @@
         </form>
         <form class="form-inline">
             <label class="checkbox">
-                <input id="group_search_checkbox" type="checkbox" onclick="getStmts_Group()">
+                <input id="group_search_checkbox" type="checkbox" onclick="getStmts_Groups()">
             </label>
             Search:
             <input id="group_search" type="text"></br>
@@ -332,20 +332,44 @@ function getStmts_Groups(event, element){
         ele = element;
     }
 
+    var userFilter;
     var verbFilter;
-    var e = document.getElementById("my_verb_filter");
+    var objectFilter;
 
-    if(e.selectedIndex == 0){
+    var e = document.getElementById("group_verb_filter");
+    var check = document.getElementById("group_verb_filter_checkbox");
+
+    if(e.selectedIndex == 0 || !check.checked){
         verbFilter = null;
     }
     else{
-        verbFilter = e.options[e.selectedIndex].value;
+        verbFilter = e.options[e.selectedIndex].value;//myFilters['verb'];
+    }
+
+    e = document.getElementById("group_user_filter");
+    check = document.getElementById("group_user_filter_checkbox");
+
+    if(!e.value || !check.checked){
+        userFilter = "0";
+    }
+    else{
+        userFilter = e.value;
+    }
+
+    e = document.getElementById("group_search");
+    check = document.getElementById("group_search_checkbox");
+
+    if(!check.checked || e.value == "") {
+        objectFilter = null;
+    }
+    else {
+        objectFilter = e.value;
     }
 
     $.ajax({
             url: u,
             type: "GET",
-            data: {user_filter:"0", verb_filter:verbFilter, object_filter:""},
+            data: {user_filter:userFilter, verb_filter:verbFilter, object_filter:objectFilter},
             context: ele,
             success: function (data){
                 if ($(this).children('ul').length){
