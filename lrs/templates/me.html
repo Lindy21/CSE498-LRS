@@ -555,10 +555,13 @@ function verbClick(event){
 }
 
 function publicVerbClick(event){
+
+    clearTimeout(feedTimeout);
     if(event && event.currentTarget){
         ele = event.target;
     }
-    var stmtid = $(ele).attr("href") + "#";
+
+    var stmtid = $(ele).parents('.statement').attr("href");
 
     initStmtOff = true;
 
@@ -803,7 +806,7 @@ function uiData(data, context, deletable){
 		ret += "<div class='span5'>";
 		ret += stmt['actor_name'] + " ";
         //ret += "<a class='verb_link' href='" + stmt['statement_id'] + "'>" + stmt['verb'] + "</a>" + " ";
-        ret += "<a class='verb_link' href='#'>" + stmt['verb'] + "</a>" + " ";
+        ret += "<a class='verb_link' href=''>" + stmt['verb'] + "</a>" + " ";
         ret += stmt['object'];
 		ret += "</div>";
 		
