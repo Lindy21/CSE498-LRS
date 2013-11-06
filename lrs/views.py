@@ -311,7 +311,7 @@ def my_statements(request):
 
                 searchstring = stmtobj.get_search_index()
                 if objectFilter:
-                    if objectFilter in searchstring:
+                    if objectFilter.lower() in searchstring.lower():
                         slist.append(d)
                 else:
                     slist.append(d)
