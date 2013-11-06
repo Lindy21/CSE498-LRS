@@ -237,7 +237,7 @@ function getGroupStatements(event, groupid, ele){
             data: { 'group_id': groupid},
             success: function (data){
                 if(!$(ele).children('div#stmts').length){
-                    $(ele).find('span.group-content').after('<div id="stmts" class="row collapse" style="margin-top:2em;"></div>');
+                    $(ele).find('span.group-content').after('<div id="stmts" class="collapse" style="margin-top:2em;"></div>');
                 }
                 ele = $(ele).find('div#stmts');
 
@@ -421,7 +421,7 @@ function groupUIData(data){
 
 function removeStatement(event){
 
-    var stmtid = $(event.target).parents("div.statement").attr('id');
+    var stmtid = $(event.target).parents("div.statement").attr('href');
     var groupid = $(event.target).parents("div.group-field").attr('id');
 
     $.ajax({
