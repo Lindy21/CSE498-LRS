@@ -452,19 +452,25 @@ function groupStmtUIData(data, grpid){
 
         ret += "' href='" + stmt['statement_id'] + "' draggable='true' ondragstart='startDrag(event)'>";
         ret += "<div class='row'>";
-        ret += "<div class='span4'>";
+        ret += "<div class='";
+        if(grpid){
+            ret += "span4'>";
+        }else{
+            ret += "span5'>";
+        }
+
         ret += stmt['actor_name'] + " ";
         ret += stmt['verb'] + " ";
         ret += stmt['object'];
         ret += "</div>";
         
-        ret += "<div class='span1 pull-right'>";
+        ret += "<div>";
         
-        ret += "<a class='stmt_link btn btn-primary' style='margin-right: 1em' href='#'>Open</a>";
+        ret += "<a class='stmt_link btn btn-primary pull-right' style='margin-right: 1em' href='#'>Open</a>";
 
         // In group, add a remove link
         if(grpid){
-            ret += "<a class='remove-link btn btn-danger' href='#"+grpid+"'>Remove</a>";
+            ret += "<a class='remove-link btn btn-danger pull-right' href='#"+grpid+"'>Remove</a>";
         }
         
         ret += "</div>";
