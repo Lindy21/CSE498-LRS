@@ -509,6 +509,8 @@ function verbClick(event){
 
     initStmtOff = true;
 
+    alert(stmtid);
+
     $.ajax({
         url: "{% url lrs.views.my_statements %}?stmt_id="+stmtid,
         type: "GET",
@@ -556,6 +558,7 @@ function publicVerbClick(event){
     if(event && event.currentTarget){
         ele = event.target;
     }
+    $(ele).parents('.statement').attr("href")
     var stmtid = $(ele).attr("href");
 
     initStmtOff = true;
