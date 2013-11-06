@@ -1021,7 +1021,7 @@ function syntaxHighlight(json) {
     return json.replace(/(\}|\])/g, function(match){return '</span>' + match + '</span>'});
 }
 
-function create_group (){
+function create_group (callback){
     var groupname = $("#group_text").val();
     $.ajax({
             url: "{% url lrs.views.my_groups %}",
@@ -1030,7 +1030,9 @@ function create_group (){
             success: function(data){
                 $("#group_text").val("");
                 getGroups();
-                return data;
+                if(callback){
+                    callback(data);
+                }
             },
             error: function(xhr, ajaxOptions, thrownError){
                 alert(thrownError);
@@ -1099,26 +1101,22 @@ function auto_create_group(){
             data: {user_filter:userFilter, verb_filter:verbFilter, object_filter:objectFilter},
             context: ele,
             success: function (data){
-                id = create_group();
-                alert(id);
+                create_group(function(id){
+                    alert(id);
 
-                /*if ($(this).children('ul').length){
-                    $(this).children('ul').replaceWith(groupStmtUIData(data));
-                }
-                else {
-                    $(this).append(groupStmtUIData(data));
-                }
-                $(this).children('ul').find('.stmt_link').click(stmtClick);
-                $(this).children('ul').find('li.prev-next a.previous').click(
-                        {
-                            the_url: $(this).children('ul').find('li.prev-next a.previous').attr("data-target"),
-                            context: $(this)
-                        }, getStmts_Groups);
-                $(this).children('ul').find('li.prev-next a.next').click(
-                        {
-                            the_url: $(this).children('ul').find('li.prev-next a.next').attr("data-target"),
-                            context: $(this)
-                        }, getStmts_Groups);*/
+                    $.ajax({
+                        url: "{% url lrs.views.my_groups %}",
+                        type: "POST",
+                        data: data,
+                        success: function (){
+                            getGroupStatements(null, group_id, ele);
+                        },
+                        error: function(xhr, ajaxOptions, thrownError){
+                            alert(thrownError);
+                        },
+                        timeout : 15000
+                    });
+                });
             },
             error: function(xhr, ajaxOptions, thrownError){
                 alert(thrownError);
