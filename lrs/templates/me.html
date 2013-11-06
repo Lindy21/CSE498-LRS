@@ -318,7 +318,7 @@ function getStmts_Groups(event, element){
         clearTimeout(feedTimeout);
     }
     var u = "{% url lrs.views.my_statements %}";
-    var ele = $('#groupstatements');
+    var ele = $('#statement_column');
 
     if (event){
         if(event.data.the_url) {
@@ -366,6 +366,7 @@ function getStmts_Groups(event, element){
         objectFilter = e.value;
     }
 
+    alert("test");
     $.ajax({
             url: u,
             type: "GET",
