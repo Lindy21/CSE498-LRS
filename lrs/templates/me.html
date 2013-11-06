@@ -288,7 +288,7 @@ function getStmts_Groups(event, element){
     if(feedTimeout) {
         clearTimeout(feedTimeout);
     }
-    var u = "{% url lrs.views.public_statements %}";
+    var u = "{% url lrs.views.my_statements %}";
     var ele = $('#publicstatements');
 
     if (event){
