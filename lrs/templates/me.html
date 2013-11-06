@@ -80,7 +80,7 @@
         </form>
         <div class="container">
             <div class="row">
-                <div id="group_column" class="span5 offset1">
+                <div id="group_column" class="span5">
                     <h3>Groups:</h3>
                 </div>
 
@@ -447,18 +447,38 @@ function groupStmtUIData(data, grpid){
 
      for (var i = 0; i < data['stmts'].length; i++) {
         var stmt = data['stmts'][i];
-        // Statement Container
-        ret += "<li><div id='" + stmt['statement_id'] + "' class='statement' draggable='true' ondragstart='startDrag(event)'>";
-        // Statement itself
-        ret += "<div class='lpad' href='" + stmt['statement_id'] + "'>" + stmt['actor_name'] + " " + stmt['verb'] + " " + stmt['object'];
+        /////////////////////////
+        ret += "<li><div class='row'><div class='statement ";
 
-        ret += "<a class='stmt_link btn btn-primary pull-right' href='#'>Open</a>";
+        ret += "' href='" + stmt['statement_id'] + "' draggable='true' ondragstart='startDrag(event)'>";
+        ret += "<div class='row'>";
+        ret += "<div class='";
+        if(grpid){
+            ret += "span4'>";
+        }else{
+            ret += "span5'>";
+        }
+
+        ret += stmt['actor_name'] + " ";
+        ret += stmt['verb'] + " ";
+        ret += stmt['object'];
+        ret += "</div>";
+        
+        ret += "<div>";
+        
+        ret += "<a class='stmt_link btn btn-primary pull-right' style='margin-right: 1em' href='#'>Open</a>";
 
         // In group, add a remove link
         if(grpid){
             ret += "<a class='remove-link btn btn-danger pull-right' href='#"+grpid+"'>Remove</a>";
         }
-        ret += "<span class='stmt-field'></span>";
+        
+        ret += "</div>";
+        ret += "</div>";
+        ret += "<div class='row'>";
+        ret += "<div class='stmt-field'></div>";
+        // Statement content inserted here.
+        ret += "</div>";
         ret += "</div></div></li>";
     }
 
@@ -801,7 +821,7 @@ function uiData(data, context, deletable){
 		
 		ret += "</div>";
 		ret += "</div>";
-		ret += "<div class='row'><div class";
+		ret += "<div class='row'>";
         ret += "<div class='stmt-field'></div>";
         ret += "</div>";
 		ret += "</div></div></li>";
@@ -858,18 +878,30 @@ function buildContent(data) {
             break;
 
             case "completed": // Quiz
-                ret += "Score: " + data.result.score.scaled * 100 + "%<br>";
+                //ret += "Score: " + data.result.score.scaled * 100 + "%<br>";
 
                 var tmpString = "";
                 tmpString = data.object.id;
                 tmpString = tmpString.slice(tmpString.indexOf("|")+1);
 
+                var tmpRet = "";
+
                 while(tmpString.length > 0)
                 {
-                    ret += "<br>&nbsp&nbsp&nbsp&nbsp" + tmpString.substr(0,tmpString.indexOf(":")) + " Score : " + 
-                            parseFloat(tmpString.substr(tmpString.indexOf(":")+1,tmpString.indexOf("/"))) * 100 + "%";
-                    tmpString = tmpString.slice(tmpString.indexOf("/")+1);
+                    if(tmpString.indexOf("TOTAL") < 2)
+                    {
+                        ret += "Total Score: " + parseFloat(tmpString.substr(tmpString.indexOf(":")+1,tmpString.length)) * 100 + "%<br>";
+                        tmpString = "";
+                    }
+                    else
+                    {
+                        tmpRet += "<br>&nbsp&nbsp&nbsp&nbsp" + tmpString.substr(0,tmpString.indexOf(":")) + " Score : " + 
+                                parseFloat(tmpString.substr(tmpString.indexOf(":")+1,tmpString.indexOf("/"))) * 100 + "%";
+                        tmpString = tmpString.slice(tmpString.indexOf("/")+1);
+                    }
                 }
+
+                ret += tmpRet;
             break;
 
             case "read":    // Text
