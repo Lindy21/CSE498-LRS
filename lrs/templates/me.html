@@ -890,7 +890,7 @@ function buildContent(data) {
                 {
                     if(tmpString.indexOf("TOTAL") < 2)
                     {
-                        ret += "Total Score: " + data.result.score.scaled * 100 + "%<br>";
+                        ret += "Total Score: " + parseFloat(tmpString.substr(tmpString.indexOf(":")+1,tmpString.length)) * 100 + "%<br>";
                         tmpString = "";
                     }
                     else
