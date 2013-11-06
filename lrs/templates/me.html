@@ -102,10 +102,11 @@
             Search:
             <input id="group_search" type="text"></br>
         </form>
-        <form class="form-inline" name="groupForm" action="javascript:create_group()">
+        <form class="form-inline" name="groupForm">
                 Group Name:
                 <input type="text" id="group_text"/>
-                <input name="Submit" type="submit" value="Create" class="btn"/>
+                <input onclick="create_group()" name="Submit" type="submit" value="Create" class="btn"/>
+                <input onclick="auto_create_group()" name="Auto-Submit" type="submit" value="Auto-Create" class="btn"/>
         </form>
         <div class="container">
             <div class="row">
@@ -366,7 +367,6 @@ function getStmts_Groups(event, element){
         objectFilter = e.value;
     }
 
-    alert("test");
     $.ajax({
             url: u,
             type: "GET",
@@ -1018,9 +1018,97 @@ function create_group (){
             url: "{% url lrs.views.my_groups %}",
             type: "POST",
             data: { name : groupname },
-            success: function(){
+            success: function(data){
                 $("#group_text").val("");
                 getGroups();
+                return data;
+            },
+            error: function(xhr, ajaxOptions, thrownError){
+                alert(thrownError);
+            },
+            timeout : 15000
+        });
+}
+
+function auto_create_group(){
+    if(feedTimeout) {
+        clearTimeout(feedTimeout);
+    }
+    var u = "{% url lrs.views.my_statements %}";
+    var ele = $('#statement_column');
+
+    if (event){
+        if(event.data.the_url) {
+           u = event.data.the_url;
+        }
+        if(event.data.context) {
+            ele = event.data.context;
+        }
+    }
+    if(element) {
+        ele = element;
+    }
+
+    var userFilter;
+    var verbFilter;
+    var objectFilter;
+
+    var e = document.getElementById("group_verb_filter");
+    var check = document.getElementById("group_verb_filter_checkbox");
+
+    if(e.selectedIndex == 0 || !check.checked){
+        verbFilter = null;
+    }
+    else{
+        verbFilter = e.options[e.selectedIndex].value;//myFilters['verb'];
+    }
+
+    e = document.getElementById("group_user_filter");
+    check = document.getElementById("group_user_filter_checkbox");
+
+    if(!e.value || !check.checked){
+        userFilter = "0";
+    }
+    else{
+        userFilter = e.value;
+    }
+
+    e = document.getElementById("group_search");
+    check = document.getElementById("group_search_checkbox");
+
+    if(!check.checked || e.value == "") {
+        objectFilter = null;
+    }
+    else {
+        objectFilter = e.value;
+    }
+
+    $.ajax({
+            url: u,
+            type: "GET",
+            data: {user_filter:userFilter, verb_filter:verbFilter, object_filter:objectFilter},
+            context: ele,
+            success: function (data){
+                id = create_group();
+                alert(id);
+
+                /*if ($(this).children('ul').length){
+                    $(this).children('ul').replaceWith(groupStmtUIData(data));
+                }
+                else {
+                    $(this).append(groupStmtUIData(data));
+                }
+                $(this).children('ul').find('.stmt_link').click(stmtClick);
+                $(this).children('ul').find('li.prev-next a.previous').click(
+                        {
+                            the_url: $(this).children('ul').find('li.prev-next a.previous').attr("data-target"),
+                            context: $(this)
+                        }, getStmts_Groups);
+                $(this).children('ul').find('li.prev-next a.next').click(
+                        {
+                            the_url: $(this).children('ul').find('li.prev-next a.next').attr("data-target"),
+                            context: $(this)
+                        }, getStmts_Groups);*/
             },
             error: function(xhr, ajaxOptions, thrownError){
                 alert(thrownError);

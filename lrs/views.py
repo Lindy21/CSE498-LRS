@@ -370,7 +370,9 @@ def my_groups(request):
 
                 new_group = models.Group(name=name, user=request.user)
                 new_group.save()
-                return HttpResponse(status=204)
+                s = new_group.id
+                return HttpResponse(json.dumps(s), mimetype="application/json", status=200)
+                #return HttpResponse(status=204)
 
             group_id = request.POST.get('group_id', None)
             stmt_id = request.POST.get('stmt_id', None)
