@@ -310,7 +310,7 @@ def my_statements(request):
                 d['object'] = stmtobj.get_a_name()
 
                 searchstring = stmtobj.get_search_index()
-                if objectFilter:
+                if not objectFilter == "" :
                     if objectFilter.lower() in searchstring.lower():
                         slist.append(d)
                 else:
