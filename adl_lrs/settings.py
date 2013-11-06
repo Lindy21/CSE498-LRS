@@ -83,7 +83,7 @@ STATICFILES_DIRS = (
 LOGIN_REDIRECT_URL = '/XAPI/me'
 
 # Me view has a tab of user's statements
-STMTS_PER_PAGE = 10
+STMTS_PER_PAGE = 6
 
 # Whether HTTP auth or OAuth is enabled
 HTTP_AUTH_ENABLED = True
