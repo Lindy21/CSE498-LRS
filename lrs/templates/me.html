@@ -849,6 +849,7 @@ function uiData(data, context, deletable){
 
 function getStmtContent(stmtid, ele){
     
+    alert(stmtid);
 	ele = $(ele).parents('.statement').find(".stmt-field");
     $.ajax({
         url: "{% url lrs.views.my_statements %}?stmt_id="+stmtid,
