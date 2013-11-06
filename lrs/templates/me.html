@@ -447,18 +447,43 @@ function groupStmtUIData(data, grpid){
 
      for (var i = 0; i < data['stmts'].length; i++) {
         var stmt = data['stmts'][i];
-        // Statement Container
-        ret += "<li><div id='" + stmt['statement_id'] + "' class='statement' draggable='true' ondragstart='startDrag(event)'>";
-        // Statement itself
-        ret += "<div class='lpad' href='" + stmt['statement_id'] + "'>" + stmt['actor_name'] + " " + stmt['verb'] + " " + stmt['object'];
+        /////////////////////////
+        ret += "<li><div class='row'><div class='statement ";
 
-        ret += "<a class='stmt_link btn btn-primary pull-right' href='#'>Open</a>";
+        ret += " offset1' href='" + stmt['statement_id'] + "' draggable='true' ondragstart='startDrag(event)'>";
+        ret += "<div class='row'>";
+        ret += "<div class='span5'>";
+        ret += stmt['actor_name'] + " ";
+        ret += stmt['verb'] + " ";
+        ret += stmt['object'];
+        ret += "</div>";
+        
+        ret += "<div class='span2'>";
+        
+        ret += "<a class='stmt_link btn btn-primary ";
+        
+        var pullDirection = "";
+        if(deletable)
+        {
+            pullDirection = "pull-left'";
+        }
+        else
+        {
+            pullDirection = "pull-right'";
+        }
+        ret += pullDirection + " style='margin-right: 1em' href='#'>Open</a>";       
 
         // In group, add a remove link
         if(grpid){
             ret += "<a class='remove-link btn btn-danger pull-right' href='#"+grpid+"'>Remove</a>";
         }
-        ret += "<span class='stmt-field'></span>";
+        
+        ret += "</div>";
+        ret += "</div>";
+        ret += "<div class='row'><div class";
+        ret += "<div class='stmt-field'></div>";
+        // Statement content inserted here.
+        ret += "</div>";
         ret += "</div></div></li>";
     }
 
