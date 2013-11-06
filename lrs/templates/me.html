@@ -365,6 +365,7 @@ function dropStmt(event){
     var group_id = $(ele).attr('id');
     var sendData = { 'stmt_id': stmt_id, 'group_id': group_id };
     
+    alert(stmt_id);
 
     // Next, send post request to add stmt_id to group_id
     $.ajax({
