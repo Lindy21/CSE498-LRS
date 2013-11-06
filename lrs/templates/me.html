@@ -78,6 +78,35 @@
                 <input type="text" id="group_text"/>
                 <input name="Submit" type="submit" value="Create" class="btn"/>
         </form>
+        <form class="form-inline">
+            <label class="checkbox">
+                <input id="group_user_filter_checkbox" type="checkbox" onclick="getStmts_Group()">
+            </label>
+            User:
+            <input id="public_user_filter" type="text">
+        </form>
+        <form class="form-inline">
+            <label class="checkbox">
+                <input id="group_verb_filter_checkbox" type="checkbox" onclick="getStmts_Group()">
+            </label>
+            Show:
+            <select id="group_verb_filter" onchange="initGroupVerbFilter()">
+                <option value="">All</option>
+                <option value="http://verbs/interaction/">Desktop Apps</option>
+                <option value="http://verbs/read/">Selected Texts</option> 
+                <option value="http://verbs/started/">Quizzes</option>
+                <option value="http://verbs/completed/">Quiz Results</option>
+                <option value="http://verbs/watched/">Videos</option>
+                <option value="http://verbs/experienced/">Webpages</option>
+            </select>
+        </form>
+        <form class="form-inline">
+            <label class="checkbox">
+                <input id="group_search_checkbox" type="checkbox" onclick="getStmts_Group()">
+            </label>
+            Search:
+            <input id="group_search" type="text"></br>
+        </form>
         <div class="container">
             <div class="row">
                 <div id="group_column" class="span5" style="margin-right:1em;">
