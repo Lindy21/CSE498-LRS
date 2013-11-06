@@ -425,7 +425,8 @@ def my_groups(request):
                 d['id'] = grp.id
                 slist.append(d)
 
-            paginator = Paginator(slist, settings.STMTS_PER_PAGE)
+            #paginator = Paginator(slist, settings.STMTS_PER_PAGE)
+            paginator = Paginator(slist, 6)
 
             page_no = request.GET.get('page', 1)
             try:
