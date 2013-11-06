@@ -502,14 +502,14 @@ function groupStmtUIData(data, grpid){
 }
 
 function verbClick(event){
+    clearTimeout(feedTimeout);
+
     if(event && event.currentTarget){
         ele = event.target;
     }
     var stmtid = $(ele).attr("href");
 
     initStmtOff = true;
-
-    alert(stmtid);
 
     $.ajax({
         url: "{% url lrs.views.my_statements %}?stmt_id="+stmtid,
@@ -558,8 +558,7 @@ function publicVerbClick(event){
     if(event && event.currentTarget){
         ele = event.target;
     }
-    $(ele).parents('.statement').attr("href")
-    var stmtid = $(ele).attr("href");
+    var stmtid = $(ele).attr("href") + "#";
 
     initStmtOff = true;
 
@@ -849,7 +848,6 @@ function uiData(data, context, deletable){
 
 function getStmtContent(stmtid, ele){
     
-    alert(stmtid);
 	ele = $(ele).parents('.statement').find(".stmt-field");
     $.ajax({
         url: "{% url lrs.views.my_statements %}?stmt_id="+stmtid,
