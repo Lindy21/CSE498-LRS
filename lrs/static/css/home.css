@@ -21,10 +21,6 @@ code
   background-color:#4B4B57;
   color:#D1D1E0;
 }
-a
-{
-  cursor:pointer;
-}
 h1
 {
   /*position: absolute;*/
@@ -318,6 +314,7 @@ div
 #mystatements .verb_link
 {
   cursor:pointer;
+  font-size: 80px;
 }
 
 #publicstatements
