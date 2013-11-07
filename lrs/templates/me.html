@@ -1099,7 +1099,7 @@ function auto_create_group(){
                     };
 
                     for (var i = 0; i < data['stmts'].length; i++) {
-                        sendData['stmts'][i] = data['stmts'][i].stmt_id;
+                        data['stmts'][i] = data['stmts'][i]['statement_id'];
                     };
                     // Group created, add all statements
                     $.ajax({
