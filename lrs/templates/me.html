@@ -110,7 +110,7 @@
                 <input type="text" id="group_text"/>
                 <input name="Submit" type="submit" value="Create" class="btn"/>
         </form>
-        <!--<input name="Auto_Submit" type="submit" value="Auto-Create" onclick="auto_create_group()">-->
+        <input name="Auto_Submit" type="submit" value="Auto-Create" onclick="auto_create_group()">
         <div class="container">
             <div class="row">
                 <div id="group_column" class="span5" style="margin-right:1em;">
@@ -1097,7 +1097,7 @@ function auto_create_group(){
                         'group_id': group_id,
                         'stmts': []
                     };
-                    
+
                     for (var i = 0; i < data['stmts'].length; i++) {
                         sendData['stmts'][i] = data['stmts'][i].stmt_id;
                     };
