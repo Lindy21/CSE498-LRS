@@ -376,7 +376,7 @@ def my_groups(request):
 
             group_id = request.POST.get('group_id', None)
             stmts = request.POST.getlist('stmts', None)
-            if group_id and stmts:
+            if group_id:
                 group = models.Group.objects.get(user=request.user, id=group_id)
 
                 for stmt_id in stmts:
