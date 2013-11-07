@@ -267,7 +267,7 @@ function getGroupStatements(event, groupid, ele){
     $.ajax({
             url: u,
             type: "GET",
-            data: { 'group_id': groupid},
+            data: { 'group_id': groupid },
             success: function (data){
                 if(!$(ele).children('div#stmts').length){
                     $(ele).find('span.group-content').after('<div id="stmts" class="collapse" style="margin-top:2em;"></div>');
@@ -309,7 +309,7 @@ function groupClick(event){
     }
     findDiv = $(ele).siblings('div#stmts').length;
     if(findDiv===0){
-        getGroupStatements(null, $(ele).parent().attr("id"), $(ele).parent());
+        getGroupStatements(null, $(ele).parent().attr("id"), $(ele).parents('.group-field'));
     }
     else{
         $(ele).siblings('div#stmts').collapse('toggle');
@@ -420,7 +420,10 @@ function dropStmt(event){
     // First, retreive dropped item's id and group id
     var stmt_id = event.dataTransfer.getData("Text");
     var group_id = $(ele).attr('id');
-    var sendData = { 'stmt_id': stmt_id, 'group_id': group_id };
+    var sendData = { 
+        'group_id': group_id,
+        'stmts': [stmt_id]
+    };
 
     // Next, send post request to add stmt_id to group_id
     $.ajax({
@@ -1042,24 +1045,9 @@ function create_group (callback){
 }
 
 function auto_create_group(){
-    alert("here");
-    if(feedTimeout) {
-        clearTimeout(feedTimeout);
-    }
     var u = "{% url lrs.views.my_statements %}";
     var ele = $('#statement_column');
 
-    if (event){
-        if(event.data.the_url) {
-           u = event.data.the_url;
-        }
-        if(event.data.context) {
-            ele = event.data.context;
-        }
-    }
-    if(element) {
-        ele = element;
-    }
 
     var userFilter;
     var verbFilter;
@@ -1095,21 +1083,31 @@ function auto_create_group(){
         objectFilter = e.value;
     }
 
+    // This request will result in a total of 4 requests.
     $.ajax({
             url: u,
             type: "GET",
             data: {user_filter:userFilter, verb_filter:verbFilter, object_filter:objectFilter},
             context: ele,
             success: function (data){
-                create_group(function(id){
-                    alert(id);
+                create_group(function(group_id){
+                    alert(group_id);
 
+                    sendData = {
+                        'group_id': group_id,
+                        'stmts': []
+                    };
+                    
+                    for (var i = 0; i < data['stmts'].length; i++) {
+                        sendData['stmts'][i] = data['stmts'][i].stmt_id;
+                    };
+                    // Group created, add all statements
                     $.ajax({
                         url: "{% url lrs.views.my_groups %}",
                         type: "POST",
-                        data: data,
+                        data: sendData,
                         success: function (){
-                            getGroupStatements(null, group_id, ele);
+                            getGroupStatements(null, group_id, $("#"+group_id));
                         },
                         error: function(xhr, ajaxOptions, thrownError){
                             alert(thrownError);

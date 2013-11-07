@@ -375,14 +375,15 @@ def my_groups(request):
                 #return HttpResponse(status=204)
 
             group_id = request.POST.get('group_id', None)
-            stmt_id = request.POST.get('stmt_id', None)
-            if group_id and stmt_id:
-                stmt = models.Statement.objects.get(statement_id=stmt_id)
+            stmts = request.POST.get('stmts', None)
+            if group_id and stmts:
                 group = models.Group.objects.get(user=request.user, id=group_id)
-                if group and stmt:
+
+                for stmt_id in stmts:
+                    stmt = models.Statement.objects.get(statement_id=stmt_id)
                     group.statements.add(stmt)
-                    return HttpResponse(status=204)
-                return HttpResponse(json.dumps({"error_message":"invalid group and/or statement"}), status=400)
+
+                return HttpResponse(status=204)
             else:
                 raise Exception("Invalid POST method")
 
