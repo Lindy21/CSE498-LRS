@@ -113,7 +113,7 @@
         <input name="Auto_Submit" type="submit" value="Auto-Create" onclick="auto_create_group()" class="btn">
         <div class="container">
             <div class="row">
-                <div id="group_column" class="span5" style="margin-right:1em;">
+                <div id="group_column" class="span6" style="margin-right:1em;">
                     <h3>Groups:</h3>
                 </div>
 
@@ -282,7 +282,7 @@ function getGroupStatements(event, groupid, ele){
                 }
 
 
-                $(ele).children('ul').find('div.statement').addClass('span4');
+                $(ele).children('ul').find('div.statement').addClass('span5');
                 $(ele).children('ul').find('a.remove-link').click(removeStatement);
                 $(ele).children('ul').find('.stmt_link').click(stmtClick);
                 $(ele).children('ul').find('li.prev-next a.previous').click(
@@ -511,15 +511,15 @@ function groupStmtUIData(data, grpid){
      for (var i = 0; i < data['stmts'].length; i++) {
         var stmt = data['stmts'][i];
         /////////////////////////
-        ret += "<li><div class='row'><div class='statement ";
+        ret += "<li><div class='row'><div class='statement";
 
         ret += "' href='" + stmt['statement_id'] + "' draggable='true' ondragstart='startDrag(event)'>";
         ret += "<div class='row'>";
         ret += "<div class='";
         if(grpid){
-            ret += "span4'>";
+            ret += "span3'>";
         }else{
-            ret += "span5'>";
+            ret += "span4'>";
         }
 
         ret += stmt['actor_name'] + " ";
