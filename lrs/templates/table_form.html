@@ -4,7 +4,7 @@
 {% endfor %}
 
 {% for field in form %}    
-    <tr><th>{{ field.label_tag }}:</th><td>{{ field }}</td>
+    <tr><th>{{ field.label_tag }}</th><td>{{ field }}</td>
     {% if field.errors %}
     {% for error in field.errors%}
     <td class="error">{{ error }}</td>
