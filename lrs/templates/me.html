@@ -211,7 +211,8 @@ function getGroups(event){
                 $(this).children('ul').find('.group-field').droppable({
                     accept: ".statement",
                     drop: dropStmt,
-                    over: overGroup
+                    over: overGroup,
+                    out: outGroup
                 });
                 $(this).children('ul').find('li.prev-next a.previous').click(
                         {the_url: $(this).children('ul').find('li.prev-next a.previous').attr("data-target")}, getGroups);
@@ -442,9 +443,13 @@ function overGroup(event, ui){
         getGroupStatements(null, $(ele).attr("id"), $(ele));
     }
     else{
-        $(ele).find('div#stmts').collapse('toggle');
+        $(ele).find('div#stmts').collapse('show');
     }
     return false;
+}
+
+function outGroup(event, ui){
+    $(event.target).find('div#stmts').collapse('hide');
 }
 
 function groupUIData(data){
