@@ -126,7 +126,7 @@
 </div>
 {% endblock content %}
 {% block extra_js %}
-<script src="{{ STATIC_URL }}scripts/jquery.easytabs.min.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}scripts/jquery.dragdrop.min.js" type="text/javascript"></script>
 <script src="{{ STATIC_URL }}scripts/jquery.hashchange.min.js" type="text/javascript"></script>
 <script type="text/javascript">
 var feedTimeout = null;
@@ -137,9 +137,6 @@ $(document).ready(function() {
     //getStmts();
     $('#myTab a:first').tab('show');
     $(".stmt_link").click(stmtClick);
-    $('#tab-container').easytabs({
-        defaultTab: "li.default"
-    });
     if ($('#mystatements').hasClass('active') && ! $('#mystatements ul').length){
         getStmts();
     }
@@ -150,21 +147,6 @@ $(document).ready(function() {
         getGroups();
         getStmts_Groups(null, $('#statement_column'));
     }
-    $('#tab-container').bind('easytabs:after', function(event, $clicked, $targetPanel, settings){
-        if ($targetPanel.attr("id") == "mystatements"){
-            //clearFilters();
-            getStmts();
-        }
-         if ($targetPanel.attr("id") == "publicstatements"){
-            //clearFilters();
-            getPublicStmts();
-        }
-        if ($targetPanel.attr("id") == "groupstatements"){
-            //clearFilters();
-            getGroups();
-            getStmts_Groups(null, $('#statement_column'));
-        }       
-    });
     $('a[data-toggle="tab"]').on('show', function (e) {
         if ($(event.target).attr("href") == "#mystatements"){
             //clearFilters();
@@ -383,6 +365,7 @@ function getStmts_Groups(event, element){
                     $(this).append(groupStmtUIData(data));
                 }
                 $(this).children('ul').find('.stmt_link').click(stmtClick);
+                $(this).children('ul').find('.statement').draggable();
                 $(this).children('ul').find('li.prev-next a.previous').click(
                         {
                             the_url: $(this).children('ul').find('li.prev-next a.previous').attr("data-target"),
@@ -513,7 +496,9 @@ function groupStmtUIData(data, grpid){
         /////////////////////////
         ret += "<li><div class='row'><div class='statement span5";
 
-        ret += "' href='" + stmt['statement_id'] + "' draggable='true' ondragstart='startDrag(event)'>";
+        //ret += "' href='" + stmt['statement_id'] + "' draggable='true' ondragstart='startDrag(event)'>";
+        ret += "' href='" + stmt['statement_id'] + "'>";
+
         ret += "<div class='row'>";
         ret += "<div class='";
         if(grpid){
