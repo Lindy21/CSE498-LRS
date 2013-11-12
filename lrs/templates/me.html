@@ -372,7 +372,8 @@ function getStmts_Groups(event, element){
                 }
                 $(this).children('ul').find('.stmt_link').click(stmtClick);
                 $(this).children('ul').find('.statement').draggable({
-                    helper: "clone"
+                    helper: "clone",
+                    start: function(event, ui){ui.helper.css("opacity", "0.5");}
                 });
                 $(this).children('ul').find('li.prev-next a.previous').click(
                         {
