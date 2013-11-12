@@ -208,6 +208,11 @@ function getGroups(event){
                 }
                 $(this).children('ul').find('.group-link').click(groupClick);
                 $(this).children('ul').find('.delete-group-link').click(deleteGroup);
+                $(this).children('ul').find('.group-field').droppable({
+                    accept: ".statement",
+                    drop: dropStmt,
+                    over: overGroup
+                });
                 $(this).children('ul').find('li.prev-next a.previous').click(
                         {the_url: $(this).children('ul').find('li.prev-next a.previous').attr("data-target")}, getGroups);
                 $(this).children('ul').find('li.prev-next a.next').click(
@@ -365,7 +370,9 @@ function getStmts_Groups(event, element){
                     $(this).append(groupStmtUIData(data));
                 }
                 $(this).children('ul').find('.stmt_link').click(stmtClick);
-                $(this).children('ul').find('.statement').draggable();
+                $(this).children('ul').find('.statement').draggable({
+                    helper: "clone"
+                });
                 $(this).children('ul').find('li.prev-next a.previous').click(
                         {
                             the_url: $(this).children('ul').find('li.prev-next a.previous').attr("data-target"),
@@ -393,7 +400,7 @@ function startDrag(event){
     event.dataTransfer.setData("Text", $(ele).attr('href'));
 }
 
-function dropStmt(event){
+function dropStmt(event, ui){
     event.preventDefault();
     var ele = event.target;
     if(!$(ele).hasClass('group-field')){
@@ -401,7 +408,8 @@ function dropStmt(event){
     }
 
     // First, retreive dropped item's id and group id
-    var stmt_id = event.dataTransfer.getData("Text");
+    //var stmt_id = event.dataTransfer.getData("Text");
+    var stmt_id = ui.draggable.attr('href');
     var group_id = $(ele).attr('id');
     var sendData = { 
         'group_id': group_id,
@@ -427,6 +435,18 @@ function allowDrop(event){
     event.preventDefault();
 }
 
+function overGroup(event, ui){
+    ele = event.target;
+    findDiv = $(ele).find('div#stmts').length;
+    if(findDiv===0){
+        getGroupStatements(null, $(ele).attr("id"), $(ele));
+    }
+    else{
+        $(ele).find('div#stmts').collapse('toggle');
+    }
+    return false;
+}
+
 function groupUIData(data){
 
     if(data['groups'].length == 0) {
@@ -437,7 +457,8 @@ function groupUIData(data){
     for (var i = 0; i < data['groups'].length; i++) {
         var grp = data['groups'][i];
         // Group title
-        ret += "<li><div id='" + grp['id'] +"' class='group-field' ondrop='dropStmt(event)' ondragover='allowDrop(event)'>" + grp['name'];
+        //ret += "<li><div id='" + grp['id'] +"' class='group-field' ondrop='dropStmt(event)' ondragover='allowDrop(event)'>" + grp['name'];
+        ret += "<li><div id='" + grp['id'] +"' class='group-field'>" + grp['name'];
         // Open Group link
         ret += "<a class='group-link btn btn-primary pull-right' href='#" + grp['id'] + "'>Open</a>";
         // Delete Group link
