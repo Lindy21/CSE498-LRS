@@ -373,7 +373,10 @@ function getStmts_Groups(event, element){
                 $(this).children('ul').find('.stmt_link').click(stmtClick);
                 $(this).children('ul').find('.statement').draggable({
                     helper: "clone",
-                    start: function(event, ui){ui.helper.css("opacity", "0.5");}
+                    start: function(event, ui){
+                        ui.helper.css("opacity", "0.5");
+                        $('#group_column .group-field #stmts').collapse('hide');
+                    }
                 });
                 $(this).children('ul').find('li.prev-next a.previous').click(
                         {
