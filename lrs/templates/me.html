@@ -811,19 +811,17 @@ function getStmts(event, element){
     var verbFilter;
     var objectFilter;
     var e = document.getElementById("my_verb_filter");
-    var check = document.getElementById("my_verb_filter_checkbox");
 
-    if(e.selectedIndex == 0 || !check.checked){
+    if(e.selectedIndex == 0){
         verbFilter = null;
     }
     else{
-        verbFilter = e.options[e.selectedIndex].value;//myFilters['verb'];
+        verbFilter = e.options[e.selectedIndex].value;
     }
 
     e = document.getElementById("my_search");
-    check = document.getElementById("my_search_checkbox");
 
-    if(!check.checked || e.value == "") {
+    if(e.value == "") {
         objectFilter = null;
     }
     else {
