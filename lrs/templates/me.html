@@ -13,11 +13,8 @@
 <div class="tab-content">
     <div id="mystatements" class="tab-pane">
         <form class="form-inline">
-            <label class="checkbox">
-                <input id="my_verb_filter_checkbox" type="checkbox" onclick="getStmts()">
-            </label>
             Show:
-            <select id="my_verb_filter" onchange="initVerbFilter()">
+            <select id="my_verb_filter" onchange="getStmts()">
                 <option value="">All</option>
                 <option value="http://verbs/interaction/">Desktop Apps</option>
                 <option value="http://verbs/viewed/">Images</option>
@@ -27,14 +24,8 @@
                 <option value="http://verbs/watched/">Videos</option>
                 <option value="http://verbs/experienced/">Webpages</option>
             </select>
-        </form>
-
-        <form class="form-inline">
-            <label class="checkbox">
-                <input id="my_search_checkbox" type="checkbox" onclick="getStmts()">
-            </label>
-            Search:
-            <input id="my_search" type="text">
+            <input id="my_search" type="text" placeholder="Search">
+            <input id="search_button" type="button" onclick="getStmts()" class="btn" value="Search">
         </form></br>        
         <span class="small-link"><a id="delstmts" href="#mystatements" class="btn btn-danger">delete all statements</a></span>
         <h2>Statements:</h2>
