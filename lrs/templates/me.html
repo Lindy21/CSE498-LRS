@@ -46,24 +46,15 @@
                 <option value="http://verbs/experienced/">Webpages</option>
             </select>
             <input id="public_search" type="text" placeholder="Keyword Search">
-            <input id="public_search_button" type="button" value="Search">
+            <input id="public_search_button" type="button" class="btn" value="Search">
         </form>
         <h2>Public Feed:</h2>
     </div>
 
     <div id="groupstatements" class="tab-pane">
-        <form class="form-inline">
-            <label class="checkbox">
-                <input id="group_user_filter_checkbox" type="checkbox" onclick="getStmts_Groups()">
-            </label>
-            User:
-            <input id="group_user_filter" type="text">
-        </form>
-        <form class="form-inline">
-            <label class="checkbox">
-                <input id="group_verb_filter_checkbox" type="checkbox" onclick="getStmts_Groups()">
-            </label>
-            Show:
+        <form class="form-inline" action="javascript:getStmts_Groups()">
+            <label>Filter</label>
+            <input id="group_user_filter" type="text" placeholder="User">
             <select id="group_verb_filter" onchange="initGroupVerbFilter()">
                 <option value="">All</option>
                 <option value="http://verbs/interaction/">Desktop Apps</option>
@@ -74,14 +65,10 @@
                 <option value="http://verbs/watched/">Videos</option>
                 <option value="http://verbs/experienced/">Webpages</option>
             </select>
+            <input id="group_search" type="text" placeholder="Keyword Search">
+            <input id="group_search_button" type="button" class="btn" value="Search">
         </form>
-        <form class="form-inline">
-            <label class="checkbox">
-                <input id="group_search_checkbox" type="checkbox" onclick="getStmts_Groups()">
-            </label>
-            Search:
-            <input id="group_search" type="text"></br>
-        </form>
+
         <form class="form-inline" name="groupForm" action="javascript:create_group()">
                 Group Name:
                 <input type="text" id="group_text"/>
@@ -306,9 +293,9 @@ function getStmts_Groups(event, element){
     var objectFilter;
 
     var e = document.getElementById("group_verb_filter");
-    var check = document.getElementById("group_verb_filter_checkbox");
+    //var check = document.getElementById("group_verb_filter_checkbox");
 
-    if(e.selectedIndex == 0 || !check.checked){
+    if(e.selectedIndex == 0){
         verbFilter = null;
     }
     else{
@@ -316,9 +303,9 @@ function getStmts_Groups(event, element){
     }
 
     e = document.getElementById("group_user_filter");
-    check = document.getElementById("group_user_filter_checkbox");
+    //check = document.getElementById("group_user_filter_checkbox");
 
-    if(!e.value || !check.checked){
+    if(!e.value){
         userFilter = "0";
     }
     else{
@@ -326,9 +313,9 @@ function getStmts_Groups(event, element){
     }
 
     e = document.getElementById("group_search");
-    check = document.getElementById("group_search_checkbox");
+    //check = document.getElementById("group_search_checkbox");
 
-    if(!check.checked || e.value == "") {
+    if(e.value == "") {
         objectFilter = null;
     }
     else {
