@@ -52,7 +52,7 @@
     </div>
 
     <div id="groupstatements" class="tab-pane">
-        <form class="form-inline" action="javascript:getStmts_Groups()">
+        <form class="form-inline" action="javascript:getStmts_Groups(null, $('#statement_column'))">
             <label>Filter</label>
             <input id="group_user_filter" type="text" placeholder="User">
             <select id="group_verb_filter" onchange="initGroupVerbFilter()">
