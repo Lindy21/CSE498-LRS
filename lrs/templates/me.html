@@ -13,7 +13,7 @@
 <div class="tab-content">
     <div id="mystatements" class="tab-pane">
         <form class="form-inline" action="javascript:getStmts()">
-            Show:
+            <label>Filter:</label>
             <select id="my_verb_filter" onchange="getStmts()">
                 <option value="">All</option>
                 <option value="http://verbs/interaction/">Desktop Apps</option>
@@ -24,7 +24,7 @@
                 <option value="http://verbs/watched/">Videos</option>
                 <option value="http://verbs/experienced/">Webpages</option>
             </select>
-            <input id="my_search" type="text" placeholder="Search">
+            <input id="my_search" type="text" placeholder="Keyword Search">
             <input id="search_button" type="button" class="btn" value="Search">
         </form></br>        
         <span class="small-link"><a id="delstmts" href="#mystatements" class="btn btn-danger">delete all statements</a></span>
@@ -32,19 +32,10 @@
     </div>
 
     <div id="publicstatements" class="tab-pane">
-        <form class="form-inline">
-            <label class="checkbox">
-                <input id="public_user_filter_checkbox" type="checkbox" onclick="getPublicStmts()">
-            </label>
-            User:
-            <input id="public_user_filter" type="text">
-        </form>
-        <form class="form-inline">
-            <label class="checkbox">
-                <input id="public_verb_filter_checkbox" type="checkbox" onclick="getPublicStmts()">
-            </label>
-            Show:
-            <select id="public_verb_filter" onchange="initPublicVerbFilter()">
+        <form class="form-inline" action="javascript:getPublicStmts()">
+            <label>Filter:</label>
+            <input id="public_user_filter" type="text" placeholder="User">
+            <select id="public_verb_filter" onchange="getPublicStmts()">
                 <option value="">All</option>
                 <option value="http://verbs/interaction/">Desktop Apps</option>
                 <option value="http://verbs/viewed/">Images</option>
@@ -54,13 +45,8 @@
                 <option value="http://verbs/watched/">Videos</option>
                 <option value="http://verbs/experienced/">Webpages</option>
             </select>
-        </form>
-        <form class="form-inline">
-            <label class="checkbox">
-                <input id="public_search_checkbox" type="checkbox" onclick="getPublicStmts()">
-            </label>
-            Search:
-            <input id="public_search" type="text"></br>
+            <input id="public_search" type="text" placeholder="Keyword Search">
+            <input id="public_search_button" type="button" value="Search">
         </form>
         <h2>Public Feed:</h2>
     </div>
@@ -732,19 +718,17 @@ function getPublicStmts(event){
     var objectFilter;
 
     var e = document.getElementById("public_verb_filter");
-    var check = document.getElementById("public_verb_filter_checkbox");
 
-    if(e.selectedIndex == 0 || !check.checked){
+    if(e.selectedIndex == 0){
         verbFilter = null;
     }
     else{
-        verbFilter = e.options[e.selectedIndex].value;//myFilters['verb'];
+        verbFilter = e.options[e.selectedIndex].value;
     }
 
     e = document.getElementById("public_user_filter");
-    check = document.getElementById("public_user_filter_checkbox");
 
-    if(!e.value || !check.checked){
+    if(!e.value){
         userFilter = "0";
     }
     else{
@@ -752,9 +736,9 @@ function getPublicStmts(event){
     }
 
     e = document.getElementById("public_search");
-    check = document.getElementById("public_search_checkbox");
+    //check = document.getElementById("public_search_checkbox");
 
-    if(!check.checked || e.value == "") {
+    if(e.value == "") {
         objectFilter = null;
     }
     else {
