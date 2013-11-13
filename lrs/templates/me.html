@@ -12,7 +12,7 @@
 
 <div class="tab-content">
     <div id="mystatements" class="tab-pane">
-        <form class="form-inline">
+        <form class="form-inline" action="javascript:getStmts()">
             Show:
             <select id="my_verb_filter" onchange="getStmts()">
                 <option value="">All</option>
@@ -25,7 +25,7 @@
                 <option value="http://verbs/experienced/">Webpages</option>
             </select>
             <input id="my_search" type="text" placeholder="Search">
-            <input id="search_button" type="button" onclick="getStmts()" class="btn" value="Search">
+            <input id="search_button" type="button" class="btn" value="Search">
         </form></br>        
         <span class="small-link"><a id="delstmts" href="#mystatements" class="btn btn-danger">delete all statements</a></span>
         <h2>Statements:</h2>
