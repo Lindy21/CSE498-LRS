@@ -76,6 +76,7 @@
                 Group Name:
                 <input type="text" id="group_text"/>
                 <input name="Submit" type="submit" value="Create" class="btn"/>
+                <div id="nameAlert" class="alert alert-danger">Enter Group Name</div>
         </form>
         <input name="Auto_Submit" type="submit" value="Auto-Create" onclick="auto_create_group()" class="btn">
         <div class="container">
@@ -1029,7 +1030,9 @@ function syntaxHighlight(json) {
 
 function create_group (callback){
     var groupname = $("#group_text").val();
-    alert(groupname);
+    if(!groupname) {
+
+    }
     $.ajax({
             url: "{% url lrs.views.my_groups %}",
             type: "POST",
