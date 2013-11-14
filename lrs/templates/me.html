@@ -68,15 +68,17 @@
                 <option value="http://verbs/experienced/">Webpages</option>
             </select>
             <input id="group_search" type="text" placeholder="Keyword Search">
-            <input id="group_search_button" type="button" class="btn" value="Search">
+            <input id="group_search_button" type="button" class="btn" value="Search" onclick="getStmts_Groups(null, $('#statement_column'))">
+            <input id="group_clear_button" type="button" class="btn" value="Clear" onclick="clearGroupFilters()">
         </form>
 
         <form class="form-inline" name="groupForm" action="javascript:create_group()">
                 Group Name:
                 <input type="text" id="group_text"/>
                 <input name="Submit" type="submit" value="Create" class="btn"/>
+                <input name="Auto_Submit" type="submit" value="Group All" onclick="auto_create_group()" class="btn">
         </form>
-        <input name="Auto_Submit" type="submit" value="Auto-Create" onclick="auto_create_group()" class="btn">
+        <!--<input name="Auto_Submit" type="submit" value="Auto-Create" onclick="auto_create_group()" class="btn">-->
         <div class="container">
             <div class="row">
                 <div id="group_column" class="span6" style="margin-right:1em;">
@@ -169,7 +171,16 @@ function clearPublicFilters(){
 }
 
 function clearGroupFilters(){
+    var e = document.getElementById("group_verb_filter");
+    e.selectedIndex = 0;
 
+    e = document.getElementById("group_search");
+    e.value = "";  
+
+    e = document.getElementById("group_user_filter");
+    e.value = "";
+
+    getStmts_Groups(null, $('#statement_column'))
 }
 
 function getGroups(event){
