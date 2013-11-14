@@ -1031,8 +1031,10 @@ function syntaxHighlight(json) {
 function create_group (callback){
     var groupname = $("#group_text").val();
     if(!groupname) {
-
+        alert("Enter Group Name");
     }
+    else
+    {
     $.ajax({
             url: "{% url lrs.views.my_groups %}",
             type: "POST",
@@ -1049,6 +1051,7 @@ function create_group (callback){
             },
             timeout : 15000
         });
+    }
 }
 
 function auto_create_group(){
