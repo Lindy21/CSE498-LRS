@@ -14,7 +14,7 @@
     <div id="mystatements" class="tab-pane">
         <form class="form-inline" action="javascript:getStmts()">
             <label>Filter:</label>
-            <select id="my_verb_filter" onchange="getStmts()">
+            <select id="my_verb_filter">
                 <option value="">All</option>
                 <option value="http://verbs/interaction/">Desktop Apps</option>
                 <option value="http://verbs/viewed/">Images</option>
@@ -36,7 +36,7 @@
         <form class="form-inline" action="javascript:getPublicStmts()">
             <label>Filter:</label>
             <input id="public_user_filter" type="text" placeholder="User">
-            <select id="public_verb_filter" onchange="getPublicStmts()">
+            <select id="public_verb_filter">
                 <option value="">All</option>
                 <option value="http://verbs/interaction/">Desktop Apps</option>
                 <option value="http://verbs/viewed/">Images</option>
@@ -162,7 +162,14 @@ function clearPublicFilters(){
     e = document.getElementById("public_search");
     e.value = "";  
 
+    e = document.getElementById("public_user_filter");
+    e.value = "";
+
     getPublicStmts();
+}
+
+function clearGroupFilters(){
+
 }
 
 function getGroups(event){
@@ -767,8 +774,8 @@ function getPublicStmts(event){
             },
             timeout : 15000
         });
-    if(!inPage)
-        feedTimeout = setTimeout(getPublicStmts, 10000);
+    /*if(!inPage)
+        feedTimeout = setTimeout(getPublicStmts, 10000);*/
 }
 
 function getStmts(event, element){
