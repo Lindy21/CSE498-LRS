@@ -162,7 +162,7 @@ def about(request):
     return HttpResponse(req_process.stream_response_generator(lrs_data), mimetype="application/json", status=200)
 
 def testquiz(request):
-    return render_to_response('smart/Learning_Activity_Capture_Quiz_player.html', {}, context_instance=RequestContext(request))  
+    return render_to_response('smart/Learning_Activity_Capture_Quiz_player.html')  
 
 def actexample(request):
     return render_to_response('actexample.json', mimetype="application/json")
