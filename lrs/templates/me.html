@@ -1058,9 +1058,8 @@ function auto_create_group(){
     var objectFilter;
 
     var e = document.getElementById("group_verb_filter");
-    var check = document.getElementById("group_verb_filter_checkbox");
 
-    if(e.selectedIndex == 0 || !check.checked){
+    if(e.selectedIndex == 0){
         verbFilter = null;
     }
     else{
@@ -1068,9 +1067,8 @@ function auto_create_group(){
     }
 
     e = document.getElementById("group_user_filter");
-    check = document.getElementById("group_user_filter_checkbox");
 
-    if(!e.value || !check.checked){
+    if(!e.value){
         userFilter = "0";
     }
     else{
@@ -1078,9 +1076,8 @@ function auto_create_group(){
     }
 
     e = document.getElementById("group_search");
-    check = document.getElementById("group_search_checkbox");
 
-    if(!check.checked || e.value == "") {
+    if(e.value == "") {
         objectFilter = null;
     }
     else {
