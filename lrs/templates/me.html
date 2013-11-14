@@ -72,17 +72,17 @@
             <input id="group_clear_button" type="button" class="btn" value="Clear" onclick="clearGroupFilters()">
         </form>
 
-        <form class="form-inline" name="groupForm" action="javascript:create_group()">
+        <form class="form-inline" name="groupForm">
                 Group Name:
                 <input type="text" id="group_text"/>
-                <input name="Submit" type="submit" value="Create" class="btn"/>
-                <div id="nameAlert" class="alert alert-danger hide">Enter Group Name</div>
+                <input type="button" value="Create" onclick="create_group()" class="btn"/>
+                <input type="button" value="Auto-Create" onclick="auto_create_group()" class="btn"/>
         </form>
-        <input name="Auto_Submit" type="submit" value="Auto-Create" onclick="auto_create_group()" class="btn">
+        <div id="nameAlert" class="alert alert-danger hide">Enter Group Name</div>
         <div class="container">
             <div class="row">
                 <div id="group_column" class="span6" style="margin-right:1em;">
-                    <h3>Groups:</h3>
+                    <h3>Groups:</h3><span class="small-link">Create groups</span>
                 </div>
 
                 <div id="statement_column" class="span5">
@@ -1031,10 +1031,12 @@ function syntaxHighlight(json) {
 function create_group (callback){
     var groupname = $("#group_text").val();
     if(!groupname) {
-        alert("Enter Group Name");
+        //alert("Enter Group Name");
+        $("#nameAlert").fadeIn(500);
+        $("#nameAlert").delay(3000).fadeOut(500);
     }
     else
-    {
+    { 
     $.ajax({
             url: "{% url lrs.views.my_groups %}",
             type: "POST",
@@ -1097,7 +1099,6 @@ function auto_create_group(){
             context: ele,
             success: function (data){
                 create_group(function(group_id){
-                    alert(group_id);
 
                     sendData = {
                         'group_id': group_id,
