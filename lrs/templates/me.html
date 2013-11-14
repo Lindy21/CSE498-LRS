@@ -72,13 +72,12 @@
             <input id="group_clear_button" type="button" class="btn" value="Clear" onclick="clearGroupFilters()">
         </form>
 
-        <form class="form-inline" name="groupForm">
+        <form class="form-inline" name="groupForm" action="javascript:create_group()">
                 Group Name:
                 <input type="text" id="group_text"/>
-                <input name="Submit" type="submit" value="Create" class="btn" onclick="create_group()">
-                <input name="Auto_Submit" type="submit" value="Group All" class="btn" onclick="auto_create_group()">
+                <input name="Submit" type="submit" value="Create" class="btn"/>
         </form>
-        <!--<input name="Auto_Submit" type="submit" value="Auto-Create" onclick="auto_create_group()" class="btn">-->
+        <input name="Auto_Submit" type="submit" value="Auto-Create" onclick="auto_create_group()" class="btn">
         <div class="container">
             <div class="row">
                 <div id="group_column" class="span6" style="margin-right:1em;">
