@@ -1030,6 +1030,7 @@ function syntaxHighlight(json) {
 
 function create_group (callback){
     var groupname = $("#group_text").val();
+    alert(groupname);
     $.ajax({
             url: "{% url lrs.views.my_groups %}",
             type: "POST",
