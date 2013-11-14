@@ -4,6 +4,12 @@ body
 	padding-bottom: 40px;
 }
 
+#nameAlert
+{
+	width: 100px;
+	height: 40px;
+}
+
 .content
 {
 	-webkit-border-radius: 6px;
