@@ -78,7 +78,7 @@
                 <input name="Submit" type="submit" value="Create" class="btn"/>
                 <input name="Auto_Submit" type="submit" value="Group All" onclick="auto_create_group()" class="btn">
         </form>
-        <!--<input name="Auto_Submit" type="submit" value="Auto-Create" onclick="auto_create_group()" class="btn">-->
+        <input name="Auto_Submit" type="submit" value="Auto-Create" onclick="auto_create_group()" class="btn">
         <div class="container">
             <div class="row">
                 <div id="group_column" class="span6" style="margin-right:1em;">
@@ -1051,7 +1051,6 @@ function create_group (callback){
 function auto_create_group(){
     var u = "{% url lrs.views.my_statements %}";
     var ele = $('#statement_column');
-
 
     var userFilter;
     var verbFilter;
