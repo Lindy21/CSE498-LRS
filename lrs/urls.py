@@ -16,6 +16,8 @@ urlpatterns = patterns('lrs.views',
     url(r'^register/$', 'register'),
     url(r'^regclient/$', 'reg_client'),    
     url(r'^OAuth/', include('oauth_provider.urls')),
+
+    url(r'^testquiz/', 'testquiz')
     # just urls for some user interface... not part of xapi
     url(r'^me/statements/', 'my_statements'),
     url(r'^me/groups/', 'my_groups'),
