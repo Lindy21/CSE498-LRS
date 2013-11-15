@@ -318,7 +318,7 @@ def my_statements(request):
                         orList = andStr.split("/")
 
                         for orStr in orList:
-                            if orStr.lower() in searchstring.lower():
+                            if orStr.rstrip().lower() in searchstring.lower():
                                 andCount += 1
                                 break
                     #newList = objectFilter.split("/")
