@@ -311,6 +311,7 @@ def my_statements(request):
 
                 searchstring = stmtobj.get_search_index()
                 if not objectFilter == "" :
+                    objectFilter = objectFilter.rstrip()
                     andList = objectFilter.split("AND")
                     andCount = 0
 
@@ -318,12 +319,12 @@ def my_statements(request):
                         orList = andStr.split("OR")
 
                         for orStr in orList:
-                            if orStr.rstrip().lower() in searchstring.lower():
+                            if orStr.lower() in searchstring.lower():
                                 andCount += 1
                                 #slist.append(d)
                                 break
 
-                    if andCount == len(andList):
+                    if andCount >= len(andList):
                         slist.append(d)
                 else:
                     slist.append(d)
