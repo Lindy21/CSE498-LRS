@@ -899,10 +899,10 @@ function uiData(data, context, deletable){
         }
 		
 		ret += "</div>";
-		//ret += "</div>";
+		ret += "</div>";
 		ret += "<div class='row'>";
-        ret += "<div class='stmt-field'></div>";
-        ret += "</div></div>";
+        ret += "<div class='span6'></div>";
+        ret += "</div>";
 		ret += "</div></div></li>";
     }
 
@@ -926,7 +926,7 @@ function getStmtContent(stmtid, ele){
         url: "{% url lrs.views.my_statements %}?stmt_id="+stmtid,
         type: "GET",
         success: function (data){
-            $(ele).after('<div id="stmts" class="stmt-field collapse"></div>');
+            $(ele).after('<div id="stmts" class="span6 collapse"></div>');
             $(ele).siblings('div#stmts').append(buildContent(data));
             $(ele).siblings('div#stmts').collapse('show');
         },
