@@ -693,7 +693,7 @@ function stmtClick(event){
         getStmtContent($(ele).parents('.statement').attr("href"), this);
     }
     else{
-        $(element).collapse('hide');
+        $(element).collapse('toggle');
     }
     return false;
 }
