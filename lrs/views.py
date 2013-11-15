@@ -311,8 +311,12 @@ def my_statements(request):
 
                 searchstring = stmtobj.get_search_index()
                 if not objectFilter == "" :
-                    if objectFilter.lower() in searchstring.lower():
-                        slist.append(d)
+                    newList = objectFilter.split("/")
+
+                    for newStr in newList:
+                        if newStr.lower() in searchstring.lower():
+                            slist.append(d)
+                            break
                 else:
                     slist.append(d)
             
