@@ -311,12 +311,20 @@ def my_statements(request):
 
                 searchstring = stmtobj.get_search_index()
                 if not objectFilter == "" :
-                    newList = objectFilter.split("/")
+                    andList = objectFilter.split("AND")
+                    andCount = 0
 
-                    for newStr in newList:
-                        if newStr.rstrip().lower() in searchstring.lower():
-                            slist.append(d)
-                            break
+                    for andStr in andList:
+                        orList = andStr.split("OR")
+
+                        for orStr in orList:
+                            if orStr.rstrip().lower() in searchstring.lower():
+                                andCount += 1
+                                #slist.append(d)
+                                break
+
+                    if andCount == len(andList):
+                        slist.append(d)
                 else:
                     slist.append(d)
             
