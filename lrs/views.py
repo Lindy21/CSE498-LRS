@@ -327,7 +327,8 @@ def my_statements(request):
                         #if newStr.rstrip().lower() in searchstring.lower():
                             #slist.append(d)
                             #break
-                    if andCount >= len(andList)
+                    if andCount >= len(andList):
+                        slist.append(d)
                 else:
                     slist.append(d)
             
