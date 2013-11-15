@@ -321,7 +321,7 @@ def my_statements(request):
                         for orStr in orList:
                             if orStr.lower() in searchstring.lower():
                                 andCount += 1
-                                #slist.append(d)
+                                slist.append(d)
                                 break
 
                     if andCount >= len(andList):
