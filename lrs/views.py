@@ -312,10 +312,10 @@ def my_statements(request):
                 searchstring = stmtobj.get_search_index()
                 if not objectFilter == "" :
                     objectFilter = objectFilter.strip()
-                    andList = objectFilter.split("&")
+                    andList = objectFilter.split("AND")
                     andCount = 0
                     for andStr in andList:
-                        orList = andStr.split("/")
+                        orList = andStr.split("OR")
 
                         for orStr in orList:
                             if orStr.strip().lower() in searchstring.lower():
