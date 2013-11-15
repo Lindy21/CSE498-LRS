@@ -443,6 +443,8 @@ class Activity(models.Model):
     authoritative = models.CharField(max_length=100, blank=True)
     global_representation = models.BooleanField(default=True)
 
+    #desktopapp
+    #quiz
     class Meta:
         unique_together = ("activity_id", "global_representation")
 
@@ -540,7 +542,10 @@ class Activity(models.Model):
 
     def get_search_index(self):
         try:
-            return self.activity_definition_name.get('en-US') + self.activity_definition_description.get('en-US') + self.activity_id
+            if not "quiz" in self.activity_id and not "desktopapp" in self.activity_id:
+                return self.activity_definition_name.get('en-US') + self.activity_definition_description.get('en-US') + self.activity_id
+            else
+                return self.activity_definition_name.get('en-US') + self.activity_definition_description.get('en-US')
         except:
             return self.activity_id
 
