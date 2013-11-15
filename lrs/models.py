@@ -542,10 +542,7 @@ class Activity(models.Model):
 
     def get_search_index(self):
         try:
-            if not "quiz" in self.activity_id and not "desktopapp" in self.activity_id:
-                return self.activity_definition_name.get('en-US') + self.activity_definition_description.get('en-US') + self.activity_id
-            else
-                return self.activity_definition_name.get('en-US') + self.activity_definition_description.get('en-US')
+            return self.activity_definition_name.get('en-US') + self.activity_definition_description.get('en-US') + self.activity_id
         except:
             return self.activity_id
 
