@@ -314,7 +314,7 @@ def my_statements(request):
                     newList = objectFilter.split("/")
 
                     for newStr in newList:
-                        if newStr.lower() in searchstring.lower():
+                        if newStr.rstrip().lower() in searchstring.lower():
                             slist.append(d)
                             break
                 else:
