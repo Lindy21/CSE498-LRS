@@ -310,6 +310,11 @@ def my_statements(request):
                 d['object'] = stmtobj.get_a_name()
 
                 searchstring = stmtobj.get_search_index()
+
+                if "desktopapp" in searchstring:
+                    splitUp = searchstring.split("desktopapp/")
+                    searchstring = splitUp[1].strip("with")
+
                 if not objectFilter == "" :
                     objectFilter = objectFilter.strip()
                     andList = objectFilter.split("AND")
