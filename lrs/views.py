@@ -255,6 +255,7 @@ def my_statements(request):
             s = models.Statement.objects.get(statement_id=stmt_id)
             return HttpResponse(json.dumps(s.object_return()),mimetype="application/json",status=200)
         else:
+            statements = {}
             s = {}
             slist = []
 
@@ -291,7 +292,7 @@ def my_statements(request):
                         try:
                             uFilter = User.objects.get(username=orStr)
                             prtStatements = models.Statement.objects.filter(user=uFilter).order_by('-timestamp')
-                            statements = statements + prtStatements
+                            statements = prtStatements
                             if verbFilter:
                                 try:
                                     vFilter = models.Verb.objects.get(verb_id=verbFilter)
