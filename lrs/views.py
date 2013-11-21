@@ -291,15 +291,16 @@ def my_statements(request):
                         try:
                             uFilter = User.objects.get(username=orStr)
                             prtStatements = models.Statement.objects.filter(user=uFilter).order_by('-timestamp')
-                            statements = statements + prtStatements;
+                            statements = statements + prtStatements
                             if verbFilter:
                                 try:
                                     vFilter = models.Verb.objects.get(verb_id=verbFilter)
                                     statements = statements.filter(verb=vFilter)
 
                                 except: 
-                                    vFilter = null;
+                                    vFilter = null
                         except:
+                            statements = {}
 
 
                     
