@@ -289,6 +289,7 @@ def my_statements(request):
                     orList = userFilter.split("OR")
 
                     for orStr in orList:
+                        orStr.strip("OR")
                         try:
                             uFilter = User.objects.get(username=orStr)
                             prtStatements = models.Statement.objects.filter(user=uFilter).order_by('-timestamp')
@@ -345,6 +346,8 @@ def my_statements(request):
                         orList = andStr.split("OR")
 
                         for orStr in orList:
+                            orStr.strip("AND")
+                            orStr.strip("OR")
                             if orStr.strip().lower() in searchstring.lower():
                                 andCount += 1
                                 break
