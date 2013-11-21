@@ -287,7 +287,7 @@ def my_statements(request):
                 userFilter = userFilter.strip()
 
                 try:
-                    uFilter = User.objects.get(username=orStr)
+                    uFilter = User.objects.get(username=userFilter)
                     statements = models.Statement.objects.filter(user=uFilter).order_by('-timestamp')
 
                     if verbFilter:
