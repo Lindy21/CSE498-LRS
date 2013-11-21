@@ -283,20 +283,40 @@ def my_statements(request):
                     except: 
                         return HttpResponse(status=204)
             else:
-                try:
-                    uFilter = User.objects.get(username=userFilter)
-                    statements = models.Statement.objects.filter(user=uFilter).order_by('-timestamp')
-                    if verbFilter:
+                if not userFilter == "" :
+                    userFilter = userFilter.strip()
+                    orList = userFilter.split("OR")
+
+                    for orStr in orList:
                         try:
-                            vFilter = models.Verb.objects.get(verb_id=verbFilter)
-                            statements = statements.filter(verb=vFilter)
+                            uFilter = User.objects.get(username=orStr)
+                            prtStatements = models.Statement.objects.filter(user=uFilter).order_by('-timestamp')
+                            statements = statements + prtStatements;
+                            if verbFilter:
+                                try:
+                                    vFilter = models.Verb.objects.get(verb_id=verbFilter)
+                                    statements = statements.filter(verb=vFilter)
+
+                                except: 
+                                    vFilter = null;
+                        except:
+
+
+                    
+                #try:
+                    #uFilter = User.objects.get(username=userFilter)
+                    #statements = models.Statement.objects.filter(user=uFilter).order_by('-timestamp')
+                    #if verbFilter:
+                        #try:
+                            #vFilter = models.Verb.objects.get(verb_id=verbFilter)
+                            #statements = statements.filter(verb=vFilter)
 
                             #if objectFilter:
                                 #statements = statements.filter(object_activity.activity_definition_name__icontains=objectFilter)
-                        except: 
-                            vFilter = null;
-                except:
-                    statements = {}
+                        #except: 
+                            #vFilter = null;
+                #except:
+                    #statements = {}
 
 
             for stmt in statements:
@@ -326,12 +346,7 @@ def my_statements(request):
                             if orStr.strip().lower() in searchstring.lower():
                                 andCount += 1
                                 break
-                    #newList = objectFilter.split("/")
 
-                    #for newStr in newList:
-                        #if newStr.rstrip().lower() in searchstring.lower():
-                            #slist.append(d)
-                            #break
                     if andCount >= len(andList):
                         slist.append(d)
                 else:
