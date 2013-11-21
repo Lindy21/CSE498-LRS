@@ -286,10 +286,15 @@ def my_statements(request):
             else:
                 if not userFilter == "" :
                     userFilter = userFilter.strip()
+                    tmpFilter = {}
                     orList = {}
 
                     while userFilter.find("OR") >= 0:
-                        orList += userFilter.partition("OR")[::2]
+                        userFilter, tmpFilter = userFilter.partition("OR")[::2]
+                        orList += tmpFilter
+
+                    if len(orList) == 0:
+                        orList.append(userFilter)
 
                     for orStr in orList:
                         orStr.strip()
