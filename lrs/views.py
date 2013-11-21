@@ -284,34 +284,22 @@ def my_statements(request):
                     except: 
                         return HttpResponse(status=204)
             else:
-                if not userFilter == "" :
-                    userFilter = userFilter.strip()
-                    tmpFilter = {}
-                    orList = {}
+                userFilter = userFilter.strip()
 
-                    while userFilter.find("OR") >= 0:
-                        userFilter, tmpFilter = userFilter.partition("OR")[::2]
-                        orList += tmpFilter
+                try:
+                    uFilter = User.objects.get(username=orStr)
+                    statements = models.Statement.objects.filter(user=uFilter).order_by('-timestamp')
 
-                    if len(orList) == 0:
-                        orList.append(userFilter)
-
-                    for orStr in orList:
-                        orStr.strip()
+                    if verbFilter:
                         try:
-                            uFilter = User.objects.get(username=orStr)
-                            prtStatements = models.Statement.objects.filter(user=uFilter).order_by('-timestamp')
-                            statements += prtStatements
-                            if verbFilter:
-                                try:
-                                    vFilter = models.Verb.objects.get(verb_id=verbFilter)
-                                    statements = statements.filter(verb=vFilter)
+                            vFilter = models.Verb.objects.get(verb_id=verbFilter)
+                            statements = statements.filter(verb=vFilter)
 
-                                except: 
-                                    vFilter = null
-                        except:
-                            if len(statements) == 0:
-                                statements = {}
+                        except: 
+                            vFilter = null
+                except:
+                    if len(statements) == 0:
+                        statements = {}
 
 
                     
