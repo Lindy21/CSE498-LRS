@@ -286,10 +286,12 @@ def my_statements(request):
             else:
                 if not userFilter == "" :
                     userFilter = userFilter.strip()
-                    orList = userFilter.split("OR")
+                    orList = userFilter.split()
 
                     for orStr in orList:
                         orStr.strip()
+                        if orStr in "OR":
+                            continue
                         orStr.strip("OR")
                         try:
                             uFilter = User.objects.get(username=orStr)
