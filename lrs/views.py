@@ -286,17 +286,17 @@ def my_statements(request):
             else:
                 if not userFilter == "" :
                     userFilter = userFilter.strip()
-                    orList = userFilter.split()
+                    orList = {}
+
+                    while userFilter.find("OR") >= 0:
+                        orList += userFilter.partition("OR")[::2]
 
                     for orStr in orList:
                         orStr.strip()
-                        if orStr in "OR":
-                            continue
-                        orStr.strip("OR")
                         try:
                             uFilter = User.objects.get(username=orStr)
                             prtStatements = models.Statement.objects.filter(user=uFilter).order_by('-timestamp')
-                            statements = prtStatements
+                            statements += prtStatements
                             if verbFilter:
                                 try:
                                     vFilter = models.Verb.objects.get(verb_id=verbFilter)
