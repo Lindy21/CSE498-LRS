@@ -289,6 +289,7 @@ def my_statements(request):
                     orList = userFilter.split("OR")
 
                     for orStr in orList:
+                        orStr.strip()
                         orStr.strip("OR")
                         try:
                             uFilter = User.objects.get(username=orStr)
@@ -302,7 +303,8 @@ def my_statements(request):
                                 except: 
                                     vFilter = null
                         except:
-                            statements = {}
+                            if len(statements) == 0:
+                                statements = {}
 
 
                     
