@@ -580,7 +580,7 @@ function verbClick(event){
     }
     var stmtid = $(ele).parents('.statement').attr("href");
 
-    initStmtOff = true;
+    initStmtOff = false;
 
     $.ajax({
         url: "{% url lrs.views.my_statements %}?stmt_id="+stmtid,
@@ -634,7 +634,7 @@ function publicVerbClick(event){
 
     var stmtid = $(ele).parents('.statement').attr("href");
 
-    initStmtOff = true;
+    initStmtOff = false;
 
     $.ajax({
         url: "{% url lrs.views.my_statements %}?stmt_id="+stmtid,
